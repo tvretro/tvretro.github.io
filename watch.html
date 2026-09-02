@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Retro TV YouTube Player Optimized</title>
+  <title>Watch the YouTube video on "Retro TV"</title>
   <style>
     :root, body {
       margin: 0;
@@ -262,18 +262,22 @@
 
         <foreignObject id="playerObject" x="203.3" y="173" width="519.4" height="369" clip-path="url(#screenCustomClip)">
            <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100%; height: 100%; margin: 0; padding: 0; background-color: #000; border-radius: 22px 22px 0 0; overflow: hidden;">
-            <iframe id="ytIframe" width="100%" height="100%" src="" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+            <!-- Iframe yerine API'nin enjekte edileceği boş div -->
+            <div id="ytIframe" style="width: 100%; height: 100%;"></div>
           </div>
         </foreignObject>
 
-        <!-- EKRAN MASKELERİ (ID'ler Eklendi) -->
-        <g style="pointer-events: none;" clip-path="url(#screenCustomClip)">
+        <!-- EKRAN ÜZERİ EFEKTLER (Pointer olayları devre dışı, tıklar alt katmana geçer) -->
+        <g id="screenEffects" clip-path="url(#screenCustomClip)" style="pointer-events: none;">
           <rect id="effectScanlines" x="203.3" y="173" width="519.4" height="369" fill="url(#scanlines)"/>
           <rect id="effectCrtGlass" x="203.3" y="173" width="519.4" height="369" fill="url(#crtGlass)"/>
           <path id="effectGlare" d="M 203.3,173 L 487.7,173 L 288.3,542 L 203.3,542 Z" fill="url(#glare)"/>
           <rect id="effectOvalStroke" x="203.3" y="173" width="519.4" height="369" fill="none" stroke="#050505" stroke-width="16" rx="22" ry="22"/>
           <rect id="effectInnerLine" x="203.3" y="173" width="519.4" height="369" fill="none" stroke="#000000" stroke-width="4" opacity="0.8"/>
         </g>
+        
+        <!-- YENİ: TIKLAMA VE KONTROL KATMANI (Görünmez, tıklamaları yakalar) -->
+        <rect id="clickOverlay" x="203.3" y="173" width="519.4" height="369" fill="transparent" cursor="pointer" clip-path="url(#screenCustomClip)"/>
         
         <g transform="translate(448, 568)">
           <rect x="0" y="0" width="30" height="7" rx="2" fill="#111111" filter="url(#dialShadow)"/>
@@ -384,45 +388,84 @@
   </svg>
 
   <script>
-    // Kendi Worker adresinizle değiştirin
-    const PROXY_URL = "https://tvretro-proxy.biserkanla.workers.dev/?url=";
+    const PROXY_URL = "https://tvretro-proxy.biserkanla.workers.dev/?url="; // Worker URL'nizi güncellemeyi unutmayın
+    let player;
+    const urlParams = new URLSearchParams(window.location.search);
+    const videoId = urlParams.get('v');
 
-    async function initPlayer() {
-      const urlParams = new URLSearchParams(window.location.search);
-      const videoId = urlParams.get('v');
+    // 1. YouTube Iframe API'yi asenkron yükle (Performans optimizasyonu)
+    const tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/iframe_api";
+    const firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
+    // 2. DOM Yüklendiğinde ekranı video oranına göre hazırla
+    window.addEventListener('DOMContentLoaded', async () => {
       if (!videoId) return;
-
-      const iframe = document.getElementById('ytIframe');
-      iframe.src = `https://www.youtube.com/embed/${videoId}?controls=0&modestbranding=1&rel=0&iv_load_policy=3&disablekb=1&fs=0&autoplay=1&mute=0`;
-
       try {
         const targetVideoUrl = `https://www.youtube.com/watch?v=${videoId}`;
         const response = await fetch(`${PROXY_URL}${encodeURIComponent(targetVideoUrl)}`);
         const data = await response.json();
-
         if (data.width && data.height) {
           adjustTvSymmetrically(data.width / data.height);
         }
       } catch (err) {
-        console.warn("oEmbed çekilemedi, varsayılan 16:9 uygulanıyor.");
-        adjustTvSymmetrically(16 / 9); // Hata anında standart yatay oranı uygula
+        console.warn("Oran verisi çekilemedi, standart 16:9 uygulanıyor.");
+        adjustTvSymmetrically(16 / 9);
       }
+    });
+
+    // 3. API Dosyaları Hazır Olduğunda Oynatıcıyı Kur
+    window.onYouTubeIframeAPIReady = function() {
+      if (!videoId) return;
+      player = new YT.Player('ytIframe', {
+        videoId: videoId,
+        playerVars: {
+          'controls': 0, // Kontroller devre dışı
+          'modestbranding': 1,
+          'rel': 0,
+          'iv_load_policy': 3,
+          'disablekb': 1,
+          'fs': 0,
+          'autoplay': 1,
+          'mute': 0
+        },
+        events: {
+          'onReady': onPlayerReady
+        }
+      });
+    };
+
+    // 4. Oynatıcı Kurulduğunda Tetiklenecek Olaylar
+    function onPlayerReady(event) {
+      // Çekirdek müdahale: Altyazı modülünü bellekten zorla sil
+      event.target.unloadModule("captions");
+      event.target.unloadModule("cc");
+      
+      // Tıklama olayını kendi görünmez SVG katmanımızdan dinle
+      const clickOverlay = document.getElementById('clickOverlay');
+      clickOverlay.addEventListener('click', () => {
+        const state = player.getPlayerState();
+        if (state === YT.PlayerState.PLAYING || state === YT.PlayerState.BUFFERING) {
+          player.pauseVideo();
+        } else {
+          player.playVideo();
+        }
+      });
     }
 
+    // 5. Simetrik Esneme Motoru
     function adjustTvSymmetrically(ratio) {
       const baseHeight = 369;
-      const baseWidth = 519.4; // Orijinal ekran genişliği
+      const baseWidth = 519.4;
       let newWidth = baseHeight * ratio;
 
-      // Tasarımı ve SVG ViewBox'u bozmamak için aşırı uçları sınırlandırıyoruz (Örn: Ultra-wide veya Dikey)
       newWidth = Math.max(380, Math.min(newWidth, 680)); 
 
       const deltaX = newWidth - baseWidth;
-      const shift = deltaX / 2; // Genişlemenin yarısı sola, yarısı sağa dağıtılacak
-      const startX = 203.3 - shift; // Ekranın yeni başlangıç noktası
+      const shift = deltaX / 2; 
+      const startX = 203.3 - shift; 
 
-      // 1. EKRAN VE YOUTUBE İFRAME GÜNCELLEMELERİ
       document.getElementById('playerObject').setAttribute('x', startX);
       document.getElementById('playerObject').setAttribute('width', newWidth);
       document.getElementById('effectScanlines').setAttribute('x', startX);
@@ -434,7 +477,10 @@
       document.getElementById('effectInnerLine').setAttribute('x', startX);
       document.getElementById('effectInnerLine').setAttribute('width', newWidth);
 
-      // Kırpma Maskesi ve Siyah Arkaplan
+      // YENİ: Tıklama katmanının koordinatlarını güncelle
+      document.getElementById('clickOverlay').setAttribute('x', startX);
+      document.getElementById('clickOverlay').setAttribute('width', newWidth);
+
       document.getElementById('screenCustomClipPath').setAttribute('d', 
         `M ${startX} 542 L ${startX} 195 A 22 22 0 0 1 ${startX + 22} 173 L ${startX + newWidth - 22} 173 A 22 22 0 0 1 ${startX + newWidth} 195 L ${startX + newWidth} 542 Z`
       );
@@ -445,7 +491,6 @@
         `M ${startX},173 L 487.7,173 L 288.3,542 L ${startX},542 Z`
       );
 
-      // 2. KREM ÇERÇEVE VE SİYAH İÇ KASA
       const caseShiftX = 190.3 - shift;
       const caseWidth = 659.4 + deltaX;
 
@@ -458,7 +503,6 @@
       document.getElementById('creamBezelStroke').setAttribute('x', startX - 5);
       document.getElementById('creamBezelStroke').setAttribute('width', newWidth + 10);
 
-      // 3. DIŞ AHŞAP KASA GÜNCELLEMELERİ
       const woodStartX = 178.3 - shift;
       const woodWidth = 683.4 + deltaX;
 
@@ -474,7 +518,6 @@
         `M ${woodStartX + 1},460 L 320,151 L 520,151 L ${woodStartX + 1},590 Z`
       );
 
-      // Kasa Köşe Çizgileri
       document.getElementById('woodLineTL').setAttribute('x1', woodStartX);
       document.getElementById('woodLineTL').setAttribute('x2', woodStartX + 12);
       document.getElementById('woodLineBL').setAttribute('x1', woodStartX);
@@ -484,13 +527,10 @@
       document.getElementById('woodLineBR').setAttribute('x1', woodStartX + woodWidth);
       document.getElementById('woodLineBR').setAttribute('x2', woodStartX + woodWidth - 12);
 
-      // 4. TV AYAKLARI VE KONTROL PANELİ (Koordinatları Translate İle Kaydırma)
       document.getElementById('controlPanelGroup').setAttribute('transform', `translate(${shift}, 0)`);
       document.getElementById('tvFeetRight').setAttribute('transform', `translate(${shift}, 0)`);
       document.getElementById('tvFeetLeft').setAttribute('transform', `translate(${-shift}, 0)`);
     }
-
-    window.addEventListener('DOMContentLoaded', initPlayer);
   </script>
 </body>
 </html>
