@@ -68,7 +68,7 @@
       const match = url.match(regExp);
 
       if (match && match[2].length === 11) {
-        window.location.href = `watch.html?v=${match[2]}`;
+        window.location.href = `${match[2]}`;
       } else {
         alert('Geçersiz YouTube URL adresi!');
       }
