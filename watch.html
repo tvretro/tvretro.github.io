@@ -415,43 +415,35 @@
       }
     });
 
-    // 3. API Dosyaları Hazır Olduğunda Oynatıcıyı Kur
     window.onYouTubeIframeAPIReady = function() {
-      if (!videoId) return;
-      player = new YT.Player('ytIframe', {
+    if (!videoId) return;
+    player = new YT.Player('ytIframe', {
         videoId: videoId,
         playerVars: {
-          'controls': 0, // Kontroller devre dışı
-          'modestbranding': 1,
-          'rel': 0,
-          'iv_load_policy': 3,
-          'disablekb': 1,
-          'fs': 0,
-          'autoplay': 1,
-          'mute': 0
+        'controls': 0,
+        'modestbranding': 1,
+        'rel': 0,
+        'iv_load_policy': 3,
+        'cc_load_policy': 0, // Altyazıyı varsayılan olarak kapatır
+        'disablekb': 1,
+        'fs': 0,
+        'autoplay': 1,
+        'mute': 0
         },
         events: {
-          'onReady': onPlayerReady
+        'onReady': onPlayerReady,
+        'onStateChange': onPlayerStateChange // Video durum dinleyicisi
         }
-      });
+    });
     };
 
     // 4. Oynatıcı Kurulduğunda Tetiklenecek Olaylar
-    function onPlayerReady(event) {
-      // Çekirdek müdahale: Altyazı modülünü bellekten zorla sil
-      event.target.unloadModule("captions");
-      event.target.unloadModule("cc");
-      
-      // Tıklama olayını kendi görünmez SVG katmanımızdan dinle
-      const clickOverlay = document.getElementById('clickOverlay');
-      clickOverlay.addEventListener('click', () => {
-        const state = player.getPlayerState();
-        if (state === YT.PlayerState.PLAYING || state === YT.PlayerState.BUFFERING) {
-          player.pauseVideo();
-        } else {
-          player.playVideo();
-        }
-      });
+    function onPlayerStateChange(event) {
+    // Video aktif olarak oynamaya başladığı an altyazı modülünü bellekten siler
+    if (event.data === YT.PlayerState.PLAYING) {
+        event.target.unloadModule("captions");
+        event.target.unloadModule("cc");
+    }
     }
 
     // 5. Simetrik Esneme Motoru
