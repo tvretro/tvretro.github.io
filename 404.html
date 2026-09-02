@@ -388,18 +388,27 @@
   </svg>
 
   <script>
-    const PROXY_URL = "https://tvretro-proxy.biserkanla.workers.dev/?url="; // Worker URL'nizi güncellemeyi unutmayın
+    // 1. URL Sorgu Parametresini Kontrol Et (?v=...)
+    const urlParams = new URLSearchParams(window.location.search);
+    let videoId = urlParams.get('v'); 
+    
+    if (!videoId) {
+      const pathSegments = window.location.pathname.split('/').filter(Boolean);
+      const lastSegment = pathSegments.pop();
+      if (lastSegment && !['watch', 'watch.html', 'index.html'].includes(lastSegment)) {
+        videoId = lastSegment;
+      }
+    }
+    const PROXY_URL = "https://tvretro-proxy.biserkanla.workers.dev/?url=";
     let player;
     const path = window.location.pathname;
     const videoId = path.split('/').filter(Boolean).pop();
 
-    // 1. YouTube Iframe API'yi asenkron yükle (Performans optimizasyonu)
     const tag = document.createElement('script');
     tag.src = "https://www.youtube.com/iframe_api";
     const firstScriptTag = document.getElementsByTagName('script')[0];
     firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
-    // 2. DOM Yüklendiğinde ekranı video oranına göre hazırla
     window.addEventListener('DOMContentLoaded', async () => {
       if (!videoId) return;
       try {
@@ -457,7 +466,6 @@
             event.target.unloadModule("captions");
             event.target.unloadModule("cc");
             } catch (err) {
-            // Oynatıcı modül hatası oluşursa yürütmeyi kesmesini engeller
             }
         }
         }
@@ -485,7 +493,6 @@
       document.getElementById('effectInnerLine').setAttribute('x', startX);
       document.getElementById('effectInnerLine').setAttribute('width', newWidth);
 
-      // YENİ: Tıklama katmanının koordinatlarını güncelle
       document.getElementById('clickOverlay').setAttribute('x', startX);
       document.getElementById('clickOverlay').setAttribute('width', newWidth);
 
