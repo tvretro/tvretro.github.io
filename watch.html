@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Retro TV Player</title>
+  <title>Retro TV YouTube Player Optimized</title>
   <style>
     :root, body {
       margin: 0;
@@ -27,7 +27,7 @@
 
   <svg id="retroTvSvg" xmlns="http://www.w3.org/2000/svg" viewBox="86 75 867 585" width="100vw" height="100vh" preserveAspectRatio="xMidYMid meet">
     <defs>
-      <!-- DOKU VE ISIKLANDIRMA GRADYANLARI -->
+      <!-- ODA DOKU VE IŞIKLANDIRMA GRADYANLARI -->
       <filter id="realisticWall" x="-20%" y="-20%" width="140%" height="140%">
         <feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="4" result="noise"/>
         <feColorMatrix type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.045 0" in="noise" result="coloredNoise"/>
@@ -58,7 +58,7 @@
         <stop offset="100%" stop-color="#020304"/>
       </radialGradient>
 
-      <!-- TV Efektleri -->
+      <!-- TV Gölgeleri ve Efektleri -->
       <filter id="tvDropShadow" x="-10%" y="-10%" width="120%" height="120%">
         <feDropShadow dx="0" dy="25" stdDeviation="18" flood-color="#000000" flood-opacity="0.65"/>
       </filter>
@@ -69,8 +69,22 @@
         <feComposite in2="shadowDiff" operator="in"/>
         <feComposite in2="SourceGraphic" operator="over"/>
       </filter>
+      <filter id="knobShadow" x="-40%" y="-40%" width="180%" height="180%">
+        <feDropShadow dx="2" dy="3" stdDeviation="2" flood-color="#000000" flood-opacity="0.8"/>
+      </filter>
+      <filter id="dialShadow" x="-20%" y="-20%" width="140%" height="140%">
+        <feDropShadow dx="0" dy="1" stdDeviation="1" flood-color="#000000" flood-opacity="0.9"/>
+      </filter>
+      <filter id="speakerInset" x="-10%" y="-10%" width="120%" height="120%">
+        <feOffset dx="0" dy="3"/>
+        <feGaussianBlur stdDeviation="3" result="blur"/>
+        <feComposite operator="out" in="SourceGraphic" in2="blur" result="inverse"/>
+        <feFlood flood-color="#000000" flood-opacity="0.85" result="color"/>
+        <feComposite operator="in" in="color" in2="inverse" result="shadow"/>
+        <feComposite operator="over" in="shadow" in2="SourceGraphic"/>
+      </filter>
 
-      <!-- Malzeme Gradyanlari -->
+      <!-- Kasa, Ahşap ve Metal Gradyanları -->
       <linearGradient id="woodFrame" x1="0%" y1="0%" x2="100%" y2="100%">
         <stop offset="0%" stop-color="#c95328"/>
         <stop offset="15%" stop-color="#8a3011"/>
@@ -99,10 +113,51 @@
         <stop offset="50%" stop-color="#ded7c0"/>
         <stop offset="100%" stop-color="#bbb39b"/>
       </linearGradient>
-
-      <!-- Ekran Maskesi -->
+      <linearGradient id="metalCylinder" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#888888"/>
+        <stop offset="30%" stop-color="#ffffff"/>
+        <stop offset="50%" stop-color="#aaaaaa"/>
+        <stop offset="80%" stop-color="#333333"/>
+        <stop offset="100%" stop-color="#111111"/>
+      </linearGradient>
+      <radialGradient id="plasticCap" cx="35%" cy="35%" r="65%">
+        <stop offset="0%" stop-color="#4a4a4a"/>
+        <stop offset="40%" stop-color="#222222"/>
+        <stop offset="100%" stop-color="#050505"/>
+      </radialGradient>
+      <radialGradient id="crtGlass" cx="50%" cy="50%" r="70%">
+        <stop offset="0%" stop-color="#ffffff" stop-opacity="0"/>
+        <stop offset="100%" stop-color="#ffffff" stop-opacity="0.12"/>
+      </radialGradient>
+      <linearGradient id="glare" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#ffffff" stop-opacity="0.25"/>
+        <stop offset="30%" stop-color="#ffffff" stop-opacity="0.05"/>
+        <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+      </linearGradient>
+      <radialGradient id="speakerCone" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#1a1a1a"/>
+        <stop offset="20%" stop-color="#242424"/>
+        <stop offset="60%" stop-color="#050505"/>
+        <stop offset="100%" stop-color="#000000"/>
+      </radialGradient>
+      <pattern id="speakerMesh" width="3" height="3" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+        <circle cx="1.5" cy="1.5" r="1" fill="#0d0d0d"/>
+      </pattern>
+      <pattern id="scanlines" width="100" height="4" patternUnits="userSpaceOnUse">
+        <line x1="0" y1="0" x2="100" y2="0" stroke="#000000" stroke-width="1.2" opacity="0.3"/>
+      </pattern>
+      
+      <!-- DINAMIK MASKE KİMLİKLERİ EKLENDİ -->
       <clipPath id="screenCustomClip">
         <path id="screenCustomClipPath" d="M 203.3 542 L 203.3 195 A 22 22 0 0 1 225.3 173 L 700.7 173 A 22 22 0 0 1 722.7 195 L 722.7 542 Z" />
+      </clipPath>
+      <clipPath id="grilleHoles">
+        <rect x="15" y="24" width="4.5" height="86" rx="2.25"/>
+        <rect x="23" y="14" width="4.5" height="106" rx="2.25"/>
+        <rect x="31" y="10" width="4.5" height="114" rx="2.25"/>
+        <rect x="39" y="10" width="4.5" height="114" rx="2.25"/>
+        <rect x="47" y="14" width="4.5" height="106" rx="2.25"/>
+        <rect x="55" y="24" width="4.5" height="86" rx="2.25"/>
       </clipPath>
       <clipPath id="woodFrameClip">
         <rect id="woodFrameClipRect" x="178.3" y="150" width="683.4" height="469" rx="8"/>
@@ -128,12 +183,15 @@
       <polygon points="1160,770 840,550 840,553 1160,774" fill="#252a36" opacity="0.8"/>
       <polygon points="200,550 840,550 840,580 200,580" fill="#06070a"/>
       <polygon points="200,550 840,550 840,552 200,552" fill="#1c2029" opacity="0.6"/>
+      
+      <polygon points="-120,770 200,550 210,555 -110,775" fill="#000000" opacity="0.4" filter="blur(2px)"/>
+      <polygon points="1160,770 840,550 830,555 1170,775" fill="#000000" opacity="0.4" filter="blur(2px)"/>
+      <polygon points="200,550 840,550 840,554 200,554" fill="#000000" opacity="0.5" filter="blur(2px)"/>
     </g>
 
-    <!-- ZEMİN GÖLGESİ -->
     <ellipse cx="520" cy="636" rx="420" ry="28" fill="#000000" opacity="0.85" filter="blur(14px)"/>
 
-    <!-- TV AYAKLARI -->
+    <!-- TV AYAKLARI (Gruplandırıldı ve ID Eklendi) -->
     <g id="tvFeetLeft">
       <rect x="248.3" y="611" width="35" height="10" rx="2" fill="url(#sharpChrome)"/>
       <rect x="250.3" y="618" width="31" height="7" rx="3" fill="#64748b" stroke="#334155" stroke-width="1"/>
@@ -143,13 +201,57 @@
       <rect x="758.7" y="618" width="31" height="7" rx="3" fill="#64748b" stroke="#334155" stroke-width="1"/>
     </g>
 
-    <!-- TV AHŞAP KASA -->
-    <g id="tvBody" filter="url(#tvDropShadow)">
-      <rect id="woodMain" x="178.3" y="150" width="683.4" height="469" rx="8" fill="url(#woodFrame)"/>
-      <rect id="woodStroke1" x="179.3" y="151" width="681.4" height="467" rx="7" fill="none" stroke="#e87a4d" stroke-width="2" opacity="0.85"/>
-      <rect id="woodStroke2" x="180.3" y="152" width="679.4" height="465" rx="6" fill="none" stroke="#3d1000" stroke-width="3" opacity="0.9"/> 
+    <!-- ANTENLER (Merkezde sabit kalacak) -->
+    <g id="antennas">
+      <ellipse cx="520" cy="155" rx="42" ry="8" fill="#111111"/>
+      <ellipse cx="520" cy="154" rx="40" ry="7" fill="#2a2a2a"/>
+      <path d="M 480,154 C 480,125 560,125 560,154 Z" fill="url(#chromeDome)"/>
+      <path d="M 490,152 C 490,132 550,132 550,152 Z" fill="#ffffff" opacity="0.15"/>
+      <g transform="rotate(-32, 505, 150)">
+        <rect x="501" y="132" width="8" height="15" rx="2" fill="url(#sharpChrome)"/>
+        <circle cx="505" cy="140" r="2.5" fill="#111111"/>
+        <circle cx="505" cy="140" r="1" fill="#444444"/>
+        <rect x="501.5" y="90" width="7" height="42" fill="url(#sharpChrome)"/>
+        <rect x="502" y="90" width="1.5" height="42" fill="#ffffff" opacity="0.7"/> 
+        <line x1="501.5" y1="95" x2="508.5" y2="95" stroke="#1f2937" stroke-width="1.5"/>
+        <line x1="501.5" y1="100" x2="508.5" y2="100" stroke="#1f2937" stroke-width="1.5"/>
+        <line x1="501.5" y1="105" x2="508.5" y2="105" stroke="#1f2937" stroke-width="1.5"/>
+        <circle cx="505" cy="85" r="5.5" fill="url(#chromeDome)"/>
+        <circle cx="503.5" cy="83.5" r="1.5" fill="#ffffff" opacity="0.8"/> 
+      </g>
+      <g transform="rotate(32, 535, 150)">
+        <rect x="531" y="132" width="8" height="15" rx="2" fill="url(#sharpChrome)"/>
+        <circle cx="535" cy="140" r="2.5" fill="#111111"/> 
+        <circle cx="535" cy="140" r="1" fill="#444444"/>
+        <rect x="531.5" y="90" width="7" height="42" fill="url(#sharpChrome)"/>
+        <rect x="532" y="90" width="1.5" height="42" fill="#ffffff" opacity="0.7"/> 
+        <line x1="531.5" y1="95" x2="538.5" y2="95" stroke="#1f2937" stroke-width="1.5"/>
+        <line x1="531.5" y1="100" x2="538.5" y2="100" stroke="#1f2937" stroke-width="1.5"/>
+        <line x1="531.5" y1="105" x2="538.5" y2="105" stroke="#1f2937" stroke-width="1.5"/>
+        <circle cx="535" cy="85" r="5.5" fill="url(#chromeDome)"/>
+        <circle cx="533.5" cy="83.5" r="1.5" fill="#ffffff" opacity="0.8"/> 
+      </g>
+    </g>
+
+    <!-- TV AHŞAP KASA (ID'ler eklendi) -->
+    <g filter="url(#tvDropShadow)">
+      <rect id="tvWoodOuter" x="178.3" y="150" width="683.4" height="469" rx="8" fill="url(#woodFrame)"/>
+      <rect id="tvWoodStroke1" x="179.3" y="151" width="681.4" height="467" rx="7" fill="none" stroke="#e87a4d" stroke-width="2" opacity="0.85"/>
+      <rect id="tvWoodStroke2" x="180.3" y="152" width="679.4" height="465" rx="6" fill="none" stroke="#3d1000" stroke-width="3" opacity="0.9"/> 
+
+      <g clip-path="url(#woodFrameClip)">
+        <line id="woodLineTL" x1="178.3" y1="150" x2="190.3" y2="162" stroke="#2a0a00" stroke-width="1.5" opacity="0.6"/>
+        <line id="woodLineTR" x1="861.7" y1="150" x2="849.7" y2="162" stroke="#2a0a00" stroke-width="1.5" opacity="0.6"/>
+        <line id="woodLineBL" x1="178.3" y1="619" x2="190.3" y2="607" stroke="#2a0a00" stroke-width="1.5" opacity="0.6"/>
+        <line id="woodLineBR" x1="861.7" y1="619" x2="849.7" y2="607" stroke="#2a0a00" stroke-width="1.5" opacity="0.6"/>
+      </g>
+
+      <g clip-path="url(#woodFrameClip)">
+        <path id="woodGlare" d="M 179.3,460 L 320,151 L 520,151 L 179.3,590 Z" fill="#ffffff" opacity="0.06"/>
+      </g>
 
       <rect id="innerBlackCase" x="190.3" y="162" width="659.4" height="445" rx="8" fill="#181818" stroke="#050505" stroke-width="3"/>
+      <rect id="innerBlackCaseStroke" x="192.3" y="164" width="655.4" height="441" rx="6" fill="none" stroke="#333333" stroke-width="1"/>
 
       <!-- EKRAN ALANI VE PLAYER -->
       <g id="screenArea">
@@ -159,77 +261,233 @@
         <path id="blackScreenBg" d="M 201.3 544 L 201.3 193 A 22 22 0 0 1 223.3 171 L 702.7 171 A 22 22 0 0 1 724.7 193 L 724.7 544 Z" fill="#050505" stroke="#99927c" stroke-width="2" />
 
         <foreignObject id="playerObject" x="203.3" y="173" width="519.4" height="369" clip-path="url(#screenCustomClip)">
-          <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100%; height: 100%; margin: 0; padding: 0; background-color: #000;">
+           <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100%; height: 100%; margin: 0; padding: 0; background-color: #000; border-radius: 22px 22px 0 0; overflow: hidden;">
             <iframe id="ytIframe" width="100%" height="100%" src="" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
           </div>
         </foreignObject>
+
+        <!-- EKRAN MASKELERİ (ID'ler Eklendi) -->
+        <g style="pointer-events: none;" clip-path="url(#screenCustomClip)">
+          <rect id="effectScanlines" x="203.3" y="173" width="519.4" height="369" fill="url(#scanlines)"/>
+          <rect id="effectCrtGlass" x="203.3" y="173" width="519.4" height="369" fill="url(#crtGlass)"/>
+          <path id="effectGlare" d="M 203.3,173 L 487.7,173 L 288.3,542 L 203.3,542 Z" fill="url(#glare)"/>
+          <rect id="effectOvalStroke" x="203.3" y="173" width="519.4" height="369" fill="none" stroke="#050505" stroke-width="16" rx="22" ry="22"/>
+          <rect id="effectInnerLine" x="203.3" y="173" width="519.4" height="369" fill="none" stroke="#000000" stroke-width="4" opacity="0.8"/>
+        </g>
+        
+        <g transform="translate(448, 568)">
+          <rect x="0" y="0" width="30" height="7" rx="2" fill="#111111" filter="url(#dialShadow)"/>
+          <rect x="3" y="2" width="7" height="3" fill="#ff2222" opacity="0.8"/>
+          <rect x="11.5" y="2" width="7" height="3" fill="#22ff22" opacity="0.8"/>
+          <rect x="20" y="2" width="7" height="3" fill="#2266ff" opacity="0.8"/>
+        </g>
+      </g>
+
+      <!-- SAĞ KONTROL PANELİ VE HOPARLÖR (Dinamik Kaydırma Grubu Eklendi) -->
+      <g id="controlPanelGroup">
+        <g id="controlPanel">
+          <rect x="735.7" y="170" width="106" height="429" fill="#222222" stroke="#111111" stroke-width="2"/>
+          <g transform="translate(765.7, 210)" filter="url(#knobShadow)">
+            <circle cx="0" cy="0" r="10.5" fill="url(#metalCylinder)"/>
+            <circle cx="0" cy="0" r="9" fill="url(#plasticCap)"/>
+            <circle cx="0" cy="0" r="9" fill="none" stroke="#050505" stroke-width="0.5"/>
+            <rect x="-0.8" y="-7.5" width="1.6" height="5" rx="0.5" fill="#e63946"/>
+            <text x="0" y="-13" font-family="sans-serif" font-size="4" font-weight="bold" fill="#bbbbbb" text-anchor="middle" filter="none">VOL</text>
+          </g>
+          <g transform="translate(811.7, 210)" filter="url(#knobShadow)">
+            <circle cx="0" cy="0" r="10.5" fill="url(#metalCylinder)"/>
+            <circle cx="0" cy="0" r="9" fill="url(#plasticCap)"/>
+            <circle cx="0" cy="0" r="9" fill="none" stroke="#050505" stroke-width="0.5"/>
+            <rect x="-0.8" y="-7.5" width="1.6" height="5" rx="0.5" fill="#e63946" transform="rotate(30)"/>
+            <text x="0" y="-13" font-family="sans-serif" font-size="4" font-weight="bold" fill="#bbbbbb" text-anchor="middle">BRIGHT</text>
+          </g>
+          <g transform="translate(765.7, 255)" filter="url(#knobShadow)">
+            <circle cx="0" cy="0" r="10.5" fill="url(#metalCylinder)"/>
+            <circle cx="0" cy="0" r="9" fill="url(#plasticCap)"/>
+            <circle cx="0" cy="0" r="9" fill="none" stroke="#050505" stroke-width="0.5"/>
+            <rect x="-0.8" y="-7.5" width="1.6" height="5" rx="0.5" fill="#e63946" transform="rotate(-40)"/>
+            <text x="0" y="-13" font-family="sans-serif" font-size="3.8" font-weight="bold" fill="#bbbbbb" text-anchor="middle">FINE</text>
+          </g>
+          <g transform="translate(811.7, 255)" filter="url(#knobShadow)">
+            <circle cx="0" cy="0" r="10.5" fill="url(#metalCylinder)"/>
+            <circle cx="0" cy="0" r="9" fill="url(#plasticCap)"/>
+            <circle cx="0" cy="0" r="9" fill="none" stroke="#050505" stroke-width="0.5"/>
+            <rect x="-0.8" y="-7.5" width="1.6" height="5" rx="0.5" fill="#e63946" transform="rotate(15)"/>
+            <text x="0" y="-13" font-family="sans-serif" font-size="3.8" font-weight="bold" fill="#bbbbbb" text-anchor="middle">CONT</text>
+          </g>
+          <g transform="translate(788.7, 330)">
+            <circle cx="0" cy="0" r="26" fill="#111111" filter="url(#dialShadow)"/>
+            <circle cx="0" cy="0" r="25" fill="none" stroke="url(#metalCylinder)" stroke-width="1.5"/>
+            <circle cx="0" cy="0" r="23" fill="none" stroke="#ffffff" stroke-width="1.2" stroke-dasharray="1.5, 6"/>
+            <circle cx="0" cy="0" r="23" fill="none" stroke="#888888" stroke-width="3" stroke-dasharray="0.5, 29.5"/>
+            <text x="17" y="-17" font-family="sans-serif" font-size="4.5" font-weight="bold" fill="#ffffff" filter="url(#dialShadow)">VHF</text>
+            <g filter="url(#knobShadow)">
+              <circle cx="0" cy="0" r="18" fill="url(#plasticCap)"/>
+              <circle cx="0" cy="0" r="17.5" fill="none" stroke="#050505" stroke-width="1.5" stroke-dasharray="1.5, 2.5"/>
+              <circle cx="0" cy="0" r="13" fill="url(#metalCylinder)"/>
+              <circle cx="0" cy="0" r="12" fill="url(#chromeDome)"/>
+              <rect x="-14" y="-4" width="28" height="8" rx="2" fill="url(#metalCylinder)"/>
+              <rect x="-13" y="-3.5" width="26" height="3" rx="1.5" fill="#ffffff" opacity="0.5"/>
+              <rect x="-13" y="1" width="26" height="2.5" rx="1.5" fill="#000000" opacity="0.4"/>
+              <rect x="-1" y="-8.5" width="2" height="10" rx="1" fill="#e63946"/>
+              <rect x="-0.5" y="-8" width="0.5" height="9" rx="0.25" fill="#ffffff" opacity="0.6"/>
+            </g>
+          </g>
+          <g transform="translate(788.7, 405)">
+            <circle cx="0" cy="0" r="26" fill="#111111" filter="url(#dialShadow)"/>
+            <circle cx="0" cy="0" r="25" fill="none" stroke="url(#metalCylinder)" stroke-width="1.5"/>
+            <circle cx="0" cy="0" r="23" fill="none" stroke="#ffffff" stroke-width="1.2" stroke-dasharray="1.5, 6"/>
+            <circle cx="0" cy="0" r="23" fill="none" stroke="#888888" stroke-width="3" stroke-dasharray="0.5, 29.5"/>
+            <text x="17" y="-17" font-family="sans-serif" font-size="4.5" font-weight="bold" fill="#ffffff" filter="url(#dialShadow)">UHF</text>
+            <g filter="url(#knobShadow)">
+              <circle cx="0" cy="0" r="18" fill="url(#plasticCap)"/>
+              <circle cx="0" cy="0" r="17.5" fill="none" stroke="#050505" stroke-width="1.5" stroke-dasharray="1.5, 2.5"/>
+              <circle cx="0" cy="0" r="13" fill="url(#metalCylinder)"/>
+              <circle cx="0" cy="0" r="12" fill="url(#chromeDome)"/>
+              <g transform="rotate(45)">
+                <rect x="-14" y="-4" width="28" height="8" rx="2" fill="url(#metalCylinder)"/>
+                <rect x="-13" y="-3.5" width="26" height="3" rx="1.5" fill="#ffffff" opacity="0.5"/>
+                <rect x="-13" y="1" width="26" height="2.5" rx="1.5" fill="#000000" opacity="0.4"/>
+                <rect x="-1" y="-8.5" width="2" height="10" rx="1" fill="#e63946"/>
+                <rect x="-0.5" y="-8" width="0.5" height="9" rx="0.25" fill="#ffffff" opacity="0.6"/>
+              </g>
+            </g>
+          </g>
+          <g transform="translate(752.7, 450)">
+            <rect x="0" y="0" width="72" height="134" rx="10" fill="#171717" stroke="#111" stroke-width="1" filter="url(#speakerInset)"/>
+            <g clip-path="url(#grilleHoles)">
+              <rect x="0" y="0" width="72" height="134" fill="#000000"/>
+              <circle cx="36" cy="67" r="38" fill="url(#speakerCone)"/>
+              <circle cx="36" cy="67" r="12" fill="#050505"/>
+              <rect x="0" y="0" width="72" height="134" fill="url(#speakerMesh)"/>
+            </g>
+            <g fill="none" stroke="#333333" stroke-width="1" transform="translate(0.5, 0.5)">
+              <rect x="15" y="24" width="4.5" height="86" rx="2.25"/>
+              <rect x="23" y="14" width="4.5" height="106" rx="2.25"/>
+              <rect x="31" y="10" width="4.5" height="114" rx="2.25"/>
+              <rect x="39" y="10" width="4.5" height="114" rx="2.25"/>
+              <rect x="47" y="14" width="4.5" height="106" rx="2.25"/>
+              <rect x="55" y="24" width="4.5" height="86" rx="2.25"/>
+            </g>
+            <g fill="none" stroke="#000000" stroke-width="1.5">
+              <rect x="15" y="24" width="4.5" height="86" rx="2.25"/>
+              <rect x="23" y="14" width="4.5" height="106" rx="2.25"/>
+              <rect x="31" y="10" width="4.5" height="114" rx="2.25"/>
+              <rect x="39" y="10" width="4.5" height="114" rx="2.25"/>
+              <rect x="47" y="14" width="4.5" height="106" rx="2.25"/>
+              <rect x="55" y="24" width="4.5" height="86" rx="2.25"/>
+            </g>
+          </g>
+        </g>
       </g>
     </g>
   </svg>
 
   <script>
-    // CLOUDFLARE WORKER URL'İNİZİ BURAYA YAZIN
+    // Kendi Worker adresinizle değiştirin
     const PROXY_URL = "https://tvretro-proxy.biserkanla.workers.dev/?url=";
 
     async function initPlayer() {
       const urlParams = new URLSearchParams(window.location.search);
       const videoId = urlParams.get('v');
 
-      if (!videoId) {
-        alert("Video ID bulunamadı!");
-        return;
-      }
+      if (!videoId) return;
 
-      // Iframe kaynağını ayarla
       const iframe = document.getElementById('ytIframe');
       iframe.src = `https://www.youtube.com/embed/${videoId}?controls=0&modestbranding=1&rel=0&iv_load_policy=3&disablekb=1&fs=0&autoplay=1&mute=0`;
 
-      // En-boy oranını çekip SVG'yi boyutlandır
       try {
         const targetVideoUrl = `https://www.youtube.com/watch?v=${videoId}`;
         const response = await fetch(`${PROXY_URL}${encodeURIComponent(targetVideoUrl)}`);
         const data = await response.json();
 
         if (data.width && data.height) {
-          adjustTvRatio(data.width / data.height);
+          adjustTvSymmetrically(data.width / data.height);
         }
       } catch (err) {
-        console.warn("oEmbed verisi çekilemedi, varsayılan 16:9 uygulanıyor.", err);
+        console.warn("oEmbed çekilemedi, varsayılan 16:9 uygulanıyor.");
+        adjustTvSymmetrically(16 / 9); // Hata anında standart yatay oranı uygula
       }
     }
 
-    function adjustTvRatio(ratio) {
-      // Ekran yüksekliği sabit: 369px
+    function adjustTvSymmetrically(ratio) {
       const baseHeight = 369;
+      const baseWidth = 519.4; // Orijinal ekran genişliği
       let newWidth = baseHeight * ratio;
 
-      // Sınırlandırma (Çok dar veya çok geniş videoları dizaynı bozmayacak seviyede tut)
-      newWidth = Math.max(280, Math.min(newWidth, 680));
+      // Tasarımı ve SVG ViewBox'u bozmamak için aşırı uçları sınırlandırıyoruz (Örn: Ultra-wide veya Dikey)
+      newWidth = Math.max(380, Math.min(newWidth, 680)); 
 
-      const defaultWidth = 519.4;
-      const deltaX = (newWidth - defaultWidth);
+      const deltaX = newWidth - baseWidth;
+      const shift = deltaX / 2; // Genişlemenin yarısı sola, yarısı sağa dağıtılacak
+      const startX = 203.3 - shift; // Ekranın yeni başlangıç noktası
 
-      // SVG Elemanlarını Dinamik Ölçekle
-      const playerObj = document.getElementById('playerObject');
-      const startX = 203.3 - (deltaX / 2);
+      // 1. EKRAN VE YOUTUBE İFRAME GÜNCELLEMELERİ
+      document.getElementById('playerObject').setAttribute('x', startX);
+      document.getElementById('playerObject').setAttribute('width', newWidth);
+      document.getElementById('effectScanlines').setAttribute('x', startX);
+      document.getElementById('effectScanlines').setAttribute('width', newWidth);
+      document.getElementById('effectCrtGlass').setAttribute('x', startX);
+      document.getElementById('effectCrtGlass').setAttribute('width', newWidth);
+      document.getElementById('effectOvalStroke').setAttribute('x', startX);
+      document.getElementById('effectOvalStroke').setAttribute('width', newWidth);
+      document.getElementById('effectInnerLine').setAttribute('x', startX);
+      document.getElementById('effectInnerLine').setAttribute('width', newWidth);
 
-      playerObj.setAttribute('x', startX);
-      playerObj.setAttribute('width', newWidth);
+      // Kırpma Maskesi ve Siyah Arkaplan
+      document.getElementById('screenCustomClipPath').setAttribute('d', 
+        `M ${startX} 542 L ${startX} 195 A 22 22 0 0 1 ${startX + 22} 173 L ${startX + newWidth - 22} 173 A 22 22 0 0 1 ${startX + newWidth} 195 L ${startX + newWidth} 542 Z`
+      );
+      document.getElementById('blackScreenBg').setAttribute('d', 
+        `M ${startX - 2} 544 L ${startX - 2} 193 A 22 22 0 0 1 ${startX + 20} 171 L ${startX + newWidth - 20} 171 A 22 22 0 0 1 ${startX + newWidth + 2} 193 L ${startX + newWidth + 2} 544 Z`
+      );
+      document.getElementById('effectGlare').setAttribute('d', 
+        `M ${startX},173 L 487.7,173 L 288.3,542 L ${startX},542 Z`
+      );
 
-      // Maskeleri Güncelle
-      const clipPath = document.getElementById('screenCustomClipPath');
-      clipPath.setAttribute('d', `M ${startX} 542 L ${startX} 195 A 22 22 0 0 1 ${startX + 22} 173 L ${startX + newWidth - 22} 173 A 22 22 0 0 1 ${startX + newWidth} 195 L ${startX + newWidth} 542 Z`);
+      // 2. KREM ÇERÇEVE VE SİYAH İÇ KASA
+      const caseShiftX = 190.3 - shift;
+      const caseWidth = 659.4 + deltaX;
 
-      const blackBg = document.getElementById('blackScreenBg');
-      blackBg.setAttribute('d', `M ${startX - 2} 544 L ${startX - 2} 193 A 22 22 0 0 1 ${startX + 20} 171 L ${startX + newWidth - 20} 171 A 22 22 0 0 1 ${startX + newWidth + 2} 193 L ${startX + newWidth + 2} 544 Z`);
+      document.getElementById('innerBlackCase').setAttribute('x', caseShiftX);
+      document.getElementById('innerBlackCase').setAttribute('width', caseWidth);
+      document.getElementById('innerBlackCaseStroke').setAttribute('x', caseShiftX + 2);
+      document.getElementById('innerBlackCaseStroke').setAttribute('width', caseWidth - 4);
+      document.getElementById('creamBezel').setAttribute('x', startX - 5);
+      document.getElementById('creamBezel').setAttribute('width', newWidth + 10);
+      document.getElementById('creamBezelStroke').setAttribute('x', startX - 5);
+      document.getElementById('creamBezelStroke').setAttribute('width', newWidth + 10);
 
-      // Bezel ve Ahşap Kasayı Genişlet
-      const creamBezel = document.getElementById('creamBezel');
-      const creamBezelStroke = document.getElementById('creamBezelStroke');
-      creamBezel.setAttribute('x', startX - 5);
-      creamBezel.setAttribute('width', newWidth + 10);
-      creamBezelStroke.setAttribute('x', startX - 5);
-      creamBezelStroke.setAttribute('width', newWidth + 10);
+      // 3. DIŞ AHŞAP KASA GÜNCELLEMELERİ
+      const woodStartX = 178.3 - shift;
+      const woodWidth = 683.4 + deltaX;
+
+      document.getElementById('tvWoodOuter').setAttribute('x', woodStartX);
+      document.getElementById('tvWoodOuter').setAttribute('width', woodWidth);
+      document.getElementById('tvWoodStroke1').setAttribute('x', woodStartX + 1);
+      document.getElementById('tvWoodStroke1').setAttribute('width', woodWidth - 2);
+      document.getElementById('tvWoodStroke2').setAttribute('x', woodStartX + 2);
+      document.getElementById('tvWoodStroke2').setAttribute('width', woodWidth - 4);
+      document.getElementById('woodFrameClipRect').setAttribute('x', woodStartX);
+      document.getElementById('woodFrameClipRect').setAttribute('width', woodWidth);
+      document.getElementById('woodGlare').setAttribute('d', 
+        `M ${woodStartX + 1},460 L 320,151 L 520,151 L ${woodStartX + 1},590 Z`
+      );
+
+      // Kasa Köşe Çizgileri
+      document.getElementById('woodLineTL').setAttribute('x1', woodStartX);
+      document.getElementById('woodLineTL').setAttribute('x2', woodStartX + 12);
+      document.getElementById('woodLineBL').setAttribute('x1', woodStartX);
+      document.getElementById('woodLineBL').setAttribute('x2', woodStartX + 12);
+      document.getElementById('woodLineTR').setAttribute('x1', woodStartX + woodWidth);
+      document.getElementById('woodLineTR').setAttribute('x2', woodStartX + woodWidth - 12);
+      document.getElementById('woodLineBR').setAttribute('x1', woodStartX + woodWidth);
+      document.getElementById('woodLineBR').setAttribute('x2', woodStartX + woodWidth - 12);
+
+      // 4. TV AYAKLARI VE KONTROL PANELİ (Koordinatları Translate İle Kaydırma)
+      document.getElementById('controlPanelGroup').setAttribute('transform', `translate(${shift}, 0)`);
+      document.getElementById('tvFeetRight').setAttribute('transform', `translate(${shift}, 0)`);
+      document.getElementById('tvFeetLeft').setAttribute('transform', `translate(${-shift}, 0)`);
     }
 
     window.addEventListener('DOMContentLoaded', initPlayer);
