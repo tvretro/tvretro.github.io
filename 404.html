@@ -434,8 +434,8 @@
           'cc_load_policy': 0,
           'disablekb': 1,
           'fs': 0,
-          'autoplay': 1,
-          'mute': 1
+          'autoplay': 0, // Otomatik oynatma kapatıldı (Doğal akış)
+          'mute': 0      // Ses kısıtlaması kaldırıldı
         },
         events: {
           'onReady': onPlayerReady,
@@ -448,16 +448,9 @@
       const clickOverlay = document.getElementById('clickOverlay');
       if (clickOverlay) {
         clickOverlay.addEventListener('click', () => {
-          if (isFirstInteraction) {
-            player.unMute();
-            player.setVolume(100);
-            player.playVideo();
-            isFirstInteraction = false;
-            return;
-          }
-
-  
           const state = player.getPlayerState();
+          
+          // Tıklamayla başlatıldığı için tarayıcı sesi engellemez
           if (state === YT.PlayerState.PLAYING || state === YT.PlayerState.BUFFERING) {
             player.pauseVideo();
           } else {
