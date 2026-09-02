@@ -1,6 +1,6 @@
 # Watch the YouTube video on "Retro TV"
 
-# [https://tvretro.github.io/](https://tvretro.github.io/watch?v=XEjLoHdbVeE)
+## [https://tvretro.github.io/](https://tvretro.github.io/)
 
 An immersive, dynamic SVG-based Retro TV interface for watching YouTube videos with styled CRT aesthetics and adaptive aspect ratio scaling.
 
