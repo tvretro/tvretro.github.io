@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Retro TV - YouTube Oynatıcı</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background-color: #080a0c;
+      color: #ede7d3;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .card {
+      background: #14171f;
+      padding: 2.5rem;
+      border-radius: 12px;
+      border: 1px solid #222836;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+      width: 100%;
+      max-width: 480px;
+      text-align: center;
+    }
+    h1 { font-size: 1.5rem; margin-bottom: 0.5rem; color: #c95328; }
+    p { font-size: 0.9rem; color: #94a3b8; margin-bottom: 1.5rem; }
+    form { display: flex; gap: 0.5rem; }
+    input {
+      flex: 1;
+      padding: 0.75rem 1rem;
+      border-radius: 6px;
+      border: 1px solid #334155;
+      background: #0b0d12;
+      color: #fff;
+      outline: none;
+    }
+    input:focus { border-color: #c95328; }
+    button {
+      padding: 0.75rem 1.25rem;
+      border-radius: 6px;
+      border: none;
+      background: #c95328;
+      color: #fff;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    button:hover { background: #bd471c; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Retro TV</h1>
+    <p>İzlemek istediğiniz YouTube video bağlantısını yapıştırın.</p>
+    <form id="urlForm">
+      <input type="text" id="ytUrl" placeholder="https://www.youtube.com/watch?v=..." required>
+      <button type="submit">İzle</button>
+    </form>
+  </div>
+
+  <script>
+    document.getElementById('urlForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const url = document.getElementById('ytUrl').value;
+      const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+      const match = url.match(regExp);
+
+      if (match && match[2].length === 11) {
+        window.location.href = `watch.html?v=${match[2]}`;
+      } else {
+        alert('Geçersiz YouTube URL adresi!');
+      }
+    });
+  </script>
+</body>
+</html>
