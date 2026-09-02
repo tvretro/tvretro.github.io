@@ -448,17 +448,22 @@
         };
 
         function onPlayerReady(event) {
-        const clickOverlay = document.getElementById('clickOverlay');
-        if (clickOverlay) {
+          const clickOverlay = document.getElementById('clickOverlay');
+          if (clickOverlay) {
             clickOverlay.addEventListener('click', () => {
-            const state = player.getPlayerState();
-            if (state === YT.PlayerState.PLAYING || state === YT.PlayerState.BUFFERING) {
+              // Sesi aç
+              if (player.isMuted()) {
+                player.unMute();
+              }
+              
+              const state = player.getPlayerState();
+              if (state === YT.PlayerState.PLAYING || state === YT.PlayerState.BUFFERING) {
                 player.pauseVideo();
-            } else {
+              } else {
                 player.playVideo();
-            }
+              }
             });
-        }
+          }
         }
 
         function onPlayerStateChange(event) {
