@@ -25,8 +25,33 @@
       height: 100vh;
     }
 
-    #homeButton:hover {
-      opacity: 0.9 !important;
+    .viewport-home-btn {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 52px;
+      height: 52px;
+      background: rgba(10, 12, 16, 0.7);
+      border: 1.5px solid rgba(255, 255, 255, 0.15);
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      backdrop-filter: blur(4px);
+    }
+
+    .viewport-home-btn:hover {
+      background: rgba(230, 57, 70, 0.9);
+      border-color: rgba(255, 255, 255, 0.6);
+      transform: scale(1.08) translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+    }
+
+    .viewport-home-btn svg {
+      width: 24px;
+      height: 24px;
     }
   </style>
 </head>
@@ -417,19 +442,24 @@
             </g>
           </g>
         </g>
-        <a href="https://tvretro.github.io/" target="_self" style="cursor: pointer;">
-          <g id="homeButton" transform="translate(800, 565)" opacity="0.4" style="transition: opacity 0.2s ease;">
-            <circle cx="12" cy="12" r="14" fill="#0d0d0d" stroke="#222222" stroke-width="1.5" />
-            <circle cx="12" cy="12" r="13" fill="none" stroke="#ffffff" stroke-width="1" opacity="0.3" />
-            <path
-              d="M 12,5.5 L 4.5,12 L 6.5,12 L 6.5,18 L 10,18 L 10,14 L 14,14 L 14,18 L 17.5,18 L 17.5,12 L 19.5,12 Z"
-              fill="#ffffff" />
-          </g>
-        </a>
       </g>
     </g>
   </svg>
 
+  <a href="https://tvretro.github.io/" class="viewport-home-btn" title="Ana Sayfaya Dön">
+    <svg viewBox="0 0 24 24" fill="none" stroke="#dedede" stroke-width="1.8" stroke-linecap="round"
+      stroke-linejoin="round">
+      <path d="M3 10L12 3l9 7" />
+      <path d="M5 10v11h14V10" />
+      <path d="M17 5v3" />
+      <path d="M15.5 4h3" />
+      <path d="M10 21V14h4v7" />
+      <circle cx="13" cy="17.5" r="0.5" fill="#dedede" stroke="none" />
+      <rect x="6" y="12" width="3" height="4" />
+      <path d="M6 14h3" />
+      <path d="M7.5 12v4" />
+    </svg>
+  </a>
   <script>
     const urlParams = new URLSearchParams(window.location.search);
     let videoId = urlParams.get('v');
