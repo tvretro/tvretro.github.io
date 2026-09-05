@@ -71,7 +71,6 @@
   <body>
     <svg id="retroTvSvg" xmlns="http://www.w3.org/2000/svg" viewBox="86 75 867 585" width="100vw" height="100vh" preserveAspectRatio="xMidYMid meet">
       <defs>
-        <!-- Güvenli Ahşap Dokusu (Performans Odaklı Pattern) -->
         <pattern id="safeWoodGrain" width="400" height="20" patternUnits="userSpaceOnUse" patternTransform="rotate(1)">
           <path d="M 0 5 Q 100 2 200 5 T 400 5" fill="none" stroke="#2B0E03" stroke-width="0.8" opacity="0.3" />
           <path d="M 0 12 Q 100 15 200 12 T 400 12" fill="none" stroke="#1A0500" stroke-width="1.2" opacity="0.2" />
@@ -231,7 +230,7 @@
           <path id="screenCustomClipPath" d="M 203.3 542 L 203.3 195 A 22 22 0 0 1 225.3 173 L 700.7 173 A 22 22 0 0 1 722.7 195 L 722.7 542 Z" />
         </clipPath>
         <clipPath id="grilleHoles">
-          <!-- Üst Izgara Parçaları -->
+
           <rect x="12" y="46.3" width="2.6" height="18.7" rx="1.3" />
           <rect x="16.8" y="30.7" width="2.6" height="34.3" rx="1.3" />
           <rect x="21.6" y="22.1" width="2.6" height="42.9" rx="1.3" />
@@ -243,7 +242,7 @@
           <rect x="50.4" y="22.1" width="2.6" height="42.9" rx="1.3" />
           <rect x="55.2" y="30.7" width="2.6" height="34.3" rx="1.3" />
           <rect x="60" y="46.3" width="2.6" height="18.7" rx="1.3" />
-          <!-- Alt Izgara Parçaları -->
+
           <rect x="12" y="69" width="2.6" height="18.7" rx="1.3" />
           <rect x="16.8" y="69" width="2.6" height="34.3" rx="1.3" />
           <rect x="21.6" y="69" width="2.6" height="42.9" rx="1.3" />
@@ -302,7 +301,7 @@
           <rect x="502.5" y="65" width="5" height="1.5" fill="#111827" opacity="0.8" />
         </g>
         <g transform="rotate(32, 535, 150)">
-          <!-- Ana Çubuk -->
+    
           <rect x="531.5" y="80" width="7" height="70" fill="url(#antennaRodGrad)" />
           <rect x="529.5" y="65" width="11" height="16" rx="1.5" fill="url(#antennaRodGrad)" />
           <line x1="531.5" y1="65" x2="531.5" y2="81" stroke="#1F2937" stroke-width="0.8" opacity="0.6" />
@@ -658,7 +657,7 @@
         document.getElementById('tvFeetRight').setAttribute('transform', `translate(${shift}, 0)`);
         document.getElementById('tvFeetLeft').setAttribute('transform', `translate(${-shift}, 0)`);
       }
-      // ===== İnteraktif VHF / UHF tuner düğmeleri =====
+      // VHF / UHF tuner 
       const dialConfigs = {
         vhf: {
           element: document.getElementById('vhfDial'),
@@ -675,30 +674,28 @@
           rotation: 75
         }
       };
-      // BURAYA EKLE: Video Listesi ve Değiştirme Mantığı
-      // ...
-      const stationList = ["dQw4w9WgXcQ", "jNQXAC9IVRw", "M7lc1UVf-VE", "kJQP7kiw5Fk", "9bZkp7q19f0"];
-      // Düğmenin kullanıcı tarafından hareket ettirilip ettirilmediğini takip et
+      // Videos
+      const stationList = ["swloMVFALXw", "S2ujotDMluo", "v9vxjNm8jX4", "IufsocTXfMY", "Qy7z_oiN6nQ"];
       let hasDialBeenMoved = false;
 
       function changeChannel(detentIndex) {
         if (!player || typeof player.loadVideoById !== 'function') return;
-        // Eğer düğme daha önce hiç hareket ettirilmemişse, URL'deki ilk video çalsın
+ 
         if (!hasDialBeenMoved) return;
         const listLength = stationList.length;
         const safeIndex = ((detentIndex % listLength) + listLength) % listLength;
-        // Eğer player henüz hazır değilse hata vermesini engelle
+ 
         try {
           player.loadVideoById(stationList[safeIndex]);
         } catch (e) {
           console.warn("YouTube Player henüz hazır değil.", e);
         }
       }
-      // ...
+ 
       let activeDial = null;
       let audioContext = null;
       let lastTickAt = 0;
-      // Ses sistemi
+ 
       function ensureDialAudio() {
         if (!audioContext) {
           const AudioCtx = window.AudioContext || window.webkitAudioContext;
@@ -710,17 +707,16 @@
         }
         return audioContext;
       }
-      // Mekanik "kır-kıt" sesi
-      // Mekanik plastik gıcırtı/sürtünme sesi
+
       function playMechanicalTick(direction) {
         const ctx = ensureDialAudio();
         if (!ctx) return;
         const now = ctx.currentTime;
-        // Seslerin üst üste binmesini engellemek için kısa bekleme
+
         if (now - lastTickAt < 0.015) return;
         lastTickAt = now;
-        // 1. Beyaz Gürültü Üretici (Plastik sürtünmesi hissi için)
-        const bufferSize = ctx.sampleRate * 0.05; // 50ms uzunluğunda buffer
+   
+        const bufferSize = ctx.sampleRate * 0.05; 
         const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
         const data = buffer.getChannelData(0);
         for (let i = 0; i < bufferSize; i++) {
@@ -728,52 +724,52 @@
         }
         const noiseSource = ctx.createBufferSource();
         noiseSource.buffer = buffer;
-        // 2. Filtre (Sesi boğuklaştırmak ve plastik tınısı vermek için)
+ 
         const filter = ctx.createBiquadFilter();
         filter.type = 'bandpass';
-        // Yön değişimine göre ufak bir tını farkı
+
         const freq = direction >= 0 ? 800 : 700;
         filter.frequency.setValueAtTime(freq, now);
-        filter.Q.setValueAtTime(1.5, now); // Genişlik - orta seviye rezonans
-        // 3. Gain (Sesin başlama ve bitiş zarfı - Envelope)
+        filter.Q.setValueAtTime(1.5, now); 
+  
         const gain = ctx.createGain();
-        // Tık sesi (vurmalı, hızlı başlayıp hızlı biten)
+   
         gain.gain.setValueAtTime(0.001, now);
-        gain.gain.linearRampToValueAtTime(0.8, now + 0.005); // Hızlı attack
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.04); // Hızlı decay
-        // Bağlantılar
+        gain.gain.linearRampToValueAtTime(0.8, now + 0.005); 
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.04); 
+
         noiseSource.connect(filter);
         filter.connect(gain);
         gain.connect(ctx.destination);
-        // Çal ve Temizle
+     
         noiseSource.start(now);
         noiseSource.stop(now + 0.05);
       }
-      // SVG elemanının ekran üzerindeki merkezini bul
+ 
       function dialCenterScreen(element) {
         const ctm = element?.getScreenCTM();
         return ctm ? new DOMPoint(0, 0).matrixTransform(ctm) : null;
       }
-      // Mouse pozisyonunun düğme merkezine göre açısını bul
+
       function pointerAngle(element, event) {
         const center = dialCenterScreen(element);
         if (!center) return null;
         return Math.atan2(event.clientY - center.y, event.clientX - center.x) * 180 / Math.PI;
       }
-      // -180 / +180 sınırında düzgün açı farkı
+
       function angleDelta(from, to) {
         let delta = to - from;
         while (delta > 180) delta -= 360;
         while (delta < -180) delta += 360;
         return delta;
       }
-      // Düğmeyi döndür
+
       function renderDial(config, rotation) {
         const transform = `rotate(${rotation})`;
         config.face?.setAttribute('transform', transform);
         config.pointer?.setAttribute('transform', transform);
       }
-      // Mouse bırakıldığında hafif oturma animasyonu
+  
       function animateDialTo(config, target) {
         const start = config.rotation;
         const distance = target - start;
@@ -797,8 +793,7 @@
         if (!config?.element) return;
         const angle = pointerAngle(config.element, event);
         if (angle == null) return;
-        // Tarayıcının ses kısıtlamasını aşmak için
-        // ilk gerçek mouse etkileşiminde AudioContext açılır.
+
         ensureDialAudio();
         activeDial = {
           name,
@@ -814,7 +809,7 @@
         } catch (_) {}
         event.preventDefault();
       }
-      // Mouse hareket ettikçe düğmeyi döndür
+  
       function moveDialDrag(event) {
         if (!activeDial || event.pointerId !== activeDial.pointerId) {
           return;
@@ -826,21 +821,18 @@
         if (angle == null) return;
         const RESISTANCE_FACTOR = 3;
         const rawDelta = angleDelta(activeDial.lastPointerAngle, angle);
-        // Açısal değişimi dirence bölerek yavaşlatıyoruz
+
         activeDial.rawRotation += (rawDelta / RESISTANCE_FACTOR);
         activeDial.lastPointerAngle = angle;
-        // Kademe hesapla
+
         const newDetent = Math.round(activeDial.rawRotation / config.step);
         const snappedRotation = newDetent * config.step;
-        // Yeni kademeye geldiysek ses çıkar
+   
         if (newDetent !== activeDial.lastDetent) {
     
-		    // Kullanıcı müdahalesi bayrağını aktif et
 		    hasDialBeenMoved = true;
 
 		    playMechanicalTick(newDetent > activeDial.lastDetent ? 1 : -1);
-		    
-		    // Kanalı değiştir
 		    changeChannel(newDetent);
 
 		    activeDial.lastDetent = newDetent;
@@ -850,7 +842,7 @@
 		  renderDial(config, snappedRotation);
 		  event.preventDefault();
 		}
-      // Mouse bırakıldı
+  
       function endDialDrag(event) {
         if (!activeDial) return;
         if (event?.pointerId != null && event.pointerId !== activeDial.pointerId) {
