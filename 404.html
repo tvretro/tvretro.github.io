@@ -53,6 +53,19 @@
       width: 24px;
       height: 24px;
     }
+    .interactive-dial {
+	  cursor: grab;
+	  touch-action: none;
+	  user-select: none;
+	}
+
+	.interactive-dial.dragging {
+	  cursor: grabbing;
+	}
+
+	.dial-hit-area {
+	  pointer-events: all;
+	}
   </style>
 </head>
 
@@ -477,10 +490,14 @@
           </g>
          </g>
 
-         <g transform="translate(788.7, 330)">
-          <circle cx="0" cy="0" r="28" fill="#1A1A1A" filter="url(#dialShadow)" />
-          <circle cx="0" cy="0" r="28" fill="none" stroke="#0A0A0A" stroke-width="4" stroke-dasharray="4 4" />
-          <circle cx="0" cy="0" r="25.5" fill="#E5E7EB" />
+         <g id="vhfDial" class="interactive-dial" transform="translate(788.7, 330)">
+         	<circle cx="0" cy="0" r="28" fill="#2B2B2B" filter="url(#dialShadow)"></circle>
+			<circle cx="0" cy="0" r="28" fill="none" stroke="#111111" stroke-width="4" stroke-dasharray="4 4"></circle>
+          <g id="vhfRotatingFace" transform="rotate(-30)">
+			  <circle cx="0" cy="0" r="25.5" fill="#E5E7EB" />
+			  <circle cx="0" cy="0" r="24.5" fill="none" stroke="#FFFFFF" stroke-width="1" />
+			  <circle cx="0" cy="0" r="15" fill="none" stroke="#C0C0C0" stroke-width="0.5" />
+		  </g>
           <circle cx="0" cy="0" r="24.5" fill="none" stroke="#FFFFFF" stroke-width="1" />
           <circle cx="0" cy="0" r="15" fill="none" stroke="#C0C0C0" stroke-width="0.5" />
           <circle cx="-38" cy="0" r="1.5" fill="#FFFFFF" filter="url(#dialShadow)"/>
@@ -503,28 +520,34 @@
            <text transform="rotate(332.3) translate(0, -21)">13</text>
           </g>
 
-          <circle cx="0" cy="0" r="13.5" fill="#111111" />
-          <circle cx="0" cy="0" r="12.5" fill="none" stroke="#2B2B2B" stroke-width="0.5" />
-          <circle cx="0" cy="0" r="8" fill="#050505" />
-          <circle cx="0" cy="0" r="5" fill="#1A1A1A" />
+          <g id="vhfRotatingPointer" transform="rotate(-30)">
+			  <circle cx="0" cy="0" r="13.5" fill="#111111" />
+			  <circle cx="0" cy="0" r="12.5" fill="none" stroke="#2B2B2B" stroke-width="0.5" />
+			  <circle cx="0" cy="0" r="8" fill="#050505" />
+			  <circle cx="0" cy="0" r="5" fill="#1A1A1A" />
 
-          <g transform="rotate(-30)" filter="url(#knobShadow)">
-           <rect x="-26" y="-3" width="52" height="8" rx="1" fill="#0A0A0A" />
-           <rect x="-25.5" y="-4" width="51" height="6.5" rx="1" fill="#F3F4F6" />
-           <rect x="-24" y="-1.5" width="16" height="1.5" fill="#E63946" />
-           <rect x="-24" y="-2" width="16" height="0.5" fill="#FFFFFF" opacity="0.6" />
-          </g>
+			  <g filter="url(#knobShadow)">
+			    <rect x="-26" y="-3" width="52" height="8" rx="1" fill="#0A0A0A" />
+			    <rect x="-25.5" y="-4" width="51" height="6.5" rx="1" fill="#F3F4F6" />
+			    <rect x="-24" y="-1.5" width="16" height="1.5" fill="#E63946" />
+			    <rect x="-24" y="-2" width="16" height="0.5" fill="#FFFFFF" opacity="0.6" />
+			  </g>
+		  </g>
+          <circle class="dial-hit-area" cx="0" cy="0"r="30" fill="#FFFFFF" fill-opacity="0.001" />
+
          </g>
 
-         <g transform="translate(788.7, 405)">
+         <g id="uhfDial" class="interactive-dial" transform="translate(788.7, 405)">
 
           <circle cx="0" cy="0" r="28" fill="#2B2B2B" filter="url(#dialShadow)" />
           <circle cx="0" cy="0" r="28" fill="none" stroke="#111111" stroke-width="4" stroke-dasharray="4 4" />
           
 
-          <circle cx="0" cy="0" r="25.5" fill="#E5E7EB" />
-          <circle cx="0" cy="0" r="24.5" fill="none" stroke="#FFFFFF" stroke-width="1" />
-          <circle cx="0" cy="0" r="15" fill="none" stroke="#C0C0C0" stroke-width="0.5" />
+            <g id="uhfRotatingFace" transform="rotate(75)">
+			  <circle cx="0" cy="0" r="25.5" fill="#E5E7EB" />
+			  <circle cx="0" cy="0" r="24.5" fill="none" stroke="#FFFFFF" stroke-width="1" />
+			  <circle cx="0" cy="0" r="15" fill="none" stroke="#C0C0C0" stroke-width="0.5" />
+			</g>
 
           <circle cx="-38" cy="0" r="1.5" fill="#FFFFFF" filter="url(#dialShadow)"/>
           
@@ -543,18 +566,24 @@
            <text transform="rotate(345) translate(0, -17)">83</text>
           </g>
 
-          <circle cx="0" cy="0" r="13.5" fill="#111111" />
-          <circle cx="0" cy="0" r="12.5" fill="none" stroke="#2B2B2B" stroke-width="0.5" />
-          <circle cx="0" cy="0" r="8" fill="#050505" />
-          <circle cx="0" cy="0" r="5" fill="#1A1A1A" />
+          <g id="uhfRotatingPointer" transform="rotate(75)">
+			  <circle cx="0" cy="0" r="13.5" fill="#111111" />
+			  <circle cx="0" cy="0" r="12.5" fill="none" stroke="#2B2B2B" stroke-width="0.5" />
+			  <circle cx="0" cy="0" r="8" fill="#050505" />
+			  <circle cx="0" cy="0" r="5" fill="#1A1A1A" />
 
-          <g transform="rotate(75)" filter="url(#knobShadow)">
-           <rect x="-26" y="-3" width="52" height="8" rx="1" fill="#0A0A0A" />
-           <rect x="-25.5" y="-4" width="51" height="6.5" rx="1" fill="#F3F4F6" />
-           <rect x="-24" y="-1.5" width="16" height="1.5" fill="#E63946" />
-           <rect x="-24" y="-2" width="16" height="0.5" fill="#FFFFFF" opacity="0.6" />
-          </g>
+			  <g filter="url(#knobShadow)">
+			    <rect x="-26" y="-3" width="52" height="8" rx="1" fill="#0A0A0A" />
+			    <rect x="-25.5" y="-4" width="51" height="6.5" rx="1" fill="#F3F4F6" />
+			    <rect x="-24" y="-1.5" width="16" height="1.5" fill="#E63946" />
+			    <rect x="-24" y="-2" width="16" height="0.5" fill="#FFFFFF" opacity="0.6" />
+			  </g>
+			</g>
+
+			<circle class="dial-hit-area" cx="0" cy="0" r="30" fill="#FFFFFF" fill-opacity="0.001" />
+
          </g>
+
          <g transform="translate(752.7, 450)">
           <g clip-path="url(#grilleHoles)">
            <rect x="0" y="0" width="72" height="134" fill="#080808" />
@@ -571,9 +600,9 @@
          </g>
 
         </g>
-	   </g>
-	  </g>
-	 </svg>
+     </g>
+    </g>
+   </svg>
 
   <a href="https://tvretro.github.io/" class="viewport-home-btn" title="Home">
     <svg viewBox="0 0 24 24" fill="none" stroke="#dedede" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -755,6 +784,417 @@
       document.getElementById('tvFeetRight').setAttribute('transform', `translate(${shift}, 0)`);
       document.getElementById('tvFeetLeft').setAttribute('transform', `translate(${-shift}, 0)`);
     }
+    // ===== İnteraktif VHF / UHF tuner düğmeleri =====
+
+const dialConfigs = {
+  vhf: {
+    element: document.getElementById('vhfDial'),
+    face: document.getElementById('vhfRotatingFace'),
+    pointer: document.getElementById('vhfRotatingPointer'),
+    step: 360 / 13,
+    rotation: -30
+  },
+
+  uhf: {
+    element: document.getElementById('uhfDial'),
+    face: document.getElementById('uhfRotatingFace'),
+    pointer: document.getElementById('uhfRotatingPointer'),
+    step: 45,
+    rotation: 75
+  }
+};
+
+// BURAYA EKLE: Video Listesi ve Değiştirme Mantığı
+const stationList = [
+  "dQw4w9WgXcQ", 
+  "jNQXAC9IVRw", 
+  "M7lc1UVf-VE",
+  "kJQP7kiw5Fk",
+  "9bZkp7q19f0"
+];
+
+function changeChannel(detentIndex) {
+  if (!player || typeof player.loadVideoById !== 'function') return;
+  const listLength = stationList.length;
+  const safeIndex = ((detentIndex % listLength) + listLength) % listLength;
+  player.loadVideoById(stationList[safeIndex]);
+}
+
+let activeDial = null;
+let audioContext = null;
+let lastTickAt = 0;
+
+
+// Ses sistemi
+function ensureDialAudio() {
+  if (!audioContext) {
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+
+    if (!AudioCtx) return null;
+
+    audioContext = new AudioCtx();
+  }
+
+  if (audioContext.state === 'suspended') {
+    audioContext.resume().catch(() => {});
+  }
+
+  return audioContext;
+}
+
+
+// Mekanik "kır-kıt" sesi
+// Mekanik plastik gıcırtı/sürtünme sesi
+function playMechanicalTick(direction) {
+  const ctx = ensureDialAudio();
+  if (!ctx) return;
+
+  const now = ctx.currentTime;
+  // Seslerin üst üste binmesini engellemek için kısa bekleme
+  if (now - lastTickAt < 0.015) return;
+  lastTickAt = now;
+
+  // 1. Beyaz Gürültü Üretici (Plastik sürtünmesi hissi için)
+  const bufferSize = ctx.sampleRate * 0.05; // 50ms uzunluğunda buffer
+  const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+  const data = buffer.getChannelData(0);
+  for (let i = 0; i < bufferSize; i++) {
+    data[i] = Math.random() * 2 - 1;
+  }
+  
+  const noiseSource = ctx.createBufferSource();
+  noiseSource.buffer = buffer;
+
+  // 2. Filtre (Sesi boğuklaştırmak ve plastik tınısı vermek için)
+  const filter = ctx.createBiquadFilter();
+  filter.type = 'bandpass';
+  // Yön değişimine göre ufak bir tını farkı
+  const freq = direction >= 0 ? 800 : 700; 
+  filter.frequency.setValueAtTime(freq, now);
+  filter.Q.setValueAtTime(1.5, now); // Genişlik - orta seviye rezonans
+
+  // 3. Gain (Sesin başlama ve bitiş zarfı - Envelope)
+  const gain = ctx.createGain();
+  
+  // Tık sesi (vurmalı, hızlı başlayıp hızlı biten)
+  gain.gain.setValueAtTime(0.001, now);
+  gain.gain.linearRampToValueAtTime(0.8, now + 0.005); // Hızlı attack
+  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.04); // Hızlı decay
+
+  // Bağlantılar
+  noiseSource.connect(filter);
+  filter.connect(gain);
+  gain.connect(ctx.destination);
+
+  // Çal ve Temizle
+  noiseSource.start(now);
+  noiseSource.stop(now + 0.05);
+}
+
+
+// SVG elemanının ekran üzerindeki merkezini bul
+function dialCenterScreen(element) {
+  const ctm = element?.getScreenCTM();
+
+  return ctm
+    ? new DOMPoint(0, 0).matrixTransform(ctm)
+    : null;
+}
+
+
+// Mouse pozisyonunun düğme merkezine göre açısını bul
+function pointerAngle(element, event) {
+  const center = dialCenterScreen(element);
+
+  if (!center) return null;
+
+  return Math.atan2(
+    event.clientY - center.y,
+    event.clientX - center.x
+  ) * 180 / Math.PI;
+}
+
+
+// -180 / +180 sınırında düzgün açı farkı
+function angleDelta(from, to) {
+  let delta = to - from;
+
+  while (delta > 180) delta -= 360;
+  while (delta < -180) delta += 360;
+
+  return delta;
+}
+
+
+// Düğmeyi döndür
+function renderDial(config, rotation) {
+  const transform = `rotate(${rotation})`;
+
+  config.face?.setAttribute(
+    'transform',
+    transform
+  );
+
+  config.pointer?.setAttribute(
+    'transform',
+    transform
+  );
+}
+
+
+// Mouse bırakıldığında hafif oturma animasyonu
+function animateDialTo(config, target) {
+  const start = config.rotation;
+  const distance = target - start;
+
+  const duration = 85;
+  const startTime = performance.now();
+
+  function frame(now) {
+    const p = Math.min(
+      1,
+      (now - startTime) / duration
+    );
+
+    const eased =
+      1 - Math.pow(1 - p, 3);
+
+    renderDial(
+      config,
+      start + distance * eased
+    );
+
+    if (p < 1) {
+      requestAnimationFrame(frame);
+    }
+  }
+
+  requestAnimationFrame(frame);
+}
+
+
+// Düğmeye basma
+function beginDialDrag(name, event) {
+  const config = dialConfigs[name];
+
+  if (!config?.element) return;
+
+  const angle = pointerAngle(
+    config.element,
+    event
+  );
+
+  if (angle == null) return;
+ 
+
+  // Tarayıcının ses kısıtlamasını aşmak için
+  // ilk gerçek mouse etkileşiminde AudioContext açılır.
+  ensureDialAudio();
+
+  activeDial = {
+    name,
+    config,
+    pointerId: event.pointerId,
+    lastPointerAngle: angle,
+    rawRotation: config.rotation,
+    lastDetent: Math.round(
+      config.rotation / config.step
+    )
+  };
+
+  config.element.classList.add('dragging');
+
+  try {
+    config.element.setPointerCapture(
+      event.pointerId
+    );
+  } catch (_) {}
+
+  event.preventDefault();
+}
+
+
+// Mouse hareket ettikçe düğmeyi döndür
+function moveDialDrag(event) {
+  if (
+    !activeDial ||
+    event.pointerId !== activeDial.pointerId
+  ) {
+    return;
+  }
+
+  const { config } = activeDial;
+
+  const angle = pointerAngle(
+    config.element,
+    event
+  );
+
+  if (angle == null) return;
+
+  const RESISTANCE_FACTOR = 3; 
+
+  const rawDelta = angleDelta(
+      activeDial.lastPointerAngle,
+      angle
+  );
+
+  // Açısal değişimi dirence bölerek yavaşlatıyoruz
+  activeDial.rawRotation += (rawDelta / RESISTANCE_FACTOR);
+
+  activeDial.lastPointerAngle = angle;
+
+
+  // Kademe hesapla
+  const newDetent = Math.round(
+    activeDial.rawRotation /
+    config.step
+  );
+
+  const snappedRotation =
+    newDetent * config.step;
+
+
+  // Yeni kademeye geldiysek ses çıkar
+  if (
+    newDetent !==
+    activeDial.lastDetent
+  ) {
+    playMechanicalTick(
+      newDetent >
+      activeDial.lastDetent
+        ? 1
+        : -1
+    );
+changeChannel(newDetent);
+
+    activeDial.lastDetent =
+      newDetent;
+  }
+
+  config.rotation =
+    snappedRotation;
+    
+    activeDial.lastDetent =
+      newDetent;
+  }
+
+
+  config.rotation =
+    snappedRotation;
+
+  renderDial(
+    config,
+    snappedRotation
+  );
+
+  event.preventDefault();
+}
+
+
+// Mouse bırakıldı
+function endDialDrag(event) {
+  if (!activeDial) return;
+
+  if (
+    event?.pointerId != null &&
+    event.pointerId !==
+    activeDial.pointerId
+  ) {
+    return;
+  }
+
+  const { config } =
+    activeDial;
+
+  const target =
+    Math.round(
+      config.rotation /
+      config.step
+    ) * config.step;
+
+  config.rotation =
+    target;
+
+  animateDialTo(
+    config,
+    target
+  );
+
+  config.element.classList.remove(
+    'dragging'
+  );
+
+  try {
+    if (
+      event?.pointerId != null
+    ) {
+      config.element.releasePointerCapture(
+        event.pointerId
+      );
+    }
+  } catch (_) {}
+
+  activeDial = null;
+}
+
+
+// Event'leri bağla
+Object.entries(dialConfigs)
+  .forEach(
+    ([name, config]) => {
+
+      if (!config.element) return;
+
+      config.element.addEventListener(
+        'pointerdown',
+        (event) => {
+          beginDialDrag(
+            name,
+            event
+          );
+        }
+      );
+
+      config.element.addEventListener(
+        'pointermove',
+        moveDialDrag
+      );
+
+      config.element.addEventListener(
+        'pointerup',
+        endDialDrag
+      );
+
+      config.element.addEventListener(
+        'pointercancel',
+        endDialDrag
+      );
+
+      config.element.addEventListener(
+        'lostpointercapture',
+        () => {
+          if (
+            activeDial?.name === name
+          ) {
+            endDialDrag();
+          }
+        }
+      );
+    }
+  );
+
+
+// Başlangıç açılarını koru
+renderDial(
+  dialConfigs.vhf,
+  dialConfigs.vhf.rotation
+);
+
+renderDial(
+  dialConfigs.uhf,
+  dialConfigs.uhf.rotation
+);
   </script>
 </body>
 </html>
