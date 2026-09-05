@@ -61,6 +61,12 @@
   <svg id="retroTvSvg" xmlns="http://www.w3.org/2000/svg" viewBox="86 75 867 585" width="100vw" height="100vh"
     preserveAspectRatio="xMidYMid meet">
     <defs>
+      <!-- Güvenli Ahşap Dokusu (Performans Odaklı Pattern) -->
+      <pattern id="safeWoodGrain" width="400" height="20" patternUnits="userSpaceOnUse" patternTransform="rotate(1)">
+        <path d="M 0 5 Q 100 2 200 5 T 400 5" fill="none" stroke="#2B0E03" stroke-width="0.8" opacity="0.3" />
+        <path d="M 0 12 Q 100 15 200 12 T 400 12" fill="none" stroke="#1A0500" stroke-width="1.2" opacity="0.2" />
+        <path d="M 0 18 Q 100 17 200 18 T 400 18" fill="none" stroke="#3D1200" stroke-width="0.5" opacity="0.4" />
+      </pattern>
       <filter id="realisticWall" x="-20%" y="-20%" width="140%" height="140%">
         <feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="4" result="noise" />
         <feColorMatrix type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.045 0" in="noise"
@@ -133,14 +139,49 @@
         <feComposite operator="over" in="shadow" in2="SourceGraphic" />
       </filter>
 
+      <!-- Gerçekçi Ahşap Dokusu ve Eskitme Filtresi -->
+      <filter id="woodTexture" x="0%" y="0%" width="100%" height="100%">
+        <!-- Yatay ahşap damarları oluşturma (baseFrequency Y ekseninde sıkıştırıldı) -->
+        <feTurbulence type="fractalNoise" baseFrequency="0.005 0.15" numOctaves="4" result="noise" />
+        <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 0.18 0" in="noise" result="coloredNoise" />
+        <feBlend mode="multiply" in="SourceGraphic" in2="coloredNoise" result="woodBlend" />
+        <!-- Çerçeve kenarlarına kir/eskitme (vignette) efekti ekleme -->
+        <feGaussianBlur in="SourceAlpha" stdDeviation="6" result="blur" />
+        <feComposite in2="SourceAlpha" operator="arithmetic" k2="-1" k3="1" result="shadowDiff" />
+        <feFlood flood-color="#0f0500" flood-opacity="0.95" />
+        <feComposite in2="shadowDiff" operator="in" result="vignette" />
+        <feComposite in="vignette" in2="woodBlend" operator="over" />
+      </filter>
+
+      <!-- Referans Görseldeki Kızıl/Kahverengi Ahşap Tonu -->
       <linearGradient id="woodFrame" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stop-color="#c95328" />
-        <stop offset="15%" stop-color="#8a3011" />
-        <stop offset="35%" stop-color="#bd471c" />
-        <stop offset="60%" stop-color="#541904" />
-        <stop offset="85%" stop-color="#8a2e10" />
-        <stop offset="100%" stop-color="#2a0a00" />
+        <stop offset="0%" stop-color="#5C2511" />
+        <stop offset="15%" stop-color="#8B3A15" />
+        <stop offset="40%" stop-color="#A54921" />
+        <stop offset="70%" stop-color="#732D10" />
+        <stop offset="100%" stop-color="#3D1200" />
       </linearGradient>
+
+      <!-- Ahşap Eskitme (Vignette) ve Kirlilik Katmanı -->
+      <radialGradient id="woodVignette" cx="50%" cy="50%" r="75%">
+        <stop offset="50%" stop-color="#000000" stop-opacity="0" />
+        <stop offset="90%" stop-color="#2a0a00" stop-opacity="0.6" />
+        <stop offset="100%" stop-color="#1a0500" stop-opacity="0.95" />
+      </radialGradient>
+
+      <!-- Parlak Gümüş İç Çerçeve Tonu (Eğer eksikse) -->
+      <linearGradient id="silverFrameGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#E5E7EB" />
+        <stop offset="20%" stop-color="#FFFFFF" />
+        <stop offset="50%" stop-color="#9CA3AF" />
+        <stop offset="80%" stop-color="#F3F4F6" />
+        <stop offset="100%" stop-color="#4B5563" />
+      </linearGradient>
+
+      <!-- Oval köşe (rx) değeri 12'ye çıkarıldı -->
+      <clipPath id="woodFrameClip">
+        <rect id="woodFrameClipRect" x="178.3" y="150" width="683.4" height="469" rx="12" />
+      </clipPath>
       <linearGradient id="sharpChrome" x1="0%" y1="0%" x2="100%" y2="0%">
         <stop offset="0%" stop-color="#e2e8f0" />
         <stop offset="25%" stop-color="#ffffff" />
@@ -305,32 +346,42 @@
       <path d="M 488,145 C 495,130 545,130 552,145 C 530,138 510,138 488,145 Z" fill="#FFFFFF" opacity="0.15" />
     </g>
 
-    <g filter="url(#tvDropShadow)">
-      <rect id="tvWoodOuter" x="178.3" y="150" width="683.4" height="469" rx="8" fill="url(#woodFrame)" />
-      <rect id="tvWoodStroke1" x="179.3" y="151" width="681.4" height="467" rx="7" fill="none" stroke="#e87a4d"
-        stroke-width="2" opacity="0.85" />
-      <rect id="tvWoodStroke2" x="180.3" y="152" width="679.4" height="465" rx="6" fill="none" stroke="#3d1000"
-        stroke-width="3" opacity="0.9" />
+    
+      <g filter="url(#tvDropShadow)">
+      <!-- 1. En Dış Katman: Ahşap Kasa (Genişletilmiş ve Kalınlaştırılmış) -->
+      <rect id="tvWoodOuter" x="164.3" y="136" width="711.4" height="497" rx="16" fill="url(#woodFrame)" />
+      
+      <!-- Ahşap Damar Dokusu Katmanı -->
+      <rect id="tvWoodGrain" x="164.3" y="136" width="711.4" height="497" rx="16" fill="url(#safeWoodGrain)" />
+      
+      <!-- Eskitme/Kirlilik Gölge Katmanı (Kenarlar daha karanlık) -->
+      <rect id="tvWoodVignette" x="164.3" y="136" width="711.4" height="497" rx="16" fill="url(#woodVignette)" />
+      
+      <!-- Ahşap Dış Çerçeve Çizgisi (Netlik İçin) -->
+      <rect id="tvWoodBorder" x="164.3" y="136" width="711.4" height="497" rx="16" fill="none" stroke="#2a0a00" stroke-width="1.5" opacity="0.8" />
+      
+      <!-- 2. Ahşap ile Gümüş Arasındaki Koyu Ayraç Çizgi -->
+      <rect id="tvWoodStroke1" x="179.3" y="151" width="681.4" height="467" rx="10" fill="none" stroke="#111111" stroke-width="2" opacity="0.9" />
+      
+      <!-- 3. Gümüş/Beyaz İnce Çerçeve -->
+      <rect id="tvWoodStroke2" x="181.3" y="153" width="677.4" height="463" rx="8" fill="none" stroke="url(#silverFrameGrad)" stroke-width="3" />
 
+      <!-- Ahşap Kasa Köşe Birleşim Çizgileri (Genişletilmiş Geometriye Uygun) -->
       <g clip-path="url(#woodFrameClip)">
-        <line id="woodLineTL" x1="178.3" y1="150" x2="190.3" y2="162" stroke="#2a0a00" stroke-width="1.5"
-          opacity="0.6" />
-        <line id="woodLineTR" x1="861.7" y1="150" x2="849.7" y2="162" stroke="#2a0a00" stroke-width="1.5"
-          opacity="0.6" />
-        <line id="woodLineBL" x1="178.3" y1="619" x2="190.3" y2="607" stroke="#2a0a00" stroke-width="1.5"
-          opacity="0.6" />
-        <line id="woodLineBR" x1="861.7" y1="619" x2="849.7" y2="607" stroke="#2a0a00" stroke-width="1.5"
-          opacity="0.6" />
+        <line id="woodLineTL" x1="164.3" y1="136" x2="179.3" y2="151" stroke="#111" stroke-width="2" opacity="0.4" />
+        <line id="woodLineTR" x1="875.7" y1="136" x2="860.7" y2="151" stroke="#111" stroke-width="2" opacity="0.4" />
+        <line id="woodLineBL" x1="164.3" y1="633" x2="179.3" y2="618" stroke="#111" stroke-width="2" opacity="0.4" />
+        <line id="woodLineBR" x1="875.7" y1="633" x2="860.7" y2="618" stroke="#111" stroke-width="2" opacity="0.4" />
       </g>
 
+      <!-- Ekran Üstü Ahşap Parlaması -->
       <g clip-path="url(#woodFrameClip)">
-        <path id="woodGlare" d="M 179.3,460 L 320,151 L 520,151 L 179.3,590 Z" fill="#ffffff" opacity="0.06" />
+        <path id="woodGlare" d="M 165.3,475 L 320,136 L 520,136 L 165.3,605 Z" fill="#ffffff" opacity="0.04" />
       </g>
 
-      <rect id="innerBlackCase" x="190.3" y="162" width="659.4" height="445" rx="8" fill="#181818" stroke="#050505"
-        stroke-width="3" />
-      <rect id="innerBlackCaseStroke" x="192.3" y="164" width="655.4" height="441" rx="6" fill="none" stroke="#333333"
-        stroke-width="1" />
+      <!-- 4. İç Kasa Zemin Rengi (Gümüş çerçevenin iç kısmı) -->
+      <rect id="innerBlackCase" x="184.3" y="156" width="671.4" height="457" rx="6" fill="#4D4D4D" stroke="#2B2B2B" stroke-width="2" />
+      <rect id="innerBlackCaseStroke" x="186.3" y="158" width="667.4" height="453" rx="4" fill="none" stroke="#5C5C5C" stroke-width="1.5" />
 
       <g id="screenArea">
         <rect id="creamBezel" x="198.3" y="170" width="529.4" height="429" rx="22" ry="22" fill="url(#creamBezelGrad)"
@@ -715,9 +766,9 @@
       document.getElementById('effectGlare').setAttribute('d',
         `M ${startX},173 L 487.7,173 L 288.3,542 L ${startX},542 Z`
       );
-
-      const caseShiftX = 190.3 - shift;
-      const caseWidth = 659.4 + deltaX;
+      // İç Gri Kasa
+      const caseShiftX = 184.3 - shift;
+      const caseWidth = 671.4 + deltaX;
 
       document.getElementById('innerBlackCase').setAttribute('x', caseShiftX);
       document.getElementById('innerBlackCase').setAttribute('width', caseWidth);
@@ -728,29 +779,43 @@
       document.getElementById('creamBezelStroke').setAttribute('x', startX - 5);
       document.getElementById('creamBezelStroke').setAttribute('width', newWidth + 10);
 
-      const woodStartX = 178.3 - shift;
-      const woodWidth = 683.4 + deltaX;
+   
+      const woodStartX = caseShiftX - 20;
+      const woodWidth = caseWidth + 40;
 
+      // Ahşap Katmanları
       document.getElementById('tvWoodOuter').setAttribute('x', woodStartX);
       document.getElementById('tvWoodOuter').setAttribute('width', woodWidth);
-      document.getElementById('tvWoodStroke1').setAttribute('x', woodStartX + 1);
-      document.getElementById('tvWoodStroke1').setAttribute('width', woodWidth - 2);
-      document.getElementById('tvWoodStroke2').setAttribute('x', woodStartX + 2);
-      document.getElementById('tvWoodStroke2').setAttribute('width', woodWidth - 4);
+      document.getElementById('tvWoodGrain').setAttribute('x', woodStartX);
+      document.getElementById('tvWoodGrain').setAttribute('width', woodWidth);
+      document.getElementById('tvWoodVignette').setAttribute('x', woodStartX);
+      document.getElementById('tvWoodVignette').setAttribute('width', woodWidth);
+      document.getElementById('tvWoodBorder').setAttribute('x', woodStartX);
+      document.getElementById('tvWoodBorder').setAttribute('width', woodWidth);
+      
+      // Çerçeve Katmanları (Siyah Ayraç ve Gümüş)
+      document.getElementById('tvWoodStroke1').setAttribute('x', caseShiftX - 5);
+      document.getElementById('tvWoodStroke1').setAttribute('width', caseWidth + 10);
+      document.getElementById('tvWoodStroke2').setAttribute('x', caseShiftX - 3);
+      document.getElementById('tvWoodStroke2').setAttribute('width', caseWidth + 6);
+      
+      // Clip Alanı ve Parlama
       document.getElementById('woodFrameClipRect').setAttribute('x', woodStartX);
       document.getElementById('woodFrameClipRect').setAttribute('width', woodWidth);
       document.getElementById('woodGlare').setAttribute('d',
-        `M ${woodStartX + 1},460 L 320,151 L 520,151 L ${woodStartX + 1},590 Z`
+        `M ${woodStartX + 1},475 L 320,136 L 520,136 L ${woodStartX + 1},605 Z`
       );
 
+      // Ahşap Köşe Birleşim Çizgileri Dinamik Noktaları
       document.getElementById('woodLineTL').setAttribute('x1', woodStartX);
-      document.getElementById('woodLineTL').setAttribute('x2', woodStartX + 12);
+      document.getElementById('woodLineTL').setAttribute('x2', woodStartX + 15);
       document.getElementById('woodLineBL').setAttribute('x1', woodStartX);
-      document.getElementById('woodLineBL').setAttribute('x2', woodStartX + 12);
+      document.getElementById('woodLineBL').setAttribute('x2', woodStartX + 15);
+      
       document.getElementById('woodLineTR').setAttribute('x1', woodStartX + woodWidth);
-      document.getElementById('woodLineTR').setAttribute('x2', woodStartX + woodWidth - 12);
+      document.getElementById('woodLineTR').setAttribute('x2', woodStartX + woodWidth - 15);
       document.getElementById('woodLineBR').setAttribute('x1', woodStartX + woodWidth);
-      document.getElementById('woodLineBR').setAttribute('x2', woodStartX + woodWidth - 12);
+      document.getElementById('woodLineBR').setAttribute('x2', woodStartX + woodWidth - 15);
 
       document.getElementById('controlPanelGroup').setAttribute('transform', `translate(${shift}, 0)`);
       document.getElementById('tvFeetRight').setAttribute('transform', `translate(${shift}, 0)`);
