@@ -309,7 +309,7 @@
 
         <foreignObject id="playerObject" x="203.3" y="173" width="519.4" height="369"
           clip-path="url(#screenCustomClip)">
-          <div xmlns="http://www.w3.org/1999/xhtml"
+          <div xmlns="http://www.w3.org/1999/xhtml" class="yt"
             style="width: 100%; height: 100%; margin: 0; padding: 0; background-color: #000; border-radius: 22px 22px 0 0; overflow: hidden;">
 
             <div id="ytIframe" style="width: 100%; height: 100%;"></div>
@@ -340,111 +340,113 @@
 
       <g id="controlPanelGroup">
         <g id="controlPanel">
-          <rect x="735.7" y="170" width="106" height="429" fill="#222222" stroke="#111111" stroke-width="2" />
-          <g transform="translate(765.7, 210)" filter="url(#knobShadow)">
-            <circle cx="0" cy="0" r="10.5" fill="url(#metalCylinder)" />
-            <circle cx="0" cy="0" r="9" fill="url(#plasticCap)" />
-            <circle cx="0" cy="0" r="9" fill="none" stroke="#050505" stroke-width="0.5" />
-            <rect x="-0.8" y="-7.5" width="1.6" height="5" rx="0.5" fill="#e63946" />
-            <text x="0" y="-13" font-family="sans-serif" font-size="4" font-weight="bold" fill="#bbbbbb"
-              text-anchor="middle" filter="none">VOL</text>
+         <rect x="735.7" y="170" width="106" height="429" rx="9" fill="#222222" stroke="#111111" stroke-width="2"/>
+              <rect x="738.7" y="173" width="100" height="423" rx="7" fill="none" stroke="#3f3b35" stroke-width="1" opacity="0.75"/>
+         <g transform="translate(765.7, 210)" filter="url(#knobShadow)">
+          <circle cx="0" cy="0" r="10.5" fill="url(#metalCylinder)" />
+          <circle cx="0" cy="0" r="9" fill="url(#plasticCap)" />
+          <circle cx="0" cy="0" r="9" fill="none" stroke="#050505" stroke-width="0.5" />
+          <rect x="-0.8" y="-7.5" width="1.6" height="5" rx="0.5" fill="#e63946" />
+          <text x="0" y="-13" font-family="sans-serif" font-size="4" font-weight="bold" fill="#bbbbbb"
+           text-anchor="middle" filter="none">VOL</text>
+         </g>
+         <g transform="translate(811.7, 210)" filter="url(#knobShadow)">
+          <circle cx="0" cy="0" r="10.5" fill="url(#metalCylinder)" />
+          <circle cx="0" cy="0" r="9" fill="url(#plasticCap)" />
+          <circle cx="0" cy="0" r="9" fill="none" stroke="#050505" stroke-width="0.5" />
+          <rect x="-0.8" y="-7.5" width="1.6" height="5" rx="0.5" fill="#e63946" transform="rotate(30)" />
+          <text x="0" y="-13" font-family="sans-serif" font-size="4" font-weight="bold" fill="#bbbbbb"
+           text-anchor="middle">BRIGHT</text>
+         </g>
+         <g transform="translate(765.7, 255)" filter="url(#knobShadow)">
+          <circle cx="0" cy="0" r="10.5" fill="url(#metalCylinder)" />
+          <circle cx="0" cy="0" r="9" fill="url(#plasticCap)" />
+          <circle cx="0" cy="0" r="9" fill="none" stroke="#050505" stroke-width="0.5" />
+          <rect x="-0.8" y="-7.5" width="1.6" height="5" rx="0.5" fill="#e63946" transform="rotate(-40)" />
+          <text x="0" y="-13" font-family="sans-serif" font-size="3.8" font-weight="bold" fill="#bbbbbb"
+           text-anchor="middle">FINE</text>
+         </g>
+         <g transform="translate(811.7, 255)" filter="url(#knobShadow)">
+          <circle cx="0" cy="0" r="10.5" fill="url(#metalCylinder)" />
+          <circle cx="0" cy="0" r="9" fill="url(#plasticCap)" />
+          <circle cx="0" cy="0" r="9" fill="none" stroke="#050505" stroke-width="0.5" />
+          <rect x="-0.8" y="-7.5" width="1.6" height="5" rx="0.5" fill="#e63946" transform="rotate(15)" />
+          <text x="0" y="-13" font-family="sans-serif" font-size="3.8" font-weight="bold" fill="#bbbbbb"
+           text-anchor="middle">CONT</text>
+         </g>
+         <g transform="translate(788.7, 330)">
+          <circle cx="0" cy="0" r="26" fill="#111111" filter="url(#dialShadow)" />
+          <circle cx="0" cy="0" r="25" fill="none" stroke="url(#metalCylinder)" stroke-width="1.5" />
+          <circle cx="0" cy="0" r="23" fill="none" stroke="#ffffff" stroke-width="1.2" stroke-dasharray="1.5, 6" />
+          <circle cx="0" cy="0" r="23" fill="none" stroke="#888888" stroke-width="3" stroke-dasharray="0.5, 29.5" />
+          <text x="17" y="-17" font-family="sans-serif" font-size="4.5" font-weight="bold" fill="#ffffff"
+           filter="url(#dialShadow)">VHF</text>
+          <g filter="url(#knobShadow)">
+           <circle cx="0" cy="0" r="18" fill="url(#plasticCap)" />
+           <circle cx="0" cy="0" r="17.5" fill="none" stroke="#050505" stroke-width="1.5"
+            stroke-dasharray="1.5, 2.5" />
+           <circle cx="0" cy="0" r="13" fill="url(#metalCylinder)" />
+           <circle cx="0" cy="0" r="12" fill="url(#chromeDome)" />
+           <rect x="-14" y="-4" width="28" height="8" rx="2" fill="url(#metalCylinder)" />
+           <rect x="-13" y="-3.5" width="26" height="3" rx="1.5" fill="#ffffff" opacity="0.5" />
+           <rect x="-13" y="1" width="26" height="2.5" rx="1.5" fill="#000000" opacity="0.4" />
+           <rect x="-1" y="-8.5" width="2" height="10" rx="1" fill="#e63946" />
+           <rect x="-0.5" y="-8" width="0.5" height="9" rx="0.25" fill="#ffffff" opacity="0.6" />
           </g>
-          <g transform="translate(811.7, 210)" filter="url(#knobShadow)">
-            <circle cx="0" cy="0" r="10.5" fill="url(#metalCylinder)" />
-            <circle cx="0" cy="0" r="9" fill="url(#plasticCap)" />
-            <circle cx="0" cy="0" r="9" fill="none" stroke="#050505" stroke-width="0.5" />
-            <rect x="-0.8" y="-7.5" width="1.6" height="5" rx="0.5" fill="#e63946" transform="rotate(30)" />
-            <text x="0" y="-13" font-family="sans-serif" font-size="4" font-weight="bold" fill="#bbbbbb"
-              text-anchor="middle">BRIGHT</text>
+         </g>
+         <g transform="translate(788.7, 405)">
+          <circle cx="0" cy="0" r="26" fill="#111111" filter="url(#dialShadow)" />
+          <circle cx="0" cy="0" r="25" fill="none" stroke="url(#metalCylinder)" stroke-width="1.5" />
+          <circle cx="0" cy="0" r="23" fill="none" stroke="#ffffff" stroke-width="1.2" stroke-dasharray="1.5, 6" />
+          <circle cx="0" cy="0" r="23" fill="none" stroke="#888888" stroke-width="3" stroke-dasharray="0.5, 29.5" />
+          <text x="17" y="-17" font-family="sans-serif" font-size="4.5" font-weight="bold" fill="#ffffff"
+           filter="url(#dialShadow)">UHF</text>
+          <g filter="url(#knobShadow)">
+           <circle cx="0" cy="0" r="18" fill="url(#plasticCap)" />
+           <circle cx="0" cy="0" r="17.5" fill="none" stroke="#050505" stroke-width="1.5"
+            stroke-dasharray="1.5, 2.5" />
+           <circle cx="0" cy="0" r="13" fill="url(#metalCylinder)" />
+           <circle cx="0" cy="0" r="12" fill="url(#chromeDome)" />
+           <g transform="rotate(45)">
+            <rect x="-14" y="-4" width="28" height="8" rx="2" fill="url(#metalCylinder)" />
+            <rect x="-13" y="-3.5" width="26" height="3" rx="1.5" fill="#ffffff" opacity="0.5" />
+            <rect x="-13" y="1" width="26" height="2.5" rx="1.5" fill="#000000" opacity="0.4" />
+            <rect x="-1" y="-8.5" width="2" height="10" rx="1" fill="#e63946" />
+            <rect x="-0.5" y="-8" width="0.5" height="9" rx="0.25" fill="#ffffff" opacity="0.6" />
+           </g>
           </g>
-          <g transform="translate(765.7, 255)" filter="url(#knobShadow)">
-            <circle cx="0" cy="0" r="10.5" fill="url(#metalCylinder)" />
-            <circle cx="0" cy="0" r="9" fill="url(#plasticCap)" />
-            <circle cx="0" cy="0" r="9" fill="none" stroke="#050505" stroke-width="0.5" />
-            <rect x="-0.8" y="-7.5" width="1.6" height="5" rx="0.5" fill="#e63946" transform="rotate(-40)" />
-            <text x="0" y="-13" font-family="sans-serif" font-size="3.8" font-weight="bold" fill="#bbbbbb"
-              text-anchor="middle">FINE</text>
+         </g>
+         <g transform="translate(752.7, 450)">
+          <rect x="0" y="0" width="72" height="134" rx="10" fill="#171717" stroke="#111" stroke-width="1"
+           filter="url(#speakerInset)" />
+          <g clip-path="url(#grilleHoles)">
+           <rect x="0" y="0" width="72" height="134" fill="#000000" />
+           <circle cx="36" cy="67" r="38" fill="url(#speakerCone)" />
+           <circle cx="36" cy="67" r="12" fill="#050505" />
+           <rect x="0" y="0" width="72" height="134" fill="url(#speakerMesh)" />
           </g>
-          <g transform="translate(811.7, 255)" filter="url(#knobShadow)">
-            <circle cx="0" cy="0" r="10.5" fill="url(#metalCylinder)" />
-            <circle cx="0" cy="0" r="9" fill="url(#plasticCap)" />
-            <circle cx="0" cy="0" r="9" fill="none" stroke="#050505" stroke-width="0.5" />
-            <rect x="-0.8" y="-7.5" width="1.6" height="5" rx="0.5" fill="#e63946" transform="rotate(15)" />
-            <text x="0" y="-13" font-family="sans-serif" font-size="3.8" font-weight="bold" fill="#bbbbbb"
-              text-anchor="middle">CONT</text>
+          <g fill="none" stroke="#333333" stroke-width="1" transform="translate(0.5, 0.5)">
+           <rect x="15" y="24" width="4.5" height="86" rx="2.25" />
+           <rect x="23" y="14" width="4.5" height="106" rx="2.25" />
+           <rect x="31" y="10" width="4.5" height="114" rx="2.25" />
+           <rect x="39" y="10" width="4.5" height="114" rx="2.25" />
+           <rect x="47" y="14" width="4.5" height="106" rx="2.25" />
+           <rect x="55" y="24" width="4.5" height="86" rx="2.25" />
           </g>
-          <g transform="translate(788.7, 330)">
-            <circle cx="0" cy="0" r="26" fill="#111111" filter="url(#dialShadow)" />
-            <circle cx="0" cy="0" r="25" fill="none" stroke="url(#metalCylinder)" stroke-width="1.5" />
-            <circle cx="0" cy="0" r="23" fill="none" stroke="#ffffff" stroke-width="1.2" stroke-dasharray="1.5, 6" />
-            <circle cx="0" cy="0" r="23" fill="none" stroke="#888888" stroke-width="3" stroke-dasharray="0.5, 29.5" />
-            <text x="17" y="-17" font-family="sans-serif" font-size="4.5" font-weight="bold" fill="#ffffff"
-              filter="url(#dialShadow)">VHF</text>
-            <g filter="url(#knobShadow)">
-              <circle cx="0" cy="0" r="18" fill="url(#plasticCap)" />
-              <circle cx="0" cy="0" r="17.5" fill="none" stroke="#050505" stroke-width="1.5"
-                stroke-dasharray="1.5, 2.5" />
-              <circle cx="0" cy="0" r="13" fill="url(#metalCylinder)" />
-              <circle cx="0" cy="0" r="12" fill="url(#chromeDome)" />
-              <rect x="-14" y="-4" width="28" height="8" rx="2" fill="url(#metalCylinder)" />
-              <rect x="-13" y="-3.5" width="26" height="3" rx="1.5" fill="#ffffff" opacity="0.5" />
-              <rect x="-13" y="1" width="26" height="2.5" rx="1.5" fill="#000000" opacity="0.4" />
-              <rect x="-1" y="-8.5" width="2" height="10" rx="1" fill="#e63946" />
-              <rect x="-0.5" y="-8" width="0.5" height="9" rx="0.25" fill="#ffffff" opacity="0.6" />
-            </g>
+          <g fill="none" stroke="#000000" stroke-width="1.5">
+           <rect x="15" y="24" width="4.5" height="86" rx="2.25" />
+           <rect x="23" y="14" width="4.5" height="106" rx="2.25" />
+           <rect x="31" y="10" width="4.5" height="114" rx="2.25" />
+           <rect x="39" y="10" width="4.5" height="114" rx="2.25" />
+           <rect x="47" y="14" width="4.5" height="106" rx="2.25" />
+           <rect x="55" y="24" width="4.5" height="86" rx="2.25" />
           </g>
-          <g transform="translate(788.7, 405)">
-            <circle cx="0" cy="0" r="26" fill="#111111" filter="url(#dialShadow)" />
-            <circle cx="0" cy="0" r="25" fill="none" stroke="url(#metalCylinder)" stroke-width="1.5" />
-            <circle cx="0" cy="0" r="23" fill="none" stroke="#ffffff" stroke-width="1.2" stroke-dasharray="1.5, 6" />
-            <circle cx="0" cy="0" r="23" fill="none" stroke="#888888" stroke-width="3" stroke-dasharray="0.5, 29.5" />
-            <text x="17" y="-17" font-family="sans-serif" font-size="4.5" font-weight="bold" fill="#ffffff"
-              filter="url(#dialShadow)">UHF</text>
-            <g filter="url(#knobShadow)">
-              <circle cx="0" cy="0" r="18" fill="url(#plasticCap)" />
-              <circle cx="0" cy="0" r="17.5" fill="none" stroke="#050505" stroke-width="1.5"
-                stroke-dasharray="1.5, 2.5" />
-              <circle cx="0" cy="0" r="13" fill="url(#metalCylinder)" />
-              <circle cx="0" cy="0" r="12" fill="url(#chromeDome)" />
-              <g transform="rotate(45)">
-                <rect x="-14" y="-4" width="28" height="8" rx="2" fill="url(#metalCylinder)" />
-                <rect x="-13" y="-3.5" width="26" height="3" rx="1.5" fill="#ffffff" opacity="0.5" />
-                <rect x="-13" y="1" width="26" height="2.5" rx="1.5" fill="#000000" opacity="0.4" />
-                <rect x="-1" y="-8.5" width="2" height="10" rx="1" fill="#e63946" />
-                <rect x="-0.5" y="-8" width="0.5" height="9" rx="0.25" fill="#ffffff" opacity="0.6" />
-              </g>
-            </g>
-          </g>
-          <g transform="translate(752.7, 450)">
-            <rect x="0" y="0" width="72" height="134" rx="10" fill="#171717" stroke="#111" stroke-width="1"
-              filter="url(#speakerInset)" />
-            <g clip-path="url(#grilleHoles)">
-              <rect x="0" y="0" width="72" height="134" fill="#000000" />
-              <circle cx="36" cy="67" r="38" fill="url(#speakerCone)" />
-              <circle cx="36" cy="67" r="12" fill="#050505" />
-              <rect x="0" y="0" width="72" height="134" fill="url(#speakerMesh)" />
-            </g>
-            <g fill="none" stroke="#333333" stroke-width="1" transform="translate(0.5, 0.5)">
-              <rect x="15" y="24" width="4.5" height="86" rx="2.25" />
-              <rect x="23" y="14" width="4.5" height="106" rx="2.25" />
-              <rect x="31" y="10" width="4.5" height="114" rx="2.25" />
-              <rect x="39" y="10" width="4.5" height="114" rx="2.25" />
-              <rect x="47" y="14" width="4.5" height="106" rx="2.25" />
-              <rect x="55" y="24" width="4.5" height="86" rx="2.25" />
-            </g>
-            <g fill="none" stroke="#000000" stroke-width="1.5">
-              <rect x="15" y="24" width="4.5" height="86" rx="2.25" />
-              <rect x="23" y="14" width="4.5" height="106" rx="2.25" />
-              <rect x="31" y="10" width="4.5" height="114" rx="2.25" />
-              <rect x="39" y="10" width="4.5" height="114" rx="2.25" />
-              <rect x="47" y="14" width="4.5" height="106" rx="2.25" />
-              <rect x="55" y="24" width="4.5" height="86" rx="2.25" />
-            </g>
-          </g>
+         </g>
         </g>
-      </g>
-    </g>
-  </svg>
+   </g>
+  </g>
+ </svg>
+
 
   <a href="https://tvretro.github.io/" class="viewport-home-btn" title="Home">
     <svg viewBox="0 0 24 24" fill="none" stroke="#dedede" stroke-width="1.8" stroke-linecap="round"
