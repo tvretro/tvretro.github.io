@@ -92,7 +92,6 @@
         <stop offset="0%" stop-color="#10131a" />
         <stop offset="100%" stop-color="#030406" />
       </linearGradient>
-      <!-- Koyu Mat Metalik Anten Kubbesi -->
       <radialGradient id="antennaDomeGrad" cx="50%" cy="30%" r="70%">
         <stop offset="0%" stop-color="#9CA3AF" />
         <stop offset="30%" stop-color="#4B5563" />
@@ -100,7 +99,6 @@
         <stop offset="100%" stop-color="#030712" />
       </radialGradient>
       
-      <!-- Silindirik Hacim Veren Çubuk ve Uç Gradyanı -->
       <linearGradient id="antennaRodGrad" x1="0%" y1="0%" x2="100%" y2="0%">
         <stop offset="0%" stop-color="#1F2937" />
         <stop offset="25%" stop-color="#9CA3AF" />
@@ -139,13 +137,11 @@
         <feComposite operator="over" in="shadow" in2="SourceGraphic" />
       </filter>
 
-      <!-- Gerçekçi Ahşap Dokusu ve Eskitme Filtresi -->
       <filter id="woodTexture" x="0%" y="0%" width="100%" height="100%">
-        <!-- Yatay ahşap damarları oluşturma (baseFrequency Y ekseninde sıkıştırıldı) -->
         <feTurbulence type="fractalNoise" baseFrequency="0.005 0.15" numOctaves="4" result="noise" />
         <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 0.18 0" in="noise" result="coloredNoise" />
         <feBlend mode="multiply" in="SourceGraphic" in2="coloredNoise" result="woodBlend" />
-        <!-- Çerçeve kenarlarına kir/eskitme (vignette) efekti ekleme -->
+
         <feGaussianBlur in="SourceAlpha" stdDeviation="6" result="blur" />
         <feComposite in2="SourceAlpha" operator="arithmetic" k2="-1" k3="1" result="shadowDiff" />
         <feFlood flood-color="#0f0500" flood-opacity="0.95" />
@@ -153,7 +149,7 @@
         <feComposite in="vignette" in2="woodBlend" operator="over" />
       </filter>
 
-      <!-- Referans Görseldeki Kızıl/Kahverengi Ahşap Tonu -->
+
       <linearGradient id="woodFrame" x1="0%" y1="0%" x2="100%" y2="100%">
         <stop offset="0%" stop-color="#5C2511" />
         <stop offset="15%" stop-color="#8B3A15" />
@@ -162,14 +158,14 @@
         <stop offset="100%" stop-color="#3D1200" />
       </linearGradient>
 
-      <!-- Ahşap Eskitme (Vignette) ve Kirlilik Katmanı -->
+ 
       <radialGradient id="woodVignette" cx="50%" cy="50%" r="75%">
         <stop offset="50%" stop-color="#000000" stop-opacity="0" />
         <stop offset="90%" stop-color="#2a0a00" stop-opacity="0.6" />
         <stop offset="100%" stop-color="#1a0500" stop-opacity="0.95" />
       </radialGradient>
 
-      <!-- Parlak Gümüş İç Çerçeve Tonu (Eğer eksikse) -->
+
       <linearGradient id="silverFrameGrad" x1="0%" y1="0%" x2="100%" y2="100%">
         <stop offset="0%" stop-color="#E5E7EB" />
         <stop offset="20%" stop-color="#FFFFFF" />
@@ -178,7 +174,7 @@
         <stop offset="100%" stop-color="#4B5563" />
       </linearGradient>
 
-      <!-- Oval köşe (rx) değeri 12'ye çıkarıldı -->
+
       <clipPath id="woodFrameClip">
         <rect id="woodFrameClipRect" x="178.3" y="150" width="683.4" height="469" rx="12" />
       </clipPath>
@@ -211,7 +207,7 @@
       </linearGradient>
       <radialGradient id="plasticCap" cx="35%" cy="35%" r="65%">
         <stop offset="0%" stop-color="#4a4a4a" />
-        <stop offset="40%" stop-color="#222222" />
+        <stop offset="40%" stop-color="#333333" />
         <stop offset="100%" stop-color="#050505" />
       </radialGradient>
       <radialGradient id="crtGlass" cx="50%" cy="50%" r="70%">
@@ -308,16 +304,11 @@
     </g>
 
     <g id="antennas">
-      <!-- 1. Anten Zemin Gölgeleri (En Arkada) -->
       <ellipse cx="520" cy="155" rx="42" ry="8" fill="#111111" />
       <ellipse cx="520" cy="154" rx="40" ry="7" fill="#1A1A1A" />
-
-      <!-- 2. Sol Anten Çubuğu (Kubbenin Arkasında/İçinde Kalacak Şekilde Üste Taşındı) -->
       <g transform="rotate(-32, 505, 150)">
-        <!-- Ana Çubuk -->
         <rect x="501.5" y="80" width="7" height="70" fill="url(#antennaRodGrad)" />
         
-        <!-- Tırtıklı Silindir Uç -->
         <rect x="499.5" y="65" width="11" height="16" rx="1.5" fill="url(#antennaRodGrad)" />
         <line x1="501.5" y1="65" x2="501.5" y2="81" stroke="#1F2937" stroke-width="0.8" opacity="0.6"/>
         <line x1="503.5" y1="65" x2="503.5" y2="81" stroke="#1F2937" stroke-width="0.8" opacity="0.6"/>
@@ -326,12 +317,11 @@
         <rect x="502.5" y="65" width="5" height="1.5" fill="#111827" opacity="0.8" />
       </g>
 
-      <!-- 3. Sağ Anten Çubuğu (Kubbenin Arkasında/İçinde Kalacak Şekilde Üste Taşındı) -->
+
       <g transform="rotate(32, 535, 150)">
         <!-- Ana Çubuk -->
         <rect x="531.5" y="80" width="7" height="70" fill="url(#antennaRodGrad)" />
         
-        <!-- Tırtıklı Silindir Uç -->
         <rect x="529.5" y="65" width="11" height="16" rx="1.5" fill="url(#antennaRodGrad)" />
         <line x1="531.5" y1="65" x2="531.5" y2="81" stroke="#1F2937" stroke-width="0.8" opacity="0.6"/>
         <line x1="533.5" y1="65" x2="533.5" y2="81" stroke="#1F2937" stroke-width="0.8" opacity="0.6"/>
@@ -340,33 +330,19 @@
         <rect x="532.5" y="65" width="5" height="1.5" fill="#111827" opacity="0.8" />
       </g>
       
-      <!-- 4. Anten Zemin Kubbesi (Çubukların Bağlantı Noktasını Örtmesi İçin Alta Taşındı) -->
       <path d="M 480,154 C 480,115 560,115 560,154 Z" fill="url(#antennaDomeGrad)" />
-      <!-- Kubbe Yatay Parlama Efekti -->
+
       <path d="M 488,145 C 495,130 545,130 552,145 C 530,138 510,138 488,145 Z" fill="#FFFFFF" opacity="0.15" />
     </g>
 
     
       <g id="tvMainGroup">
-      <!-- 1. En Dış Katman: Ahşap Kasa (Gölge Sadece Bu Katmana Uygulandı) -->
       <rect id="tvWoodOuter" x="164.3" y="136" width="711.4" height="497" rx="16" fill="url(#woodFrame)" filter="url(#tvDropShadow)" />
-      
-      <!-- Ahşap Damar Dokusu Katmanı -->
       <rect id="tvWoodGrain" x="164.3" y="136" width="711.4" height="497" rx="16" fill="url(#safeWoodGrain)" />
-      
-      <!-- Eskitme/Kirlilik Gölge Katmanı (Kenarlar daha karanlık) -->
       <rect id="tvWoodVignette" x="164.3" y="136" width="711.4" height="497" rx="16" fill="url(#woodVignette)" />
-      
-      <!-- Ahşap Dış Çerçeve Çizgisi (Netlik İçin) -->
       <rect id="tvWoodBorder" x="164.3" y="136" width="711.4" height="497" rx="16" fill="none" stroke="#2a0a00" stroke-width="1.5" opacity="0.8" />
-      
-      <!-- 2. Ahşap ile Gümüş Arasındaki Koyu Ayraç Çizgi -->
       <rect id="tvWoodStroke1" x="179.3" y="151" width="681.4" height="467" rx="10" fill="none" stroke="#111111" stroke-width="2" opacity="0.9" />
-      
-      <!-- 3. Gümüş/Beyaz İnce Çerçeve -->
       <rect id="tvWoodStroke2" x="181.3" y="153" width="677.4" height="463" rx="8" fill="none" stroke="url(#silverFrameGrad)" stroke-width="3" />
-
-      <!-- Ahşap Kasa Köşe Birleşim Çizgileri (Genişletilmiş Geometriye Uygun) -->
       <g clip-path="url(#woodFrameClip)">
         <line id="woodLineTL" x1="164.3" y1="136" x2="179.3" y2="151" stroke="#111" stroke-width="2" opacity="0.4" />
         <line id="woodLineTR" x1="875.7" y1="136" x2="860.7" y2="151" stroke="#111" stroke-width="2" opacity="0.4" />
@@ -374,14 +350,12 @@
         <line id="woodLineBR" x1="875.7" y1="633" x2="860.7" y2="618" stroke="#111" stroke-width="2" opacity="0.4" />
       </g>
 
-      <!-- Ekran Üstü Ahşap Parlaması -->
       <g clip-path="url(#woodFrameClip)">
         <path id="woodGlare" d="M 165.3,475 L 320,136 L 520,136 L 165.3,605 Z" fill="#ffffff" opacity="0.04" />
       </g>
 
-      <!-- 4. İç Kasa Zemin Rengi (Gümüş çerçevenin iç kısmı) -->
-      <rect id="innerBlackCase" x="184.3" y="156" width="671.4" height="457" rx="6" fill="#4D4D4D" stroke="#2B2B2B" stroke-width="2" />
-      <rect id="innerBlackCaseStroke" x="186.3" y="158" width="667.4" height="453" rx="4" fill="none" stroke="#5C5C5C" stroke-width="1.5" />
+      <rect id="innerBlackCase" x="184.3" y="156" width="671.4" height="457" rx="6" fill="#333333" stroke="#1C1C1C" stroke-width="2" />
+      <rect id="innerBlackCaseStroke" x="186.3" y="158" width="667.4" height="453" rx="4" fill="none" stroke="#4A4A4A" stroke-width="1.5" />
 
       <g id="screenArea">
         <rect id="creamBezel" x="198.3" y="170" width="529.4" height="429" rx="22" ry="22" fill="url(#creamBezelGrad)"
@@ -424,81 +398,66 @@
 
       <g id="controlPanelGroup">
         <g id="controlPanel">
-         <rect x="735.7" y="170" width="106" height="429" rx="9" fill="#4D4D4D" stroke="#2B2B2B" stroke-width="2"/>
-         <!-- ================= 1.1 ON/VOL (Sol Üst) ================= -->
+         <rect x="735.7" y="170" width="106" height="429" rx="9" fill="#333333" stroke="#1C1C1C" stroke-width="2"/>
+
          <g transform="translate(765.7, 210)">
-          <!-- Tipografi ve İkonografi -->
           <text x="-10" y="-13" font-family="sans-serif" font-size="3.5" font-weight="bold" fill="#E5E7EB" text-anchor="end" letter-spacing="0.2">ON/VOL</text>
           <polygon points="-22,-2 -14,-2 -14,-7" fill="#E5E7EB" opacity="0.85" />
           <circle cx="-21" cy="2" r="0.8" fill="#E5E7EB" opacity="0.85" />
 
-          <!-- Çevresel Kadran (Ticks) -->
           <circle cx="0" cy="0" r="14" fill="none" stroke="#D1D5DB" stroke-width="0.8" stroke-dasharray="1 6.33" opacity="0.5"/>
           
           <g transform="rotate(-40)">
-           <!-- Gümüş Zemin ve Gövde -->
            <circle cx="0" cy="0" r="11" fill="url(#metalCylinder)" filter="url(#knobShadow)" />
            <circle cx="0" cy="0" r="10.5" fill="none" stroke="#FFFFFF" stroke-width="0.3" opacity="0.6" />
            <circle cx="0" cy="0" r="7.5" fill="#18181B" />
            <circle cx="0" cy="0" r="7" fill="none" stroke="#27272A" stroke-width="0.5" />
            
-           <!-- Gösterge İbresi ve Merkez -->
            <rect x="-0.75" y="-7" width="1.5" height="3.5" fill="#E63946" />
            <circle cx="0" cy="0" r="4.5" fill="url(#chromeDome)" />
           </g>
          </g>
 
-         <!-- ================= 1.2 CONTRAST (Sağ Üst) ================= -->
          <g transform="translate(811.7, 210)">
-          <!-- Tipografi ve İkonografi -->
           <text x="10" y="-13" font-family="sans-serif" font-size="3.5" font-weight="bold" fill="#E5E7EB" text-anchor="start" letter-spacing="0.2">CONT</text>
           <circle cx="18" cy="-3.5" r="3" fill="none" stroke="#E5E7EB" stroke-width="0.8" opacity="0.85" />
           <path d="M 18 -6.5 A 3 3 0 0 1 18 -0.5 Z" fill="#E5E7EB" opacity="0.85" />
 
-          <!-- Çevresel Kadran (Ticks) -->
           <circle cx="0" cy="0" r="14" fill="none" stroke="#D1D5DB" stroke-width="0.8" stroke-dasharray="1 6.33" opacity="0.5"/>
           
           <g transform="rotate(30)">
-           <!-- Gümüş Zemin ve Gövde -->
            <circle cx="0" cy="0" r="11" fill="url(#metalCylinder)" filter="url(#knobShadow)" />
            <circle cx="0" cy="0" r="10.5" fill="none" stroke="#FFFFFF" stroke-width="0.3" opacity="0.6" />
            <circle cx="0" cy="0" r="7.5" fill="#18181B" />
            <circle cx="0" cy="0" r="7" fill="none" stroke="#27272A" stroke-width="0.5" />
-           
-           <!-- Gösterge İbresi ve Merkez -->
+ 
            <rect x="-0.75" y="-7" width="1.5" height="3.5" fill="#E63946" />
            <circle cx="0" cy="0" r="4.5" fill="url(#chromeDome)" />
           </g>
          </g>
 
-         <!-- ================= 2.1 BRIGHT (Sol Alt) ================= -->
          <g transform="translate(765.7, 255)">
-          <!-- Tipografi ve İkonografi -->
           <text x="-10" y="-13" font-family="sans-serif" font-size="3.5" font-weight="bold" fill="#E5E7EB" text-anchor="end" letter-spacing="0.2">BRIGHT</text>
           <g transform="translate(-18, -3.5)" opacity="0.85">
            <circle cx="0" cy="0" r="1.5" fill="none" stroke="#E5E7EB" stroke-width="0.8" />
            <path d="M 0 -3 L 0 -2 M 0 2 L 0 3 M -3 0 L -2 0 M 2 0 L 3 0 M -2 -2 L -1.5 -1.5 M 1.5 1.5 L 2 2 M -2 2 L -1.5 1.5 M 1.5 -1.5 L 2 -2" stroke="#E5E7EB" stroke-width="0.6" />
           </g>
 
-          <!-- Çevresel Kadran (Ticks) -->
           <circle cx="0" cy="0" r="14" fill="none" stroke="#D1D5DB" stroke-width="0.8" stroke-dasharray="1 6.33" opacity="0.5"/>
           
           <g transform="rotate(-15)">
-           <!-- Gümüş Zemin ve Gövde -->
            <circle cx="0" cy="0" r="11" fill="url(#metalCylinder)" filter="url(#knobShadow)" />
            <circle cx="0" cy="0" r="10.5" fill="none" stroke="#FFFFFF" stroke-width="0.3" opacity="0.6" />
            <circle cx="0" cy="0" r="7.5" fill="#18181B" />
            <circle cx="0" cy="0" r="7" fill="none" stroke="#27272A" stroke-width="0.5" />
-           
-           <!-- Gösterge İbresi ve Merkez -->
+
            <rect x="-0.75" y="-7" width="1.5" height="3.5" fill="#E63946" />
            <circle cx="0" cy="0" r="4.5" fill="url(#chromeDome)" />
           </g>
          </g>
 
-         <!-- ================= 2.2 TONE (Sağ Alt) ================= -->
+
          <g transform="translate(811.7, 255)">
-          <!-- Tipografi ve İkonografi -->
           <text x="10" y="-13" font-family="sans-serif" font-size="3.5" font-weight="bold" fill="#E5E7EB" text-anchor="start" letter-spacing="0.2">TONE</text>
           <g transform="translate(18, -3.5)" fill="#E5E7EB" opacity="0.85">
            <rect x="-2" y="-2" width="1" height="4" />
@@ -506,39 +465,29 @@
            <rect x="2" y="-1.5" width="1" height="3" />
           </g>
 
-          <!-- Çevresel Kadran (Ticks) -->
           <circle cx="0" cy="0" r="14" fill="none" stroke="#D1D5DB" stroke-width="0.8" stroke-dasharray="1 6.33" opacity="0.5"/>
           
           <g transform="rotate(45)">
-           <!-- Gümüş Zemin ve Gövde -->
            <circle cx="0" cy="0" r="11" fill="url(#metalCylinder)" filter="url(#knobShadow)" />
            <circle cx="0" cy="0" r="10.5" fill="none" stroke="#FFFFFF" stroke-width="0.3" opacity="0.6" />
            <circle cx="0" cy="0" r="7.5" fill="#18181B" />
            <circle cx="0" cy="0" r="7" fill="none" stroke="#27272A" stroke-width="0.5" />
            
-           <!-- Gösterge İbresi ve Merkez -->
            <rect x="-0.75" y="-7" width="1.5" height="3.5" fill="#E63946" />
            <circle cx="0" cy="0" r="4.5" fill="url(#chromeDome)" />
           </g>
          </g>
-         <!-- ================= VHF DÜĞMESİ ================= -->
+
          <g transform="translate(788.7, 330)">
-          <!-- Tırtıklı Dış Ring -->
-          <circle cx="0" cy="0" r="28" fill="#2B2B2B" filter="url(#dialShadow)" />
-          <circle cx="0" cy="0" r="28" fill="none" stroke="#111111" stroke-width="4" stroke-dasharray="4 4" />
-          
-          <!-- Gümüş Kadran Yüzeyi -->
+          <circle cx="0" cy="0" r="28" fill="#1A1A1A" filter="url(#dialShadow)" />
+          <circle cx="0" cy="0" r="28" fill="none" stroke="#0A0A0A" stroke-width="4" stroke-dasharray="4 4" />
           <circle cx="0" cy="0" r="25.5" fill="#E5E7EB" />
           <circle cx="0" cy="0" r="24.5" fill="none" stroke="#FFFFFF" stroke-width="1" />
           <circle cx="0" cy="0" r="15" fill="none" stroke="#C0C0C0" stroke-width="0.5" />
-
-          <!-- Sol Beyaz Nokta (Gösterge Referansı) -->
           <circle cx="-38" cy="0" r="1.5" fill="#FFFFFF" filter="url(#dialShadow)"/>
-          
-          <!-- VHF Metni -->
+   
           <text x="28" y="-22" font-family="sans-serif" font-size="7" font-weight="normal" fill="#FFFFFF" letter-spacing="0.5" filter="url(#dialShadow)">VHF</text>
 
-          <!-- VHF Rakamları (Merkeze Doğru Bakan Tipografi) -->
           <g font-family="sans-serif" font-size="3.5" font-weight="bold" fill="#333333" text-anchor="middle" dominant-baseline="middle">
            <text transform="rotate(0) translate(0, -21)">U</text>
            <text transform="rotate(27.6) translate(0, -21)">2</text>
@@ -555,13 +504,11 @@
            <text transform="rotate(332.3) translate(0, -21)">13</text>
           </g>
 
-          <!-- Siyah Merkez Göbeği -->
           <circle cx="0" cy="0" r="13.5" fill="#111111" />
           <circle cx="0" cy="0" r="12.5" fill="none" stroke="#2B2B2B" stroke-width="0.5" />
           <circle cx="0" cy="0" r="8" fill="#050505" />
           <circle cx="0" cy="0" r="5" fill="#1A1A1A" />
 
-          <!-- Dönen Ana İbre -->
           <g transform="rotate(-30)" filter="url(#knobShadow)">
            <rect x="-26" y="-3" width="52" height="8" rx="1" fill="#0A0A0A" />
            <rect x="-25.5" y="-4" width="51" height="6.5" rx="1" fill="#F3F4F6" />
@@ -570,24 +517,20 @@
           </g>
          </g>
 
-         <!-- ================= UHF DÜĞMESİ ================= -->
          <g transform="translate(788.7, 405)">
-          <!-- Tırtıklı Dış Ring -->
+
           <circle cx="0" cy="0" r="28" fill="#2B2B2B" filter="url(#dialShadow)" />
           <circle cx="0" cy="0" r="28" fill="none" stroke="#111111" stroke-width="4" stroke-dasharray="4 4" />
           
-          <!-- Gümüş Kadran Yüzeyi -->
+
           <circle cx="0" cy="0" r="25.5" fill="#E5E7EB" />
           <circle cx="0" cy="0" r="24.5" fill="none" stroke="#FFFFFF" stroke-width="1" />
           <circle cx="0" cy="0" r="15" fill="none" stroke="#C0C0C0" stroke-width="0.5" />
 
-          <!-- Sol Beyaz Nokta (Gösterge Referansı) -->
           <circle cx="-38" cy="0" r="1.5" fill="#FFFFFF" filter="url(#dialShadow)"/>
           
-          <!-- UHF Metni -->
           <text x="28" y="-22" font-family="sans-serif" font-size="7" font-weight="normal" fill="#FFFFFF" letter-spacing="0.5" filter="url(#dialShadow)">UHF</text>
 
-          <!-- UHF Noktaları ve Rakamları -->
           <circle cx="0" cy="0" r="21" fill="none" stroke="#555555" stroke-width="1.2" stroke-dasharray="0.5 4" />
           
           <g font-family="sans-serif" font-size="3" font-weight="bold" fill="#333333" text-anchor="middle" dominant-baseline="middle">
@@ -601,13 +544,11 @@
            <text transform="rotate(345) translate(0, -17)">83</text>
           </g>
 
-          <!-- Siyah Merkez Göbeği -->
           <circle cx="0" cy="0" r="13.5" fill="#111111" />
           <circle cx="0" cy="0" r="12.5" fill="none" stroke="#2B2B2B" stroke-width="0.5" />
           <circle cx="0" cy="0" r="8" fill="#050505" />
           <circle cx="0" cy="0" r="5" fill="#1A1A1A" />
 
-          <!-- Dönen Ana İbre -->
           <g transform="rotate(75)" filter="url(#knobShadow)">
            <rect x="-26" y="-3" width="52" height="8" rx="1" fill="#0A0A0A" />
            <rect x="-25.5" y="-4" width="51" height="6.5" rx="1" fill="#F3F4F6" />
@@ -623,10 +564,10 @@
            <rect x="0" y="0" width="72" height="134" fill="url(#speakerMesh)" opacity="0.4" />
           </g>
           
-          <!-- Kesiklere derinlik vermek için iç gölge efektleri -->
+
           <g clip-path="url(#grilleHoles)" fill="none" stroke-width="1.5">
-           <rect x="-1" y="-1" width="74" height="136" stroke="#2B2B2B" transform="translate(0.5, 0.5)" opacity="0.9" />
-           <rect x="-1" y="-1" width="74" height="136" stroke="#111111" />
+           <rect x="-1" y="-1" width="74" height="136" stroke="#1C1C1C" transform="translate(0.5, 0.5)" opacity="0.9" />
+           <rect x="-1" y="-1" width="74" height="136" stroke="#0A0A0A" />
           </g>
          </g>
 
@@ -636,17 +577,11 @@
 	 </svg>
 
   <a href="https://tvretro.github.io/" class="viewport-home-btn" title="Home">
-    <svg viewBox="0 0 24 24" fill="none" stroke="#dedede" stroke-width="1.8" stroke-linecap="round"
-      stroke-linejoin="round">
-      <path d="M3 10L12 3l9 7" />
-      <path d="M5 10v11h14V10" />
-      <path d="M17 5v3" />
-      <path d="M15.5 4h3" />
-      <path d="M10 21V14h4v7" />
-      <circle cx="13" cy="17.5" r="0.5" fill="#dedede" stroke="none" />
-      <rect x="6" y="12" width="3" height="4" />
-      <path d="M6 14h3" />
-      <path d="M7.5 12v4" />
+    <svg viewBox="0 0 24 24" fill="none" stroke="#dedede" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M2 10.5L12 2.5L22 10.5" />
+      <path d="M5 8.5V20.5C5 21.05 5.45 21.5 6 21.5H18C18.55 21.5 19 21.05 19 20.5V8.5" />
+      <path d="M10 21.5V14.5C10 13.95 10.45 13.5 11 13.5H13C13.55 13.5 14 13.95 14 14.5V21.5" />
+      <path d="M18 7.5V3.5C18 3.22 17.78 3 17.5 3H15.5C15.22 3 15 3.22 15 3.5V5" />
     </svg>
   </a>
   <script>
@@ -766,7 +701,7 @@
       document.getElementById('effectGlare').setAttribute('d',
         `M ${startX},173 L 487.7,173 L 288.3,542 L ${startX},542 Z`
       );
-      // İç Gri Kasa
+ 
       const caseShiftX = 184.3 - shift;
       const caseWidth = 671.4 + deltaX;
 
@@ -783,7 +718,7 @@
       const woodStartX = caseShiftX - 20;
       const woodWidth = caseWidth + 40;
 
-      // Ahşap Katmanları
+ 
       document.getElementById('tvWoodOuter').setAttribute('x', woodStartX);
       document.getElementById('tvWoodOuter').setAttribute('width', woodWidth);
       document.getElementById('tvWoodGrain').setAttribute('x', woodStartX);
@@ -793,20 +728,20 @@
       document.getElementById('tvWoodBorder').setAttribute('x', woodStartX);
       document.getElementById('tvWoodBorder').setAttribute('width', woodWidth);
       
-      // Çerçeve Katmanları (Siyah Ayraç ve Gümüş)
+
       document.getElementById('tvWoodStroke1').setAttribute('x', caseShiftX - 5);
       document.getElementById('tvWoodStroke1').setAttribute('width', caseWidth + 10);
       document.getElementById('tvWoodStroke2').setAttribute('x', caseShiftX - 3);
       document.getElementById('tvWoodStroke2').setAttribute('width', caseWidth + 6);
       
-      // Clip Alanı ve Parlama
+
       document.getElementById('woodFrameClipRect').setAttribute('x', woodStartX);
       document.getElementById('woodFrameClipRect').setAttribute('width', woodWidth);
       document.getElementById('woodGlare').setAttribute('d',
         `M ${woodStartX + 1},475 L 320,136 L 520,136 L ${woodStartX + 1},605 Z`
       );
 
-      // Ahşap Köşe Birleşim Çizgileri Dinamik Noktaları
+
       document.getElementById('woodLineTL').setAttribute('x1', woodStartX);
       document.getElementById('woodLineTL').setAttribute('x2', woodStartX + 15);
       document.getElementById('woodLineBL').setAttribute('x1', woodStartX);
