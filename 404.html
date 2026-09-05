@@ -675,7 +675,7 @@
         }
       };
       // Videos
-      const stationList = ["swloMVFALXw", "S2ujotDMluo", "v9vxjNm8jX4", "IufsocTXfMY", "Qy7z_oiN6nQ"];
+      const stationList = ["IufsocTXfMY", "v9vxjNm8jX4", "Qy7z_oiN6nQ", "S2ujotDMluo", "swloMVFALXw"];
       let hasDialBeenMoved = false;
 
       function changeChannel(detentIndex) {
@@ -787,7 +787,7 @@
         }
         requestAnimationFrame(frame);
       }
-      // Düğmeye basma
+  
       function beginDialDrag(name, event) {
         const config = dialConfigs[name];
         if (!config?.element) return;
@@ -862,7 +862,7 @@
         } catch (_) {}
         activeDial = null;
       }
-      // Event'leri bağla
+ 
       Object.entries(dialConfigs).forEach(
         ([name, config]) => {
           if (!config.element) return;
@@ -880,7 +880,7 @@
               }
             });
         });
-      // Başlangıç açılarını koru
+
       renderDial(dialConfigs.vhf, dialConfigs.vhf.rotation);
       renderDial(dialConfigs.uhf, dialConfigs.uhf.rotation);
     </script>
