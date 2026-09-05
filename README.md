@@ -1,12 +1,11 @@
 # Watch the YouTube video on "Retro TV"
 
-### [https://tvretro.github.io/](https://tvretro.github.io/)
-
 An immersive, dynamic SVG-based Retro TV interface for watching YouTube videos with styled CRT aesthetics and adaptive aspect ratio scaling.
 
 [![Retro TV Showcase](home.png)](https://tvretro.github.io/watch?v=XEjLoHdbVeE)
 
 ## Overview
+### [https://tvretro.github.io/](https://tvretro.github.io/)
 
 Retro TV transforms any standard YouTube video into a nostalgic 80s television experience. Built purely with Vanilla JS and SVG, it automatically detects video dimensions to dynamically scale the TV casing, CRT screen mask, and control panel while preserving authentic visual ratios.
 
