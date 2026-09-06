@@ -675,7 +675,7 @@
         }
       };
       // Videos
-      const stationList = ["IufsocTXfMY", "jx0llzSntd8", "Qy7z_oiN6nQ", "S2ujotDMluo", "vdJthIdDR6w"];
+      const stationList = ["IufsocTXfMY", "jx0llzSntd8", "CGj85pVzRJs", "S2ujotDMluo", "vdJthIdDR6w"];
       let hasDialBeenMoved = false;
 
       function changeChannel(detentIndex) {
@@ -830,18 +830,18 @@
    
         if (newDetent !== activeDial.lastDetent) {
     
-		    hasDialBeenMoved = true;
+        hasDialBeenMoved = true;
 
-		    playMechanicalTick(newDetent > activeDial.lastDetent ? 1 : -1);
-		    changeChannel(newDetent);
+        playMechanicalTick(newDetent > activeDial.lastDetent ? 1 : -1);
+        changeChannel(newDetent);
 
-		    activeDial.lastDetent = newDetent;
-		  }
+        activeDial.lastDetent = newDetent;
+      }
 
-		  config.rotation = snappedRotation;
-		  renderDial(config, snappedRotation);
-		  event.preventDefault();
-		}
+      config.rotation = snappedRotation;
+      renderDial(config, snappedRotation);
+      event.preventDefault();
+    }
   
       function endDialDrag(event) {
         if (!activeDial) return;
