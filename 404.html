@@ -66,6 +66,7 @@
       .dial-hit-area {
         pointer-events: all;
       }
+      #tvWoodOuter, #tvWoodGrain, #tvWoodVignette, #tvWoodBorder, #tvWoodStroke1, #tvWoodStroke2, #woodGlare {cursor: default;}
     </style>
   </head>
   <body>
@@ -763,6 +764,71 @@
         while (delta < -180) delta += 360;
         return delta;
       }
+
+      // --- Ahşap Ses Sentezleyicisi ---
+function playWoodKnock() {
+  const ctx = ensureDialAudio();
+  if (!ctx) return;
+  const now = ctx.currentTime;
+
+  // 1. Gövde Rezonansı (Pesleşen Sinüs Dalgası)
+  const osc = ctx.createOscillator();
+  osc.type = 'sine';
+  osc.frequency.setValueAtTime(300, now);
+  // Frekansı çok hızlı bir şekilde düşürerek tok bir yankı elde ediyoruz
+  osc.frequency.exponentialRampToValueAtTime(40, now + 0.08);
+
+  const oscGain = ctx.createGain();
+  oscGain.gain.setValueAtTime(0, now);
+  oscGain.gain.linearRampToValueAtTime(1, now + 0.005);
+  oscGain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+
+  osc.connect(oscGain);
+  oscGain.connect(ctx.destination);
+
+  // 2. Tıklama/Vuruş Etkisi (Kısa Süreli Filtrelenmiş Gürültü)
+  const bufferSize = ctx.sampleRate * 0.05;
+  const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+  const data = buffer.getChannelData(0);
+  for (let i = 0; i < bufferSize; i++) {
+    data[i] = Math.random() * 2 - 1; // Beyaz gürültü üretimi
+  }
+  const noise = ctx.createBufferSource();
+  noise.buffer = buffer;
+
+  const filter = ctx.createBiquadFilter();
+  filter.type = 'lowpass';
+  filter.frequency.setValueAtTime(1000, now); // Çok tiz sesleri kesiyoruz
+
+  const noiseGain = ctx.createGain();
+  noiseGain.gain.setValueAtTime(0, now);
+  noiseGain.gain.linearRampToValueAtTime(0.5, now + 0.002); // Anlık maksimum ses
+  noiseGain.gain.exponentialRampToValueAtTime(0.001, now + 0.03); // Hızlıca sönümlenme
+
+  noise.connect(filter);
+  filter.connect(noiseGain);
+  noiseGain.connect(ctx.destination);
+
+  // Sesleri başlat ve bitiş sürelerini zamanla
+  osc.start(now);
+  noise.start(now);
+  osc.stop(now + 0.15);
+  noise.stop(now + 0.05);
+}
+
+// --- Event Delegation (Olay Yakalama) ---
+// Sadece ahşap görünümü oluşturan element ID'leri
+const woodElements = [
+  'tvWoodOuter', 'tvWoodGrain', 'tvWoodVignette', 
+  'tvWoodBorder', 'tvWoodStroke1', 'tvWoodStroke2', 'woodGlare'
+];
+
+document.getElementById('retroTvSvg').addEventListener('pointerdown', (e) => {
+  // Eğer tıklanan hedefin ID'si ahşap katmanlarından biriyse sesi çal
+  if (e.target && woodElements.includes(e.target.id)) {
+    playWoodKnock();
+  }
+});
 
       function renderDial(config, rotation) {
         const transform = `rotate(${rotation})`;
