@@ -69,7 +69,7 @@
    }
 
    #tvWoodOuter, #tvWoodGrain, #tvWoodVignette, #tvWoodBorder, 
-   #tvWoodStroke1, #tvWoodStroke2, #woodGlare, #tvFeetLeft, #tvFeetRight,
+   #tvWoodStroke1, #tvWoodStroke2, #woodGlare,
    #innerBlackCase, #controlPanel rect[fill="#333333"] {
     cursor: help;
    }
@@ -174,31 +174,6 @@
      <stop offset="70%" stop-color="#732D10" />
      <stop offset="100%" stop-color="#3D1200" />
     </linearGradient>
-    <!-- Retro 60-70'ler Çubuk Ayak Gradiyentleri -->
-    <linearGradient id="retroLegWood" x1="0%" y1="0%" x2="100%" y2="0%">
-     <stop offset="0%" stop-color="#2D1106" />
-     <stop offset="25%" stop-color="#54230D" />
-     <stop offset="60%" stop-color="#783415" />
-     <stop offset="85%" stop-color="#431A08" />
-     <stop offset="100%" stop-color="#1B0701" />
-    </linearGradient>
-    <linearGradient id="retroLegWoodRear" x1="0%" y1="0%" x2="100%" y2="0%">
-     <stop offset="0%" stop-color="#140602" />
-     <stop offset="50%" stop-color="#321307" />
-     <stop offset="100%" stop-color="#0E0301" />
-    </linearGradient>
-    <linearGradient id="brassTipGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-     <stop offset="0%" stop-color="#785314" />
-     <stop offset="25%" stop-color="#D4AF37" />
-     <stop offset="50%" stop-color="#FFF3B0" />
-     <stop offset="75%" stop-color="#AA7C11" />
-     <stop offset="100%" stop-color="#4A3205" />
-    </linearGradient>
-    <linearGradient id="legBracketGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-     <stop offset="0%" stop-color="#374151" />
-     <stop offset="50%" stop-color="#1F2937" />
-     <stop offset="100%" stop-color="#111827" />
-    </linearGradient>
     <radialGradient id="woodVignette" cx="50%" cy="50%" r="75%">
      <stop offset="50%" stop-color="#000000" stop-opacity="0" />
      <stop offset="90%" stop-color="#2a0a00" stop-opacity="0.6" />
@@ -295,6 +270,23 @@
      <rect x="55.2" y="69" width="2.6" height="34.3" rx="1.3" />
      <rect x="60" y="69" width="2.6" height="18.7" rx="1.3" />
     </clipPath>
+    <clipPath id="woodFrameClip">
+     <rect id="woodFrameClipRect" x="178.3" y="150" width="683.4" height="469" rx="8" />
+    </clipPath>
+
+    <!-- Retro Çubuk Ayak Gradiyentleri -->
+    <linearGradient id="pegWood" x1="0%" y1="0%" x2="100%" y2="0%">
+     <stop offset="0%" stop-color="#2a0f05" />
+     <stop offset="35%" stop-color="#5a240c" />
+     <stop offset="70%" stop-color="#732f10" />
+     <stop offset="100%" stop-color="#1c0701" />
+    </linearGradient>
+    <linearGradient id="pegBrass" x1="0%" y1="0%" x2="100%" y2="0%">
+     <stop offset="0%" stop-color="#7a5515" />
+     <stop offset="45%" stop-color="#e8c253" />
+     <stop offset="70%" stop-color="#fff1a8" />
+     <stop offset="100%" stop-color="#523707" />
+    </linearGradient>
    </defs>
    <g id="perspectiveRoom" filter="url(#realisticWall)">
     <polygon points="-120,-110 1160,-110 840,120 200,120" fill="url(#ceilingRealistic)" />
@@ -316,80 +308,38 @@
     <polygon points="1160,770 840,550 830,555 1170,775" fill="#000000" opacity="0.4" filter="blur(2px)" />
     <polygon points="200,550 840,550 840,554 200,554" fill="#000000" opacity="0.5" filter="blur(2px)" />
    </g>
-   
-   <!-- Zemin Ana Gölgesi -->
-   <ellipse cx="520" cy="650" rx="420" ry="26" fill="#000000" opacity="0.85" filter="blur(14px)" />
+   <ellipse cx="520" cy="648" rx="420" ry="28" fill="#000000" opacity="0.85" filter="blur(14px)" />
 
-   <!-- 60-70'ler Sol Çubuk Ayak Grubu (Mid-Century Tapered Peg Legs) -->
+   <!-- 60-70'ler Sol Çubuk Ayak Grubu -->
    <g id="tvFeetLeft">
-    <!-- Ayak Ucu Zemin Nokta Gölgeleri -->
-    <ellipse cx="236" cy="656" rx="8" ry="2.2" fill="#000000" opacity="0.65" filter="blur(1.5px)" />
-    <ellipse cx="279" cy="653" rx="6" ry="1.8" fill="#000000" opacity="0.55" filter="blur(1.5px)" />
-
-    <!-- Arka Sol Çubuk Ayak (Derinlik Hissi Veren Perspektif) -->
-    <g id="tvFeetLeftRear">
-     <!-- Gövde -->
-     <polygon points="269,632.5 275.5,632.5 281.5,652 277,652" fill="url(#retroLegWoodRear)" />
-     <!-- Pirinç Yüksük (Ferrule) -->
-     <polygon points="275,647 280.2,647 281.5,652 277,652" fill="url(#brassTipGrad)" opacity="0.8" />
-     <!-- Taban Pabuç -->
-     <ellipse cx="279.2" cy="652.5" rx="2.4" ry="0.8" fill="#111111" />
-    </g>
-
-    <!-- Ön Sol Ana Çubuk Ayak (Dışa Açılı Konik Çubuk) -->
-    <g id="tvFeetLeftFront">
-     <!-- Ahşap Gövde -->
-     <polygon points="252,632.5 260.5,632.5 238.5,655 233.5,655" fill="url(#retroLegWood)" />
-     <!-- Ahşap Işık/Cila Çizgisi -->
-     <line x1="255.5" y1="633.5" x2="236.5" y2="648" stroke="#ffffff" stroke-width="0.8" opacity="0.25" stroke-linecap="round" />
-     <!-- Pirinç Pabuç / Yüksük -->
-     <polygon points="238.5,648.5 244.5,648.5 238.5,655 233.5,655" fill="url(#brassTipGrad)" stroke="#553a06" stroke-width="0.3" />
-     <!-- Pirinç Yansıma Parıltısı -->
-     <line x1="239" y1="649" x2="235.5" y2="654.5" stroke="#ffffff" stroke-width="0.8" opacity="0.6" stroke-linecap="round" />
-     <!-- Siyah Taban Lastik Pabuç -->
-     <ellipse cx="236" cy="655.4" rx="2.8" ry="1" fill="#111111" />
-    </g>
-
-    <!-- Metal Montaj Tablası ve Vidalar -->
-    <polygon points="241,631 285,631 281,634.5 245,634.5" fill="url(#legBracketGrad)" stroke="#0a0d14" stroke-width="0.6" />
-    <circle cx="249" cy="632.8" r="1" fill="#9CA3AF" />
-    <circle cx="277" cy="632.8" r="1" fill="#9CA3AF" />
+    <!-- Arka Çubuk Ayak (Gölge ve derinlik) -->
+    <polygon points="268,632 274,632 281,652 276.5,652" fill="#160802" />
+    <polygon points="274.5,647.5 279.5,647.5 281,652 276.5,652" fill="url(#pegBrass)" opacity="0.75" />
+    <ellipse cx="278.8" cy="652.5" rx="2.2" ry="0.8" fill="#0a0a0a" />
+    <!-- Ön Ana Çubuk Ayak (Dışa açılı konik çubuk) -->
+    <polygon points="252,632 260,632 238,655 233,655" fill="url(#pegWood)" />
+    <line x1="255" y1="633" x2="236" y2="649" stroke="#ffffff" stroke-width="0.8" opacity="0.3" stroke-linecap="round" />
+    <!-- Pirinç Pabuç / Ferrule -->
+    <polygon points="238.5,648.5 244,648.5 238,655 233,655" fill="url(#pegBrass)" stroke="#452e05" stroke-width="0.3" />
+    <ellipse cx="235.5" cy="655.4" rx="2.6" ry="0.9" fill="#111111" />
+    <!-- Metal Montaj Plakası -->
+    <polygon points="244,631 280,631 276,634 248,634" fill="#1f242d" stroke="#000000" stroke-width="0.5" />
    </g>
 
-   <!-- 60-70'ler Sağ Çubuk Ayak Grubu (Mid-Century Tapered Peg Legs) -->
+   <!-- 60-70'ler Sağ Çubuk Ayak Grubu -->
    <g id="tvFeetRight">
-    <!-- Ayak Ucu Zemin Nokta Gölgeleri -->
-    <ellipse cx="804" cy="656" rx="8" ry="2.2" fill="#000000" opacity="0.65" filter="blur(1.5px)" />
-    <ellipse cx="761" cy="653" rx="6" ry="1.8" fill="#000000" opacity="0.55" filter="blur(1.5px)" />
-
-    <!-- Arka Sağ Çubuk Ayak (Derinlik Hissi Veren Perspektif) -->
-    <g id="tvFeetRightRear">
-     <!-- Gövde -->
-     <polygon points="771,632.5 764.5,632.5 758.5,652 763,652" fill="url(#retroLegWoodRear)" />
-     <!-- Pirinç Yüksük (Ferrule) -->
-     <polygon points="765,647 759.8,647 758.5,652 763,652" fill="url(#brassTipGrad)" opacity="0.8" />
-     <!-- Taban Pabuç -->
-     <ellipse cx="760.8" cy="652.5" rx="2.4" ry="0.8" fill="#111111" />
-    </g>
-
-    <!-- Ön Sağ Ana Çubuk Ayak (Dışa Açılı Konik Çubuk) -->
-    <g id="tvFeetRightFront">
-     <!-- Ahşap Gövde -->
-     <polygon points="788,632.5 779.5,632.5 801.5,655 806.5,655" fill="url(#retroLegWood)" />
-     <!-- Ahşap Işık/Cila Çizgisi -->
-     <line x1="784.5" y1="633.5" x2="803.5" y2="648" stroke="#ffffff" stroke-width="0.8" opacity="0.25" stroke-linecap="round" />
-     <!-- Pirinç Pabuç / Yüksük -->
-     <polygon points="801.5,648.5 795.5,648.5 801.5,655 806.5,655" fill="url(#brassTipGrad)" stroke="#553a06" stroke-width="0.3" />
-     <!-- Pirinç Yansıma Parıltısı -->
-     <line x1="801" y1="649" x2="804.5" y2="654.5" stroke="#ffffff" stroke-width="0.8" opacity="0.6" stroke-linecap="round" />
-     <!-- Siyah Taban Lastik Pabuç -->
-     <ellipse cx="804" cy="655.4" rx="2.8" ry="1" fill="#111111" />
-    </g>
-
-    <!-- Metal Montaj Tablası ve Vidalar -->
-    <polygon points="799,631 755,631 759,634.5 795,634.5" fill="url(#legBracketGrad)" stroke="#0a0d14" stroke-width="0.6" />
-    <circle cx="791" cy="632.8" r="1" fill="#9CA3AF" />
-    <circle cx="763" cy="632.8" r="1" fill="#9CA3AF" />
+    <!-- Arka Çubuk Ayak (Gölge ve derinlik) -->
+    <polygon points="772,632 766,632 759,652 763.5,652" fill="#160802" />
+    <polygon points="765.5,647.5 760.5,647.5 759,652 763.5,652" fill="url(#pegBrass)" opacity="0.75" />
+    <ellipse cx="761.2" cy="652.5" rx="2.2" ry="0.8" fill="#0a0a0a" />
+    <!-- Ön Ana Çubuk Ayak (Dışa açılı konik çubuk) -->
+    <polygon points="788,632 780,632 802,655 807,655" fill="url(#pegWood)" />
+    <line x1="785" y1="633" x2="804" y2="649" stroke="#ffffff" stroke-width="0.8" opacity="0.3" stroke-linecap="round" />
+    <!-- Pirinç Pabuç / Ferrule -->
+    <polygon points="801.5,648.5 796,648.5 802,655 807,655" fill="url(#pegBrass)" stroke="#452e05" stroke-width="0.3" />
+    <ellipse cx="804.5" cy="655.4" rx="2.6" ry="0.9" fill="#111111" />
+    <!-- Metal Montaj Plakası -->
+    <polygon points="796,631 760,631 764,634 792,634" fill="#1f242d" stroke="#000000" stroke-width="0.5" />
    </g>
 
    <g id="antennas">
@@ -405,6 +355,7 @@
      <rect x="502.5" y="65" width="5" height="1.5" fill="#111827" opacity="0.8" />
     </g>
     <g transform="rotate(32, 535, 150)">
+   
      <rect x="531.5" y="80" width="7" height="70" fill="url(#antennaRodGrad)" />
      <rect x="529.5" y="65" width="11" height="16" rx="1.5" fill="url(#antennaRodGrad)" />
      <line x1="531.5" y1="65" x2="531.5" y2="81" stroke="#1F2937" stroke-width="0.8" opacity="0.6" />
@@ -647,8 +598,8 @@
    window.addEventListener('DOMContentLoaded', async () => {
     if (!videoId) return;
     try {
-     const targetVideoUrl = `https://www.youtube.com/watch?v=${}`;
-     const response = await fetch(`${}${encodeURIComponent(targetVideoUrl)}`);
+     const targetVideoUrl = `https://www.youtube.com/watch?v=$`;
+     const response = await fetch(`$${encodeURIComponent(targetVideoUrl)}`);
      const data = await response.json();
      if (data.width && data.height) {
       adjustTvSymmetrically(data.width / data.height);
@@ -724,9 +675,9 @@
     document.getElementById('effectInnerLine').setAttribute('width', newWidth);
     document.getElementById('clickOverlay').setAttribute('x', startX);
     document.getElementById('clickOverlay').setAttribute('width', newWidth);
-    document.getElementById('screenCustomClipPath').setAttribute('d', `M ${} 542 L ${} 195 A 22 22 0 0 1 ${startX + 22} 173 L ${startX + newWidth - 22} 173 A 22 22 0 0 1 ${startX + newWidth} 195 L ${startX + newWidth} 542 Z`);
+    document.getElementById('screenCustomClipPath').setAttribute('d', `M $ 542 L $ 195 A 22 22 0 0 1 ${startX + 22} 173 L ${startX + newWidth - 22} 173 A 22 22 0 0 1 ${startX + newWidth} 195 L ${startX + newWidth} 542 Z`);
     document.getElementById('blackScreenBg').setAttribute('d', `M ${startX - 2} 544 L ${startX - 2} 193 A 22 22 0 0 1 ${startX + 20} 171 L ${startX + newWidth - 20} 171 A 22 22 0 0 1 ${startX + newWidth + 2} 193 L ${startX + newWidth + 2} 544 Z`);
-    document.getElementById('effectGlare').setAttribute('d', `M ${},173 L 487.7,173 L 288.3,542 L ${},542 Z`);
+    document.getElementById('effectGlare').setAttribute('d', `M $,173 L 487.7,173 L 288.3,542 L $,542 Z`);
     const caseShiftX = 184.3 - shift;
     const caseWidth = 671.4 + deltaX;
     document.getElementById('innerBlackCase').setAttribute('x', caseShiftX);
@@ -764,8 +715,8 @@
     document.getElementById('woodLineTR').setAttribute('x2', woodStartX + woodWidth - 15);
     document.getElementById('woodLineBR').setAttribute('x1', woodStartX + woodWidth);
     document.getElementById('woodLineBR').setAttribute('x2', woodStartX + woodWidth - 15);
-    document.getElementById('controlPanelGroup').setAttribute('transform', `translate(${deltaX}, 0)`);
-    document.getElementById('tvFeetRight').setAttribute('transform', `translate(${}, 0)`);
+    document.getElementById('controlPanelGroup').setAttribute('transform', `translate($, 0)`);
+    document.getElementById('tvFeetRight').setAttribute('transform', `translate($, 0)`);
     document.getElementById('tvFeetLeft').setAttribute('transform', `translate(${-shift}, 0)`);
    }
    // VHF / UHF tuner 
@@ -889,7 +840,7 @@
 
      const oscGain = ctx.createGain();
      oscGain.gain.setValueAtTime(0, now);
-     oscGain.gain.linearRampToValueAtTime(0.25, now + 0.005);
+     oscGain.gain.linearRampToValueAtTime(0.25, now + 0.005); // Main tone -> 0.25
      oscGain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
 
      osc.connect(oscGain);
@@ -910,7 +861,7 @@
 
      const noiseGain = ctx.createGain();
      noiseGain.gain.setValueAtTime(0, now);
-     noiseGain.gain.linearRampToValueAtTime(0.1, now + 0.002);
+     noiseGain.gain.linearRampToValueAtTime(0.1, now + 0.002); // Impact tissue -> 0.1
      noiseGain.gain.exponentialRampToValueAtTime(0.001, now + 0.03);
 
      noise.connect(filter);
@@ -936,7 +887,7 @@
 
      const oscGain = ctx.createGain();
      oscGain.gain.setValueAtTime(0, now);
-     oscGain.gain.linearRampToValueAtTime(0.18, now + 0.001);
+     oscGain.gain.linearRampToValueAtTime(0.18, now + 0.001); // Main tone -> 0.18
      oscGain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
 
      osc.connect(oscGain);
@@ -957,7 +908,7 @@
 
      const noiseGain = ctx.createGain();
      noiseGain.gain.setValueAtTime(0, now);
-     noiseGain.gain.linearRampToValueAtTime(0.04, now + 0.001);
+     noiseGain.gain.linearRampToValueAtTime(0.04, now + 0.001); // Impact tissue -> 0.04
      noiseGain.gain.exponentialRampToValueAtTime(0.001, now + 0.02);
 
      noise.connect(filter);
@@ -970,6 +921,7 @@
      noise.stop(now + 0.03);
     }
 
+    
     document.getElementById('retroTvSvg').addEventListener('pointerdown', (e) => {
      const target = e.target;
      if (!target) return;
@@ -983,7 +935,7 @@
      ) {
       return;
      }
-     const isWood = target.closest('#tvWoodOuter, #tvWoodGrain, #tvWoodVignette, #tvWoodBorder, #tvWoodStroke1, #tvWoodStroke2, #woodGlare, #tvFeetLeft, #tvFeetRight');
+     const isWood = target.closest('#tvWoodOuter, #tvWoodGrain, #tvWoodVignette, #tvWoodBorder, #tvWoodStroke1, #tvWoodStroke2, #woodGlare');
      if (isWood) {
       playWoodKnock();
       return;
@@ -993,8 +945,9 @@
       playPlasticTap();
      }
     });
+    // --- Area Click Sound
 
-    // --- Bej / Cilalama Etkileşimi ---
+    // --- Bej 
     let rubAudio = null;
     let isRubbing = false;
     let lastPointerPos = null;
@@ -1010,10 +963,12 @@
 
      const now = ctx.currentTime;
 
+     // (Master Gain)
      const masterGain = ctx.createGain();
      masterGain.gain.setValueAtTime(0, now);
      masterGain.connect(ctx.destination);
 
+     // 1. Smooth Carbon Friction Texture (Pink Noise)
      const bufferSize = ctx.sampleRate * 2;
      const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
      const data = buffer.getChannelData(0);
@@ -1038,6 +993,7 @@
      noise.connect(filter);
      filter.connect(masterGain);
 
+     // 2. Carbon Fiber Body Vibration
      const osc = ctx.createOscillator();
      osc.type = 'sine';
      osc.frequency.setValueAtTime(130, now);
@@ -1075,6 +1031,7 @@
 
      if (dist < 1) return;
 
+      
      const targetGain = Math.min(0.25, Math.max(0.05, speed * 0.15));
      const targetFreq = Math.min(900, 350 + speed * 400);
 
@@ -1150,9 +1107,11 @@
       surface.addEventListener('lostpointercapture', stopRubbing);
      }
     });
+    // Bej End
+
 
     function renderDial(config, rotation) {
-     const transform = `rotate(${})`;
+     const transform = `rotate($)`;
      config.face?.setAttribute('transform', transform);
      config.pointer?.setAttribute('transform', transform);
     }
@@ -1164,7 +1123,8 @@
      const startTime = performance.now();
 
      function frame(now) {
-      const p = Math.min(1, (now - startTime) / duration);
+      const p = Math.min(1,
+       (now - startTime) / duration);
       const eased = 1 - Math.pow(1 - p, 3);
       renderDial(config, start + distance * eased);
       if (p < 1) {
@@ -1200,7 +1160,9 @@
      if (!activeDial || event.pointerId !== activeDial.pointerId) {
       return;
      }
-     const { config } = activeDial;
+     const {
+      config
+     } = activeDial;
      const angle = pointerAngle(config.element, event);
      if (angle == null) return;
      const RESISTANCE_FACTOR = 3;
@@ -1213,9 +1175,12 @@
      const snappedRotation = newDetent * config.step;
    
      if (newDetent !== activeDial.lastDetent) {
+    
       hasDialBeenMoved = true;
+
       playMechanicalTick(newDetent > activeDial.lastDetent ? 1 : -1);
       changeChannel(newDetent);
+
       activeDial.lastDetent = newDetent;
      }
 
@@ -1224,12 +1189,16 @@
      event.preventDefault();
     }
 
+
+
     function endDialDrag(event) {
      if (!activeDial) return;
      if (event?.pointerId != null && event.pointerId !== activeDial.pointerId) {
       return;
      }
-     const { config } = activeDial;
+     const {
+      config
+     } = activeDial;
      const target = Math.round(config.rotation / config.step) * config.step;
      config.rotation = target;
      animateDialTo(config, target);
@@ -1265,5 +1234,3 @@
   </script>
  </body>
 </html>
-
-
