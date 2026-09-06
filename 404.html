@@ -492,6 +492,7 @@
             <rect id="channelTransitionLines" class="transitionLines" x="203.3" y="173" width="519.4" height="369" fill="url(#channelStaticLines)" />
             <rect x="203.3" y="173" width="519.4" height="369" fill="none" stroke="#ffffff" stroke-width="1.2" opacity="0.10" />
           </g>
+          <rect id="powerOffOverlay" x="203.3" y="173" width="519.4" height="369" fill="#000000" opacity="0" pointer-events="none" clip-path="url(#screenCustomClip)" />
           <rect id="clickOverlay" x="203.3" y="173" width="519.4" height="369" fill="#000000" opacity="0" cursor="pointer" clip-path="url(#screenCustomClip)" />
           <!-- 1. Ekran Çerçevesi Hitbox'ı (Alta Çizilecek) -->
           <rect id="bezelBottomHitbox" x="198.3" y="542" width="529.4" height="57" fill="rgba(0,0,0,0.01)" pointer-events="all" />
@@ -646,7 +647,8 @@
               </g>
               <circle class="dial-hit-area" cx="0" cy="0" r="30" fill="#FFFFFF" fill-opacity="0.001" />
             </g>
-            <g transform="translate(752.7, 450)">
+            <!-- Hoparlör: boyutu korunarak hafif yukarı alındı -->
+            <g transform="translate(752.7, 440)">
               <g clip-path="url(#grilleHoles)">
                 <rect x="0" y="0" width="72" height="134" fill="#080808" />
                 <circle cx="36" cy="67" r="38" fill="url(#speakerCone)" />
@@ -657,6 +659,18 @@
                 <rect x="-1" y="-1" width="74" height="136" stroke="#1C1C1C" transform="translate(0.5, 0.5)" opacity="0.9" />
                 <rect x="-1" y="-1" width="74" height="136" stroke="#0A0A0A" />
               </g>
+            </g>
+
+            <!-- Yatay ON / OFF güç anahtarı -->
+            <g id="powerSwitch" transform="translate(788.7, 585)" style="cursor:pointer" role="button" aria-label="TV Power Switch">
+              <text x="-25" y="2.5" font-family="sans-serif" font-size="4.5" font-weight="bold" fill="#E5E7EB" text-anchor="end" letter-spacing="0.15">OFF</text>
+              <text x="25" y="2.5" font-family="sans-serif" font-size="4.5" font-weight="bold" fill="#E5E7EB" text-anchor="start" letter-spacing="0.15">ON</text>
+
+              <rect x="-14" y="-6" width="28" height="12" rx="4" fill="#111111" stroke="#050505" stroke-width="1.2" />
+              <rect x="-12.5" y="-4.5" width="25" height="9" rx="3" fill="url(#silverFrameGrad)" stroke="#6B7280" stroke-width="0.5" />
+              <rect id="powerSwitchLever" x="0.5" y="-3.2" width="10" height="6.4" rx="2" fill="url(#silverFrameGrad)" stroke="#4B5563" stroke-width="0.45" filter="url(#knobShadow)" />
+              <line x1="-8.5" y1="-1.8" x2="-2.5" y2="-1.8" stroke="#FFFFFF" stroke-width="0.65" opacity="0.8" stroke-linecap="round" />
+              <rect id="powerSwitchHitbox" x="-16" y="-9" width="32" height="18" rx="5" fill="#FFFFFF" fill-opacity="0.001" pointer-events="all" />
             </g>
           </g>
         </g>
@@ -764,6 +778,8 @@
         document.getElementById('effectOvalStroke').setAttribute('width', newWidth);
         document.getElementById('effectInnerLine').setAttribute('x', startX);
         document.getElementById('effectInnerLine').setAttribute('width', newWidth);
+        document.getElementById('powerOffOverlay').setAttribute('x', startX);
+        document.getElementById('powerOffOverlay').setAttribute('width', newWidth);
         document.getElementById('channelTransitionBlack').setAttribute('x', startX);
         document.getElementById('channelTransitionBlack').setAttribute('width', newWidth);
         document.getElementById('channelTransitionNoise').setAttribute('x', startX);
@@ -1095,7 +1111,8 @@
             target.closest('#playerObject') ||
             target.tagName.toLowerCase() === 'text' ||
             target.closest('#polishedSurface') ||
-            target.closest('#bezelBottomHitbox')
+            target.closest('#bezelBottomHitbox') ||
+            target.closest('#powerSwitch')
           ) {
             return;
           }
@@ -1273,6 +1290,47 @@
         });
         // Bej End
 
+        // --- Power switch ---
+        let isTvPoweredOn = true;
+
+        function setTvPowerState(poweredOn) {
+          isTvPoweredOn = poweredOn;
+          const overlay = document.getElementById('powerOffOverlay');
+          const lever = document.getElementById('powerSwitchLever');
+          if (overlay) {
+            overlay.setAttribute('opacity', poweredOn ? '0' : '0.97');
+          }
+          if (lever) {
+            lever.setAttribute('x', poweredOn ? '0.5' : '-10.5');
+          }
+          if (!player) return;
+          try {
+            if (poweredOn) {
+              player.playVideo();
+            } else {
+              player.pauseVideo();
+            }
+          } catch (err) {}
+        }
+
+        function toggleTvPower() {
+          ensureDialAudio();
+          playMechanicalTick(isTvPoweredOn ? -1 : 1);
+          setTvPowerState(!isTvPoweredOn);
+        }
+
+        const powerSwitch = document.getElementById('powerSwitch');
+        if (powerSwitch) {
+          powerSwitch.addEventListener('pointerdown', (event) => {
+            event.preventDefault();
+            event.stopPropagation();
+          });
+          powerSwitch.addEventListener('click', (event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            toggleTvPower();
+          });
+        }
 
         function renderDial(config, rotation) {
           const transform = `rotate(${rotation})`;
