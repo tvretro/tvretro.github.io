@@ -72,6 +72,11 @@
     #innerBlackCase, #controlPanel rect[fill="#333333"] {
       cursor: default;
     }
+
+    #polishedSurface {
+      touch-action: none; 
+      cursor: url('twofingers.svg') 25 25, pointer !important;
+    }
     </style>
   </head>
   <body>
@@ -360,6 +365,7 @@
             <rect x="11.5" y="2" width="7" height="3" fill="#22ff22" opacity="0.8" />
             <rect x="20" y="2" width="7" height="3" fill="#2266ff" opacity="0.8" />
           </g>
+          <rect id="bezelBottomHitbox" x="198.3" y="542" width="529.4" height="57" fill="transparent" pointer-events="all" />
         </g>
         <g id="controlPanelGroup">
           <g id="controlPanel">
@@ -634,6 +640,8 @@
         document.getElementById('creamBezel').setAttribute('width', newWidth + 10);
         document.getElementById('creamBezelStroke').setAttribute('x', startX - 5);
         document.getElementById('creamBezelStroke').setAttribute('width', newWidth + 10);
+        document.getElementById('bezelBottomHitbox').setAttribute('x', startX - 5);
+        document.getElementById('bezelBottomHitbox').setAttribute('width', newWidth + 10);
         const woodStartX = caseShiftX - 20;
         const woodWidth = caseWidth + 40;
         document.getElementById('tvWoodOuter').setAttribute('x', woodStartX);
@@ -873,7 +881,8 @@
             target.closest('.interactive-dial') ||
             target.closest('#clickOverlay') ||
             target.closest('#playerObject') ||
-            target.tagName.toLowerCase() === 'text'
+            target.tagName.toLowerCase() === 'text' ||
+            target.closest('#polishedSurface')
           ) {
             return;
           }
@@ -889,7 +898,91 @@
         });
       // --- Area Click Sound ---
 
+       // --- Parlak Yüzey Sürtünme Sentezleyicisi (Sürekli Çalar) ---
+          let rubAudioParams = null;
 
+          function startRubbingSound() {
+            const ctx = ensureDialAudio();
+            if (!ctx || rubAudioParams) return;
+            const now = ctx.currentTime;
+
+            // 1. Zemin Rezonansı (Derin ve hafif titreşim)
+            const osc = ctx.createOscillator();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(80, now);
+
+            const oscGain = ctx.createGain();
+            oscGain.gain.setValueAtTime(0, now);
+            oscGain.gain.linearRampToValueAtTime(0.15, now + 0.1);
+
+            osc.connect(oscGain);
+            oscGain.connect(ctx.destination);
+
+            // 2. Sürtünme Hışırtısı (Parlak yüzey hışırtısı - Noise)
+            const bufferSize = ctx.sampleRate * 2; // 2 saniyelik buffer (Sürekli döngü için)
+            const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+            const data = buffer.getChannelData(0);
+            for (let i = 0; i < bufferSize; i++) {
+              data[i] = (Math.random() * 2 - 1) * 0.4; // Pembe gürültü hissi için genlik düşürüldü
+            }
+
+            const noise = ctx.createBufferSource();
+            noise.buffer = buffer;
+            noise.loop = true; // Basılı tutulduğu sürece kesintisiz tekrar eder
+
+            const filter = ctx.createBiquadFilter();
+            filter.type = 'bandpass';
+            filter.frequency.setValueAtTime(350, now); // Orta-pes frekanslara odaklanır
+            filter.Q.setValueAtTime(0.4, now);
+
+            const noiseGain = ctx.createGain();
+            noiseGain.gain.setValueAtTime(0, now);
+            noiseGain.gain.linearRampToValueAtTime(0.25, now + 0.1); // Pürüzsüz giriş
+
+            noise.connect(filter);
+            filter.connect(noiseGain);
+            noiseGain.connect(ctx.destination);
+
+            osc.start(now);
+            noise.start(now);
+
+            rubAudioParams = { osc, oscGain, noise, noiseGain };
+          }
+
+          function stopRubbingSound() {
+            if (!rubAudioParams) return;
+            const ctx = ensureDialAudio();
+            const now = ctx.currentTime;
+
+            // Sesin birden değil, yumuşakça kesilmesi (Fade-Out)
+            rubAudioParams.oscGain.gain.linearRampToValueAtTime(0.001, now + 0.15);
+            rubAudioParams.noiseGain.gain.linearRampToValueAtTime(0.001, now + 0.15);
+
+            rubAudioParams.osc.stop(now + 0.2);
+            rubAudioParams.noise.stop(now + 0.2);
+
+            rubAudioParams = null;
+          }
+
+          // --- Parlak Yüzey İçin Doğrudan Event Dinleyiciler ---
+          const polishedSurfaceElement = document.getElementById('polishedSurface');
+          if (polishedSurfaceElement) {
+            // Mouse/Dokunma başladığında sürtme sesini tetikle ve takibe al
+            polishedSurfaceElement.addEventListener('pointerdown', (e) => {
+              e.target.setPointerCapture(e.pointerId);
+              startRubbingSound();
+            });
+
+            // Tıklama bırakıldığında veya imleç dışarı çıktığında sesi durdur
+            polishedSurfaceElement.addEventListener('pointerup', (e) => {
+              e.target.releasePointerCapture(e.pointerId);
+              stopRubbingSound();
+            });
+            
+            polishedSurfaceElement.addEventListener('pointercancel', stopRubbingSound);
+          }
+
+             // Finger
       function renderDial(config, rotation) {
         const transform = `rotate(${rotation})`;
         config.face?.setAttribute('transform', transform);
