@@ -770,100 +770,128 @@
         return delta;
       }
 
-      // Click Audios ---
-      // --- Wood ---
-      function playWoodKnock() {
-        const ctx = ensureDialAudio();
-        if (!ctx) return;
-        const now = ctx.currentTime;
+     // --- Ahşap Ses Sentezleyicisi ---
+function playWoodKnock() {
+  const ctx = ensureDialAudio();
+  if (!ctx) return;
+  const now = ctx.currentTime;
 
-        const osc = ctx.createOscillator();
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(320, now);
-        osc.frequency.exponentialRampToValueAtTime(50, now + 0.08);
+  const osc = ctx.createOscillator();
+  osc.type = 'sine';
+  osc.frequency.setValueAtTime(320, now);
+  osc.frequency.exponentialRampToValueAtTime(50, now + 0.08);
 
-        const oscGain = ctx.createGain();
-        oscGain.gain.setValueAtTime(0, now);
-        oscGain.gain.linearRampToValueAtTime(0.25, now + 0.005); // Main tone -> 0.25
-        oscGain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+  const oscGain = ctx.createGain();
+  oscGain.gain.setValueAtTime(0, now);
+  oscGain.gain.linearRampToValueAtTime(0.25, now + 0.005);
+  oscGain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
 
-        osc.connect(oscGain);
-        oscGain.connect(ctx.destination);
+  osc.connect(oscGain);
+  oscGain.connect(ctx.destination);
 
-        const bufferSize = ctx.sampleRate * 0.05;
-        const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
-        const data = buffer.getChannelData(0);
-        for (let i = 0; i < bufferSize; i++) {
-          data[i] = Math.random() * 2 - 1;
-        }
-        const noise = ctx.createBufferSource();
-        noise.buffer = buffer;
+  const bufferSize = ctx.sampleRate * 0.05;
+  const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+  const data = buffer.getChannelData(0);
+  for (let i = 0; i < bufferSize; i++) {
+    data[i] = Math.random() * 2 - 1;
+  }
+  const noise = ctx.createBufferSource();
+  noise.buffer = buffer;
 
-        const filter = ctx.createBiquadFilter();
-        filter.type = 'lowpass';
-        filter.frequency.setValueAtTime(1200, now);
+  const filter = ctx.createBiquadFilter();
+  filter.type = 'lowpass';
+  filter.frequency.setValueAtTime(1200, now);
 
-        const noiseGain = ctx.createGain();
-        noiseGain.gain.setValueAtTime(0, now);
-        noiseGain.gain.linearRampToValueAtTime(0.1, now + 0.002); // Impact tissue -> 0.1
-        noiseGain.gain.exponentialRampToValueAtTime(0.001, now + 0.03);
+  const noiseGain = ctx.createGain();
+  noiseGain.gain.setValueAtTime(0, now);
+  noiseGain.gain.linearRampToValueAtTime(0.1, now + 0.002);
+  noiseGain.gain.exponentialRampToValueAtTime(0.001, now + 0.03);
 
-        noise.connect(filter);
-        filter.connect(noiseGain);
-        noiseGain.connect(ctx.destination);
+  noise.connect(filter);
+  filter.connect(noiseGain);
+  noiseGain.connect(ctx.destination);
 
-        osc.start(now);
-        noise.start(now);
-        osc.stop(now + 0.15);
-        noise.stop(now + 0.05);
-      }
+  osc.start(now);
+  noise.start(now);
+  osc.stop(now + 0.15);
+  noise.stop(now + 0.05);
+}
 
-      // --- Plastic ---
-      function playPlasticTap() {
-        const ctx = ensureDialAudio();
-        if (!ctx) return;
-        const now = ctx.currentTime;
+// --- Plastik Ses Sentezleyicisi ---
+function playPlasticTap() {
+  const ctx = ensureDialAudio();
+  if (!ctx) return;
+  const now = ctx.currentTime;
 
-        const osc = ctx.createOscillator();
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(750, now);
-        osc.frequency.exponentialRampToValueAtTime(180, now + 0.04);
+  const osc = ctx.createOscillator();
+  osc.type = 'triangle';
+  osc.frequency.setValueAtTime(750, now);
+  osc.frequency.exponentialRampToValueAtTime(180, now + 0.04);
 
-        const oscGain = ctx.createGain();
-        oscGain.gain.setValueAtTime(0, now);
-        oscGain.gain.linearRampToValueAtTime(0.18, now + 0.001); // Main tone -> 0.18
-        oscGain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+  const oscGain = ctx.createGain();
+  oscGain.gain.setValueAtTime(0, now);
+  oscGain.gain.linearRampToValueAtTime(0.18, now + 0.001);
+  oscGain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
 
-        osc.connect(oscGain);
-        oscGain.connect(ctx.destination);
+  osc.connect(oscGain);
+  oscGain.connect(ctx.destination);
 
-        const bufferSize = ctx.sampleRate * 0.02;
-        const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
-        const data = buffer.getChannelData(0);
-        for (let i = 0; i < bufferSize; i++) {
-          data[i] = Math.random() * 2 - 1;
-        }
-        const noise = ctx.createBufferSource();
-        noise.buffer = buffer;
+  const bufferSize = ctx.sampleRate * 0.02;
+  const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+  const data = buffer.getChannelData(0);
+  for (let i = 0; i < bufferSize; i++) {
+    data[i] = Math.random() * 2 - 1;
+  }
+  const noise = ctx.createBufferSource();
+  noise.buffer = buffer;
 
-        const filter = ctx.createBiquadFilter();
-        filter.type = 'highpass';
-        filter.frequency.setValueAtTime(1800, now);
+  const filter = ctx.createBiquadFilter();
+  filter.type = 'highpass';
+  filter.frequency.setValueAtTime(1800, now);
 
-        const noiseGain = ctx.createGain();
-        noiseGain.gain.setValueAtTime(0, now);
-        noiseGain.gain.linearRampToValueAtTime(0.04, now + 0.001); // Impact tissue -> 0.04
-        noiseGain.gain.exponentialRampToValueAtTime(0.001, now + 0.02);
+  const noiseGain = ctx.createGain();
+  noiseGain.gain.setValueAtTime(0, now);
+  noiseGain.gain.linearRampToValueAtTime(0.04, now + 0.001);
+  noiseGain.gain.exponentialRampToValueAtTime(0.001, now + 0.02);
 
-        noise.connect(filter);
-        filter.connect(noiseGain);
-        noiseGain.connect(ctx.destination);
+  noise.connect(filter);
+  filter.connect(noiseGain);
+  noiseGain.connect(ctx.destination);
 
-        osc.start(now);
-        noise.start(now);
-        osc.stop(now + 0.06);
-        noise.stop(now + 0.03);
-      }
+  osc.start(now);
+  noise.start(now);
+  osc.stop(now + 0.06);
+  noise.stop(now + 0.03);
+}
+
+// --- Kesin ve Güvenilir Event Delegation ---
+document.getElementById('retroTvSvg').addEventListener('pointerdown', (e) => {
+  const target = e.target;
+  if (!target) return;
+
+  // 1. Düğmelere, ekrana veya metinlere tıklandıysa gövde seslerini çalıştırma
+  if (
+    target.closest('.interactive-dial') ||
+    target.closest('#clickOverlay') ||
+    target.closest('#playerObject') ||
+    target.tagName.toLowerCase() === 'text'
+  ) {
+    return;
+  }
+
+  // 2. Ahşap Bölge Kontrolü
+  const isWood = target.closest('#tvWoodOuter, #tvWoodGrain, #tvWoodVignette, #tvWoodBorder, #tvWoodStroke1, #tvWoodStroke2, #woodGlare');
+  if (isWood) {
+    playWoodKnock();
+    return;
+  }
+
+  // 3. Plastik Bölge Kontrolü (Çerçeve ve Sağ Kontrol Paneli)
+  const isPlastic = target.closest('#innerBlackCase, #innerBlackCaseStroke, #controlPanelGroup');
+  if (isPlastic) {
+    playPlasticTap();
+  }
+});
 
       function renderDial(config, rotation) {
         const transform = `rotate(${rotation})`;
