@@ -69,7 +69,7 @@
       }
 
       #tvWoodOuter, #tvWoodGrain, #tvWoodVignette, #tvWoodBorder, 
-      #tvWoodStroke1, #tvWoodStroke2, #woodGlare, #tvFeetLeft, #tvFeetRight,
+      #tvWoodStroke1, #tvWoodStroke2, #woodGlare,
       #innerBlackCase, #controlPanel rect[fill="#333333"] {
         cursor: help;
       }
@@ -81,6 +81,42 @@
       #polishedSurface.active-rub, #bezelBottomHitbox.active-rub {
         cursor: -webkit-grabbing !important;
         cursor: grabbing !important;
+      }
+
+      /* Kanal değişiminde eski CRT televizyon parazit efekti */
+      #channelTransition {
+        opacity: 0;
+        pointer-events: none;
+        visibility: hidden;
+      }
+
+      #channelTransition.active {
+        visibility: visible;
+        animation: crtChannelChange 680ms steps(2, end) forwards;
+      }
+
+      #channelTransition .transitionNoise {
+        opacity: 0.86;
+      }
+
+      #channelTransition .transitionBlack {
+        opacity: 0.18;
+      }
+
+      #channelTransition .transitionLines {
+        opacity: 0.42;
+        mix-blend-mode: screen;
+      }
+
+      @keyframes crtChannelChange {
+        0% { opacity: 0; }
+        8% { opacity: 0.92; }
+        18% { opacity: 1; }
+        34% { opacity: 0.86; }
+        52% { opacity: 1; }
+        72% { opacity: 0.72; }
+        88% { opacity: 0.34; }
+        100% { opacity: 0; visibility: hidden; }
       }
     </style>
   </head>
@@ -174,32 +210,31 @@
           <stop offset="70%" stop-color="#732D10" />
           <stop offset="100%" stop-color="#3D1200" />
         </linearGradient>
-        
+        <!-- Retro 60-70'ler Çubuk Ayak Gradiyentleri -->
         <linearGradient id="retroLegWood" x1="0%" y1="0%" x2="100%" y2="0%">
-         <stop offset="0%" stop-color="#2D1106" />
-         <stop offset="25%" stop-color="#54230D" />
-         <stop offset="60%" stop-color="#783415" />
-         <stop offset="85%" stop-color="#431A08" />
-         <stop offset="100%" stop-color="#1B0701" />
-        </linearGradient>
+     <stop offset="0%" stop-color="#2D1106" />
+     <stop offset="25%" stop-color="#54230D" />
+     <stop offset="60%" stop-color="#783415" />
+     <stop offset="85%" stop-color="#431A08" />
+     <stop offset="100%" stop-color="#1B0701" />
+    </linearGradient>
         <linearGradient id="retroLegWoodRear" x1="0%" y1="0%" x2="100%" y2="0%">
-         <stop offset="0%" stop-color="#140602" />
-         <stop offset="50%" stop-color="#321307" />
-         <stop offset="100%" stop-color="#0E0301" />
-        </linearGradient>
+     <stop offset="0%" stop-color="#140602" />
+     <stop offset="50%" stop-color="#321307" />
+     <stop offset="100%" stop-color="#0E0301" />
+    </linearGradient>
         <linearGradient id="brassTipGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-         <stop offset="0%" stop-color="#785314" />
-         <stop offset="25%" stop-color="#D4AF37" />
-         <stop offset="50%" stop-color="#FFF3B0" />
-         <stop offset="75%" stop-color="#AA7C11" />
-         <stop offset="100%" stop-color="#4A3205" />
-        </linearGradient>
+     <stop offset="0%" stop-color="#785314" />
+     <stop offset="25%" stop-color="#D4AF37" />
+     <stop offset="50%" stop-color="#FFF3B0" />
+     <stop offset="75%" stop-color="#AA7C11" />
+     <stop offset="100%" stop-color="#4A3205" />
+    </linearGradient>
         <linearGradient id="legBracketGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-         <stop offset="0%" stop-color="#374151" />
-         <stop offset="50%" stop-color="#1F2937" />
-         <stop offset="100%" stop-color="#111827" />
-        </linearGradient>
-
+     <stop offset="0%" stop-color="#374151" />
+     <stop offset="50%" stop-color="#1F2937" />
+     <stop offset="100%" stop-color="#111827" />
+    </linearGradient>
         <radialGradient id="woodVignette" cx="50%" cy="50%" r="75%">
           <stop offset="50%" stop-color="#000000" stop-opacity="0" />
           <stop offset="90%" stop-color="#2a0a00" stop-opacity="0.6" />
@@ -272,6 +307,7 @@
           <path id="screenCustomClipPath" d="M 203.3 542 L 203.3 195 A 22 22 0 0 1 225.3 173 L 700.7 173 A 22 22 0 0 1 722.7 195 L 722.7 542 Z" />
         </clipPath>
         <clipPath id="grilleHoles">
+
           <rect x="12" y="46.3" width="2.6" height="18.7" rx="1.3" />
           <rect x="16.8" y="30.7" width="2.6" height="34.3" rx="1.3" />
           <rect x="21.6" y="22.1" width="2.6" height="42.9" rx="1.3" />
@@ -283,6 +319,7 @@
           <rect x="50.4" y="22.1" width="2.6" height="42.9" rx="1.3" />
           <rect x="55.2" y="30.7" width="2.6" height="34.3" rx="1.3" />
           <rect x="60" y="46.3" width="2.6" height="18.7" rx="1.3" />
+
           <rect x="12" y="69" width="2.6" height="18.7" rx="1.3" />
           <rect x="16.8" y="69" width="2.6" height="34.3" rx="1.3" />
           <rect x="21.6" y="69" width="2.6" height="42.9" rx="1.3" />
@@ -298,6 +335,19 @@
         <clipPath id="woodFrameClip">
           <rect id="woodFrameClipRect" x="178.3" y="150" width="683.4" height="469" rx="8" />
         </clipPath>
+        <filter id="channelStatic" x="-10%" y="-10%" width="120%" height="120%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.85 0.32" numOctaves="2" seed="17" result="staticNoise" />
+          <feColorMatrix in="staticNoise" type="saturate" values="0" result="grayNoise" />
+          <feComponentTransfer in="grayNoise">
+            <feFuncR type="gamma" amplitude="1.8" exponent="1.15" offset="0" />
+            <feFuncG type="gamma" amplitude="1.8" exponent="1.15" offset="0" />
+            <feFuncB type="gamma" amplitude="1.8" exponent="1.15" offset="0" />
+          </feComponentTransfer>
+        </filter>
+        <pattern id="channelStaticLines" width="8" height="5" patternUnits="userSpaceOnUse">
+          <line x1="0" y1="0.5" x2="8" y2="0.5" stroke="#ffffff" stroke-width="1" opacity="0.55" />
+          <line x1="0" y1="3.2" x2="8" y2="3.2" stroke="#000000" stroke-width="1.2" opacity="0.65" />
+        </pattern>
       </defs>
       <g id="perspectiveRoom" filter="url(#realisticWall)">
         <polygon points="-120,-110 1160,-110 840,120 200,120" fill="url(#ceilingRealistic)" />
@@ -319,21 +369,22 @@
         <polygon points="1160,770 840,550 830,555 1170,775" fill="#000000" opacity="0.4" filter="blur(2px)" />
         <polygon points="200,550 840,550 840,554 200,554" fill="#000000" opacity="0.5" filter="blur(2px)" />
       </g>
-      
-      <ellipse cx="520" cy="650" rx="420" ry="26" fill="#000000" opacity="0.85" filter="blur(14px)" />
-
+      <ellipse cx="520" cy="648" rx="420" ry="28" fill="#000000" opacity="0.85" filter="blur(14px)" />
+      <!-- 60-70'ler Sol Çubuk Ayak Grubu (Mid-Century Tapered Peg Legs) -->
       <g id="tvFeetLeft">
+        <!-- Ayak Ucu Zemin Nokta Gölgeleri -->
         <ellipse cx="236" cy="656" rx="8" ry="2.2" fill="#000000" opacity="0.65" filter="blur(1.5px)" />
         <ellipse cx="279" cy="653" rx="6" ry="1.8" fill="#000000" opacity="0.55" filter="blur(1.5px)" />
 
+        <!-- Arka Sol Çubuk Ayak (Derinlik Hissi Veren Perspektif) -->
         <g id="tvFeetLeftRear">
           <polygon points="269,632.5 275.5,632.5 281.5,652 277,652" fill="url(#retroLegWoodRear)" />
           <polygon points="275,647 280.2,647 281.5,652 277,652" fill="url(#brassTipGrad)" opacity="0.8" />
           <ellipse cx="279.2" cy="652.5" rx="2.4" ry="0.8" fill="#111111" />
         </g>
 
+        <!-- Ön Sol Ana Çubuk Ayak (Dışa Açılı Konik Çubuk) -->
         <g id="tvFeetLeftFront">
- 
           <polygon points="252,632.5 260.5,632.5 238.5,655 233.5,655" fill="url(#retroLegWood)" />
           <line x1="255.5" y1="633.5" x2="236.5" y2="648" stroke="#ffffff" stroke-width="0.8" opacity="0.25" stroke-linecap="round" />
           <polygon points="238.5,648.5 244.5,648.5 238.5,655 233.5,655" fill="url(#brassTipGrad)" stroke="#553a06" stroke-width="0.3" />
@@ -341,21 +392,26 @@
           <ellipse cx="236" cy="655.4" rx="2.8" ry="1" fill="#111111" />
         </g>
 
+        <!-- Metal Montaj Tablası ve Vidalar -->
         <polygon points="241,631 285,631 281,634.5 245,634.5" fill="url(#legBracketGrad)" stroke="#0a0d14" stroke-width="0.6" />
         <circle cx="249" cy="632.8" r="1" fill="#9CA3AF" />
         <circle cx="277" cy="632.8" r="1" fill="#9CA3AF" />
       </g>
 
+      <!-- 60-70'ler Sağ Çubuk Ayak Grubu (Mid-Century Tapered Peg Legs) -->
       <g id="tvFeetRight">
+        <!-- Ayak Ucu Zemin Nokta Gölgeleri -->
         <ellipse cx="804" cy="656" rx="8" ry="2.2" fill="#000000" opacity="0.65" filter="blur(1.5px)" />
         <ellipse cx="761" cy="653" rx="6" ry="1.8" fill="#000000" opacity="0.55" filter="blur(1.5px)" />
 
+        <!-- Arka Sağ Çubuk Ayak (Derinlik Hissi Veren Perspektif) -->
         <g id="tvFeetRightRear">
           <polygon points="771,632.5 764.5,632.5 758.5,652 763,652" fill="url(#retroLegWoodRear)" />
           <polygon points="765,647 759.8,647 758.5,652 763,652" fill="url(#brassTipGrad)" opacity="0.8" />
           <ellipse cx="760.8" cy="652.5" rx="2.4" ry="0.8" fill="#111111" />
         </g>
 
+        <!-- Ön Sağ Ana Çubuk Ayak (Dışa Açılı Konik Çubuk) -->
         <g id="tvFeetRightFront">
           <polygon points="788,632.5 779.5,632.5 801.5,655 806.5,655" fill="url(#retroLegWood)" />
           <line x1="784.5" y1="633.5" x2="803.5" y2="648" stroke="#ffffff" stroke-width="0.8" opacity="0.25" stroke-linecap="round" />
@@ -364,11 +420,11 @@
           <ellipse cx="804" cy="655.4" rx="2.8" ry="1" fill="#111111" />
         </g>
 
+        <!-- Metal Montaj Tablası ve Vidalar -->
         <polygon points="799,631 755,631 759,634.5 795,634.5" fill="url(#legBracketGrad)" stroke="#0a0d14" stroke-width="0.6" />
         <circle cx="791" cy="632.8" r="1" fill="#9CA3AF" />
         <circle cx="763" cy="632.8" r="1" fill="#9CA3AF" />
       </g>
-
       <g id="antennas">
         <ellipse cx="520" cy="155" rx="42" ry="8" fill="#111111" />
         <ellipse cx="520" cy="154" rx="40" ry="7" fill="#1A1A1A" />
@@ -382,6 +438,7 @@
           <rect x="502.5" y="65" width="5" height="1.5" fill="#111827" opacity="0.8" />
         </g>
         <g transform="rotate(32, 535, 150)">
+    
           <rect x="531.5" y="80" width="7" height="70" fill="url(#antennaRodGrad)" />
           <rect x="529.5" y="65" width="11" height="16" rx="1.5" fill="url(#antennaRodGrad)" />
           <line x1="531.5" y1="65" x2="531.5" y2="81" stroke="#1F2937" stroke-width="0.8" opacity="0.6" />
@@ -427,16 +484,25 @@
             <rect id="effectOvalStroke" x="203.3" y="173" width="519.4" height="369" fill="none" stroke="#050505" stroke-width="16" rx="22" ry="22" />
             <rect id="effectInnerLine" x="203.3" y="173" width="519.4" height="369" fill="none" stroke="#000000" stroke-width="4" opacity="0.8" />
           </g>
-          <rect id="clickOverlay" x="203.3" y="173" width="519.4" height="369" fill="#000000" opacity="0" cursor="pointer" clip-path="url(#screenCustomClip)" />
 
+          <!-- Kanal değiştirme: analog CRT karıncalanma / yatay tarama efekti -->
+          <g id="channelTransition" clip-path="url(#screenCustomClip)" style="pointer-events: none;">
+            <rect id="channelTransitionBlack" class="transitionBlack" x="203.3" y="173" width="519.4" height="369" fill="#000000" />
+            <rect id="channelTransitionNoise" class="transitionNoise" x="203.3" y="173" width="519.4" height="369" fill="#ffffff" filter="url(#channelStatic)" />
+            <rect id="channelTransitionLines" class="transitionLines" x="203.3" y="173" width="519.4" height="369" fill="url(#channelStaticLines)" />
+            <rect x="203.3" y="173" width="519.4" height="369" fill="none" stroke="#ffffff" stroke-width="1.2" opacity="0.10" />
+          </g>
+          <rect id="clickOverlay" x="203.3" y="173" width="519.4" height="369" fill="#000000" opacity="0" cursor="pointer" clip-path="url(#screenCustomClip)" />
+          <!-- 1. Ekran Çerçevesi Hitbox'ı (Alta Çizilecek) -->
           <rect id="bezelBottomHitbox" x="198.3" y="542" width="529.4" height="57" fill="rgba(0,0,0,0.01)" pointer-events="all" />
           <g transform="translate(448, 568)">
-
+            <!-- Görsel Katmanlar (pointer-events="none" ile tıklamaya kapatıldı) -->
             <rect x="0" y="0" width="30" height="7" rx="2" fill="#F5F5DC" filter="url(#dialShadow)" pointer-events="none" />
             <rect x="3" y="2" width="7" height="3" fill="#ff2222" opacity="0.8" pointer-events="none" />
             <rect x="11.5" y="2" width="7" height="3" fill="#22ff22" opacity="0.8" pointer-events="none" />
             <rect x="20" y="2" width="7" height="3" fill="#2266ff" opacity="0.8" pointer-events="none" />
             
+            <!-- Etkileşim (Hitbox) Katmanı (%1 Siyahlık ile Görünmez ama Kesin Tıklanabilir) -->
             <rect id="polishedSurface" x="0" y="0" width="30" height="7" rx="2" fill="rgba(0,0,0,0.01)" pointer-events="all" />
           </g>
         </g> 
@@ -698,6 +764,12 @@
         document.getElementById('effectOvalStroke').setAttribute('width', newWidth);
         document.getElementById('effectInnerLine').setAttribute('x', startX);
         document.getElementById('effectInnerLine').setAttribute('width', newWidth);
+        document.getElementById('channelTransitionBlack').setAttribute('x', startX);
+        document.getElementById('channelTransitionBlack').setAttribute('width', newWidth);
+        document.getElementById('channelTransitionNoise').setAttribute('x', startX);
+        document.getElementById('channelTransitionNoise').setAttribute('width', newWidth);
+        document.getElementById('channelTransitionLines').setAttribute('x', startX);
+        document.getElementById('channelTransitionLines').setAttribute('width', newWidth);
         document.getElementById('clickOverlay').setAttribute('x', startX);
         document.getElementById('clickOverlay').setAttribute('width', newWidth);
         document.getElementById('screenCustomClipPath').setAttribute('d', `M ${startX} 542 L ${startX} 195 A 22 22 0 0 1 ${startX + 22} 173 L ${startX + newWidth - 22} 173 A 22 22 0 0 1 ${startX + newWidth} 195 L ${startX + newWidth} 542 Z`);
@@ -765,18 +837,85 @@
       const stationList = ["vdJthIdDR6w", "IufsocTXfMY", "jx0llzSntd8", "CGj85pVzRJs", "S2ujotDMluo"];
       let hasDialBeenMoved = false;
 
+      let channelTransitionTimer = null;
+      let channelTransitionToken = 0;
+
+      function playChannelStaticBurst() {
+        const ctx = ensureDialAudio();
+        if (!ctx) return;
+        const now = ctx.currentTime;
+        const duration = 0.22;
+        const bufferSize = Math.max(1, Math.floor(ctx.sampleRate * duration));
+        const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+        const data = buffer.getChannelData(0);
+        for (let i = 0; i < bufferSize; i++) {
+          const fade = 1 - (i / bufferSize);
+          data[i] = (Math.random() * 2 - 1) * fade;
+        }
+
+        const source = ctx.createBufferSource();
+        source.buffer = buffer;
+        const filter = ctx.createBiquadFilter();
+        filter.type = 'bandpass';
+        filter.frequency.setValueAtTime(2100, now);
+        filter.Q.setValueAtTime(0.9, now);
+
+        const gain = ctx.createGain();
+        gain.gain.setValueAtTime(0.0001, now);
+        gain.gain.exponentialRampToValueAtTime(0.13, now + 0.008);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+
+        source.connect(filter);
+        filter.connect(gain);
+        gain.connect(ctx.destination);
+        source.start(now);
+        source.stop(now + duration);
+      }
+
+      function startChannelTransition() {
+        const overlay = document.getElementById('channelTransition');
+        if (!overlay) return;
+
+        channelTransitionToken++;
+        const token = channelTransitionToken;
+
+        if (channelTransitionTimer) {
+          clearTimeout(channelTransitionTimer);
+          channelTransitionTimer = null;
+        }
+
+        overlay.classList.remove('active');
+        void overlay.getBoundingClientRect();
+        overlay.classList.add('active');
+
+        playChannelStaticBurst();
+
+        // Eski TV hissi: kısa karıncalanma, sonra yeni kanalın yüklenmesi.
+        channelTransitionTimer = setTimeout(() => {
+          if (token !== channelTransitionToken) return;
+          channelTransitionTimer = null;
+        }, 680);
+
+        return token;
+      }
+
       function changeChannel(detentIndex) {
         if (!player || typeof player.loadVideoById !== 'function') return;
- 
         if (!hasDialBeenMoved) return;
+
         const listLength = stationList.length;
         const safeIndex = ((detentIndex % listLength) + listLength) % listLength;
- 
-        try {
-          player.loadVideoById(stationList[safeIndex]);
-        } catch (e) {
-          console.warn("YouTube Player henüz hazır değil.", e);
-        }
+        const token = startChannelTransition();
+
+        // Parazit oturduktan hemen sonra yeni kanalı yükle.
+        setTimeout(() => {
+          if (token !== channelTransitionToken) return;
+          try {
+            player.loadVideoById(stationList[safeIndex]);
+          } catch (e) {
+            console.warn("YouTube Player henüz hazır değil.", e);
+          }
+        }, 245);
       }
  
       let activeDial = null;
@@ -960,7 +1099,7 @@
           ) {
             return;
           }
-          const isWood = target.closest('#tvWoodOuter, #tvWoodGrain, #tvWoodVignette, #tvWoodBorder, #tvWoodStroke1, #tvWoodStroke2, #woodGlare, #tvFeetLeft, #tvFeetRight');
+          const isWood = target.closest('#tvWoodOuter, #tvWoodGrain, #tvWoodVignette, #tvWoodBorder, #tvWoodStroke1, #tvWoodStroke2, #woodGlare');
           if (isWood) {
             playWoodKnock();
             return;
