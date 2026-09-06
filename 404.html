@@ -916,47 +916,72 @@
           if (!ctx || rubAudioParams) return;
           const now = ctx.currentTime;
 
-          // 1. Zemin Rezonansı (Derin ve hafif titreşim)
-          const osc = ctx.createOscillator();
-          osc.type = 'sine';
-          osc.frequency.setValueAtTime(80, now);
-
-          const oscGain = ctx.createGain();
-          oscGain.gain.setValueAtTime(0, now);
-          oscGain.gain.linearRampToValueAtTime(0.15, now + 0.1);
-
-          osc.connect(oscGain);
-          oscGain.connect(ctx.destination);
-
-          // 2. Sürtünme Hışırtısı (Parlak yüzey hışırtısı - Noise)
-          const bufferSize = ctx.sampleRate * 2; // 2 saniyelik buffer (Sürekli döngü için)
+          // 1. Kadifemsi / Pürüzsüz Yüzey Sürtünmesi (Hışırtısız Brownian Gürültü)
+          const bufferSize = ctx.sampleRate * 2;
           const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
           const data = buffer.getChannelData(0);
+          let lastOut = 0.0;
           for (let i = 0; i < bufferSize; i++) {
-            data[i] = (Math.random() * 2 - 1) * 0.4; // Pembe gürültü hissi için genlik düşürüldü
+            const white = Math.random() * 2 - 1;
+            // Entegre gürültü (Brownian/Kırmızı gürültü) cızırtıyı tamamen yok eder, ipeksi bir sürtünme hissi verir
+            lastOut = (lastOut + (0.02 * white)) / 1.02;
+            data[i] = lastOut * 3.5;
           }
 
           const noise = ctx.createBufferSource();
           noise.buffer = buffer;
-          noise.loop = true; // Basılı tutulduğu sürece kesintisiz tekrar eder
+          noise.loop = true;
 
-          const filter = ctx.createBiquadFilter();
-          filter.type = 'bandpass';
-          filter.frequency.setValueAtTime(350, now); // Orta-pes frekanslara odaklanır
-          filter.Q.setValueAtTime(0.4, now);
+          // Sürtünme filtresi (Pürüzsüz cilalı yüzey karakteristiği)
+          const noiseFilter = ctx.createBiquadFilter();
+          noiseFilter.type = 'lowpass';
+          noiseFilter.frequency.setValueAtTime(550, now);
 
           const noiseGain = ctx.createGain();
-          noiseGain.gain.setValueAtTime(0, now);
-          noiseGain.gain.linearRampToValueAtTime(0.25, now + 0.1); // Pürüzsüz giriş
+          noiseGain.gain.setValueAtTime(0.001, now);
+          noiseGain.gain.linearRampToValueAtTime(0.22, now + 0.08);
 
-          noise.connect(filter);
-          filter.connect(noiseGain);
+          noise.connect(noiseFilter);
+          noiseFilter.connect(noiseGain);
           noiseGain.connect(ctx.destination);
 
-          osc.start(now);
-          noise.start(now);
+          // 2. Karbon Fiber Gövde Rezonansı (Tok ve hafif kompozit titreşimi)
+          const bodyOsc = ctx.createOscillator();
+          bodyOsc.type = 'sine';
+          bodyOsc.frequency.setValueAtTime(145, now);
 
-          rubAudioParams = { osc, oscGain, noise, noiseGain };
+          const bodyGain = ctx.createGain();
+          bodyGain.gain.setValueAtTime(0.001, now);
+          bodyGain.gain.linearRampToValueAtTime(0.07, now + 0.08);
+
+          bodyOsc.connect(bodyGain);
+          bodyGain.connect(ctx.destination);
+
+          // 3. Parlak Cila / Vernik Kayma Tonu (Glossy Glide Tınısı)
+          const glossOsc = ctx.createOscillator();
+          glossOsc.type = 'triangle';
+          glossOsc.frequency.setValueAtTime(620, now);
+          // Sürtünme hissi için hafif organik frekans salınımı
+          glossOsc.frequency.linearRampToValueAtTime(580, now + 0.3);
+
+          const glossFilter = ctx.createBiquadFilter();
+          glossFilter.type = 'bandpass';
+          glossFilter.frequency.setValueAtTime(600, now);
+          glossFilter.Q.setValueAtTime(3.0, now);
+
+          const glossGain = ctx.createGain();
+          glossGain.gain.setValueAtTime(0.001, now);
+          glossGain.gain.linearRampToValueAtTime(0.035, now + 0.06);
+
+          glossOsc.connect(glossFilter);
+          glossFilter.connect(glossGain);
+          glossGain.connect(ctx.destination);
+
+          noise.start(now);
+          bodyOsc.start(now);
+          glossOsc.start(now);
+
+          rubAudioParams = { noise, noiseGain, bodyOsc, bodyGain, glossOsc, glossGain };
         }
 
         function stopRubbingSound() {
@@ -964,44 +989,20 @@
           const ctx = ensureDialAudio();
           const now = ctx.currentTime;
 
-          // Sesin birden değil, yumuşakça kesilmesi (Fade-Out)
-          rubAudioParams.oscGain.gain.linearRampToValueAtTime(0.001, now + 0.15);
-          rubAudioParams.noiseGain.gain.linearRampToValueAtTime(0.001, now + 0.15);
+          // Yumuşak sönümlenme (Fade-Out)
+          rubAudioParams.noiseGain.gain.linearRampToValueAtTime(0.0001, now + 0.12);
+          rubAudioParams.bodyGain.gain.linearRampToValueAtTime(0.0001, now + 0.12);
+          rubAudioParams.glossGain.gain.linearRampToValueAtTime(0.0001, now + 0.12);
 
-          rubAudioParams.osc.stop(now + 0.2);
-          rubAudioParams.noise.stop(now + 0.2);
+          rubAudioParams.noise.stop(now + 0.15);
+          rubAudioParams.bodyOsc.stop(now + 0.15);
+          rubAudioParams.glossOsc.stop(now + 0.15);
 
           rubAudioParams = null;
         }
+        // Finger End
 
-        // --- Parlak Yüzey İçin Doğrudan Event Dinleyiciler ---
-        const rubbingSurfaces = [
-          document.getElementById('polishedSurface'),
-          document.getElementById('bezelBottomHitbox')
-        ];
-
-        rubbingSurfaces.forEach(surface => {
-          if (surface) {
-            surface.addEventListener('pointerdown', (e) => {
-              try { e.target.setPointerCapture(e.pointerId); } catch(err){}
-              e.target.classList.add('active-rub'); 
-              startRubbingSound();
-            });
-
-            surface.addEventListener('pointerup', (e) => {
-              try { e.target.releasePointerCapture(e.pointerId); } catch(err){}
-              e.target.classList.remove('active-rub'); 
-              stopRubbingSound();
-            });
-            
-            surface.addEventListener('pointercancel', (e) => {
-              e.target.classList.remove('active-rub');
-              stopRubbingSound();
-            });
-          }
-        });
-
-           // Finger
+        
         function renderDial(config, rotation) {
           const transform = `rotate(${rotation})`;
           config.face?.setAttribute('transform', transform);
@@ -1080,7 +1081,7 @@
         renderDial(config, snappedRotation);
         event.preventDefault();
       }
-      
+
       // --- Bej
 
       function endDialDrag(event) {
