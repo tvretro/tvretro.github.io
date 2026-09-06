@@ -360,10 +360,13 @@
           </g>
           <rect id="clickOverlay" x="203.3" y="173" width="519.4" height="369" fill="#000000" opacity="0" cursor="pointer" clip-path="url(#screenCustomClip)" />
           <g transform="translate(448, 568)">
-            <rect x="0" y="0" width="30" height="7" rx="2" fill="#111111" filter="url(#dialShadow)" />
-            <rect x="3" y="2" width="7" height="3" fill="#ff2222" opacity="0.8" />
-            <rect x="11.5" y="2" width="7" height="3" fill="#22ff22" opacity="0.8" />
-            <rect x="20" y="2" width="7" height="3" fill="#2266ff" opacity="0.8" />
+            <rect x="0" y="0" width="30" height="7" rx="2" fill="#F5F5DC" filter="url(#dialShadow)" pointer-events="none" />
+            <rect x="3" y="2" width="7" height="3" fill="#ff2222" opacity="0.8" pointer-events="none" />
+            <rect x="11.5" y="2" width="7" height="3" fill="#22ff22" opacity="0.8" pointer-events="none" />
+            <rect x="20" y="2" width="7" height="3" fill="#2266ff" opacity="0.8" pointer-events="none" />
+            
+            <!-- Etkileşim (Hitbox) Katmanı -->
+            <rect id="polishedSurface" x="0" y="0" width="30" height="7" rx="2" fill="transparent" />
           </g>
           <rect id="bezelBottomHitbox" x="198.3" y="542" width="529.4" height="57" fill="transparent" pointer-events="all" />
         </g>
@@ -965,22 +968,25 @@
           }
 
           // --- Parlak Yüzey İçin Doğrudan Event Dinleyiciler ---
-          const polishedSurfaceElement = document.getElementById('polishedSurface');
-          if (polishedSurfaceElement) {
-            // Mouse/Dokunma başladığında sürtme sesini tetikle ve takibe al
-            polishedSurfaceElement.addEventListener('pointerdown', (e) => {
-              e.target.setPointerCapture(e.pointerId);
-              startRubbingSound();
-            });
-
-            // Tıklama bırakıldığında veya imleç dışarı çıktığında sesi durdur
-            polishedSurfaceElement.addEventListener('pointerup', (e) => {
-              e.target.releasePointerCapture(e.pointerId);
-              stopRubbingSound();
-            });
+          window.addEventListener('DOMContentLoaded', () => {
+            const polishedSurfaceElement = document.getElementById('polishedSurface');
             
-            polishedSurfaceElement.addEventListener('pointercancel', stopRubbingSound);
-          }
+            if (polishedSurfaceElement) {
+              polishedSurfaceElement.addEventListener('pointerdown', (e) => {
+                e.target.setPointerCapture(e.pointerId);
+                startRubbingSound();
+              });
+
+              polishedSurfaceElement.addEventListener('pointerup', (e) => {
+                e.target.releasePointerCapture(e.pointerId);
+                stopRubbingSound();
+              });
+              
+              polishedSurfaceElement.addEventListener('pointercancel', stopRubbingSound);
+            } else {
+              console.warn("polishedSurface ID'li eleman DOM'da bulunamadı!");
+            }
+          });
 
              // Finger
       function renderDial(config, rotation) {
