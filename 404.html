@@ -492,7 +492,12 @@
             <rect id="channelTransitionLines" class="transitionLines" x="203.3" y="173" width="519.4" height="369" fill="url(#channelStaticLines)" />
             <rect x="203.3" y="173" width="519.4" height="369" fill="none" stroke="#ffffff" stroke-width="1.2" opacity="0.10" />
           </g>
-          <rect id="powerOffOverlay" x="203.3" y="173" width="519.4" height="369" fill="#000000" opacity="0" pointer-events="none" clip-path="url(#screenCustomClip)" />
+          <!-- CRT kapanış ritüeli: kararma → yatay çizgi → nokta → tamamen kapanma -->
+          <g id="powerOffEffect" clip-path="url(#screenCustomClip)" pointer-events="none">
+            <rect id="powerOffOverlay" x="203.3" y="173" width="519.4" height="369" fill="#000000" opacity="0" />
+            <rect id="powerOffLine" x="203.3" y="356.5" width="519.4" height="2" rx="1" fill="#F5F7FA" opacity="0" />
+            <circle id="powerOffDot" cx="462.9" cy="357.5" r="3.2" fill="#FFFFFF" opacity="0" />
+          </g>
           <rect id="clickOverlay" x="203.3" y="173" width="519.4" height="369" fill="#000000" opacity="0" cursor="pointer" clip-path="url(#screenCustomClip)" />
           <!-- 1. Ekran Çerçevesi Hitbox'ı (Alta Çizilecek) -->
           <rect id="bezelBottomHitbox" x="198.3" y="542" width="529.4" height="57" fill="rgba(0,0,0,0.01)" pointer-events="all" />
@@ -780,6 +785,9 @@
         document.getElementById('effectInnerLine').setAttribute('width', newWidth);
         document.getElementById('powerOffOverlay').setAttribute('x', startX);
         document.getElementById('powerOffOverlay').setAttribute('width', newWidth);
+        document.getElementById('powerOffLine').setAttribute('x', startX);
+        document.getElementById('powerOffLine').setAttribute('width', newWidth);
+        document.getElementById('powerOffDot').setAttribute('cx', startX + newWidth / 2);
         document.getElementById('channelTransitionBlack').setAttribute('x', startX);
         document.getElementById('channelTransitionBlack').setAttribute('width', newWidth);
         document.getElementById('channelTransitionNoise').setAttribute('x', startX);
@@ -1292,25 +1300,204 @@
 
         // --- Power switch ---
         let isTvPoweredOn = true;
+        let powerAnimationToken = 0;
+
+        function powerEffectElements() {
+          return {
+            overlay: document.getElementById('powerOffOverlay'),
+            line: document.getElementById('powerOffLine'),
+            dot: document.getElementById('powerOffDot')
+          };
+        }
+
+        function resetPowerEffectOn() {
+          const { overlay, line, dot } = powerEffectElements();
+          if (overlay) overlay.setAttribute('opacity', '0');
+          if (line) {
+            const x = parseFloat(line.getAttribute('x') || '203.3');
+            const width = parseFloat(line.getAttribute('width') || '519.4');
+            line.setAttribute('x', x);
+            line.setAttribute('width', width);
+            line.setAttribute('y', '356.5');
+            line.setAttribute('height', '2');
+            line.setAttribute('opacity', '0');
+          }
+          if (dot) {
+            dot.setAttribute('r', '3.2');
+            dot.setAttribute('opacity', '0');
+          }
+        }
+
+        function animatePowerOff() {
+          const { overlay, line, dot } = powerEffectElements();
+          if (!overlay || !line || !dot) {
+            if (player) { try { player.pauseVideo(); } catch (err) {} }
+            return;
+          }
+
+          powerAnimationToken++;
+          const token = powerAnimationToken;
+          const start = performance.now();
+          const x = parseFloat(line.getAttribute('x') || '203.3');
+          const width = parseFloat(line.getAttribute('width') || '519.4');
+          const centerX = x + width / 2;
+
+          overlay.setAttribute('opacity', '0');
+          line.setAttribute('x', x);
+          line.setAttribute('width', width);
+          line.setAttribute('y', '356.5');
+          line.setAttribute('height', '2');
+          line.setAttribute('opacity', '0');
+          dot.setAttribute('cx', centerX);
+          dot.setAttribute('cy', '357.5');
+          dot.setAttribute('r', '3.2');
+          dot.setAttribute('opacity', '0');
+
+          // Video hemen durur; görüntünün fiziksel kapanışını overlay tamamlar.
+          if (player) {
+            try { player.pauseVideo(); } catch (err) {}
+          }
+
+          function frame(now) {
+            if (token !== powerAnimationToken) return;
+            const elapsed = now - start;
+
+            if (elapsed <= 520) {
+              // 0-520 ms: görüntü yavaşça kararır.
+              const p = elapsed / 520;
+              const eased = 1 - Math.pow(1 - p, 2.2);
+              overlay.setAttribute('opacity', String(eased * 0.965));
+              requestAnimationFrame(frame);
+              return;
+            }
+
+            if (elapsed <= 610) {
+              // 520-610 ms: siyah ekran üzerinde yatay ışık çizgisi belirir.
+              overlay.setAttribute('opacity', '0.965');
+              line.setAttribute('opacity', String((elapsed - 520) / 90));
+              requestAnimationFrame(frame);
+              return;
+            }
+
+            if (elapsed <= 875) {
+              // 610-875 ms: çizgi ortadan iki yana doğru sıkışır.
+              const p = (elapsed - 610) / 265;
+              const eased = 1 - Math.pow(p, 1.7);
+              const lineWidth = Math.max(4, width * eased);
+              line.setAttribute('x', String(centerX - lineWidth / 2));
+              line.setAttribute('width', String(lineWidth));
+              line.setAttribute('opacity', '1');
+              requestAnimationFrame(frame);
+              return;
+            }
+
+            if (elapsed <= 1035) {
+              // 875-1035 ms: çizgi tek parlak noktaya dönüşür ve söner.
+              overlay.setAttribute('opacity', '0.985');
+              line.setAttribute('x', String(centerX - 1.5));
+              line.setAttribute('width', '3');
+              line.setAttribute('height', '2');
+              line.setAttribute('opacity', '1');
+              const p = (elapsed - 875) / 160;
+              const eased = 1 - Math.pow(p, 2);
+              dot.setAttribute('r', String(2.2 + eased * 2.0));
+              dot.setAttribute('opacity', String(0.2 + eased * 0.8));
+              requestAnimationFrame(frame);
+              return;
+            }
+
+            // Son durum: tamamen kapalı.
+            overlay.setAttribute('opacity', '1');
+            line.setAttribute('opacity', '0');
+            dot.setAttribute('opacity', '0');
+          }
+          requestAnimationFrame(frame);
+        }
+
+        function animatePowerOn() {
+          const { overlay, line, dot } = powerEffectElements();
+          if (!overlay || !line || !dot) {
+            resetPowerEffectOn();
+            if (player) { try { player.playVideo(); } catch (err) {} }
+            return;
+          }
+
+          powerAnimationToken++;
+          const token = powerAnimationToken;
+          const start = performance.now();
+          const x = parseFloat(line.getAttribute('x') || '203.3');
+          const width = parseFloat(line.getAttribute('width') || '519.4');
+          const centerX = x + width / 2;
+
+          overlay.setAttribute('opacity', '1');
+          line.setAttribute('x', String(centerX - 1.5));
+          line.setAttribute('width', '3');
+          line.setAttribute('height', '2');
+          line.setAttribute('opacity', '1');
+          dot.setAttribute('cx', centerX);
+          dot.setAttribute('cy', '357.5');
+          dot.setAttribute('r', '3.2');
+          dot.setAttribute('opacity', '1');
+
+          function frame(now) {
+            if (token !== powerAnimationToken) return;
+            const elapsed = now - start;
+
+            if (elapsed <= 150) {
+              // Nokta yatay bir çizgiye dönüşür.
+              const p = elapsed / 150;
+              const eased = p * (2 - p);
+              const lineWidth = 3 + (width - 3) * eased;
+              line.setAttribute('x', String(centerX - lineWidth / 2));
+              line.setAttribute('width', String(lineWidth));
+              line.setAttribute('opacity', '1');
+              dot.setAttribute('opacity', String(1 - eased));
+              requestAnimationFrame(frame);
+              return;
+            }
+
+            if (elapsed <= 430) {
+              // Çizgi genişleyerek ekranı yeniden açar.
+              const p = (elapsed - 150) / 280;
+              const eased = 1 - Math.pow(1 - p, 2);
+              line.setAttribute('x', String(centerX - width * eased / 2));
+              line.setAttribute('width', String(Math.max(3, width * eased)));
+              line.setAttribute('opacity', String(Math.max(0, 1 - p)));
+              overlay.setAttribute('opacity', String(1 - p * 0.15));
+              requestAnimationFrame(frame);
+              return;
+            }
+
+            if (elapsed <= 720) {
+              const p = (elapsed - 430) / 290;
+              const eased = p * p * (3 - 2 * p);
+              overlay.setAttribute('opacity', String(0.85 * (1 - eased)));
+              line.setAttribute('opacity', '0');
+              requestAnimationFrame(frame);
+              return;
+            }
+
+            resetPowerEffectOn();
+            if (player && token === powerAnimationToken) {
+              try { player.playVideo(); } catch (err) {}
+            }
+          }
+          requestAnimationFrame(frame);
+        }
 
         function setTvPowerState(poweredOn) {
+          if (isTvPoweredOn === poweredOn) return;
           isTvPoweredOn = poweredOn;
-          const overlay = document.getElementById('powerOffOverlay');
           const lever = document.getElementById('powerSwitchLever');
-          if (overlay) {
-            overlay.setAttribute('opacity', poweredOn ? '0' : '0.97');
-          }
           if (lever) {
             lever.setAttribute('x', poweredOn ? '0.5' : '-10.5');
           }
-          if (!player) return;
-          try {
-            if (poweredOn) {
-              player.playVideo();
-            } else {
-              player.pauseVideo();
-            }
-          } catch (err) {}
+
+          if (poweredOn) {
+            animatePowerOn();
+          } else {
+            animatePowerOff();
+          }
         }
 
         function toggleTvPower() {
