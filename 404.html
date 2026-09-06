@@ -771,6 +771,7 @@
       }
 
       // Click Audios ---
+      // --- Wood ---
       function playWoodKnock() {
         const ctx = ensureDialAudio();
         if (!ctx) return;
@@ -778,12 +779,12 @@
 
         const osc = ctx.createOscillator();
         osc.type = 'sine';
-        osc.frequency.setValueAtTime(300, now);
-        osc.frequency.exponentialRampToValueAtTime(40, now + 0.08);
+        osc.frequency.setValueAtTime(320, now);
+        osc.frequency.exponentialRampToValueAtTime(50, now + 0.08);
 
         const oscGain = ctx.createGain();
         oscGain.gain.setValueAtTime(0, now);
-        oscGain.gain.linearRampToValueAtTime(0.08, now + 0.005); // // Volume -> 0.08
+        oscGain.gain.linearRampToValueAtTime(0.25, now + 0.005); // Main tone -> 0.25
         oscGain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
 
         osc.connect(oscGain);
@@ -800,11 +801,11 @@
 
         const filter = ctx.createBiquadFilter();
         filter.type = 'lowpass';
-        filter.frequency.setValueAtTime(1000, now);
+        filter.frequency.setValueAtTime(1200, now);
 
         const noiseGain = ctx.createGain();
         noiseGain.gain.setValueAtTime(0, now);
-        noiseGain.gain.linearRampToValueAtTime(0.04, now + 0.002); // Volume -> 0.04
+        noiseGain.gain.linearRampToValueAtTime(0.1, now + 0.002); // Impact tissue -> 0.1
         noiseGain.gain.exponentialRampToValueAtTime(0.001, now + 0.03);
 
         noise.connect(filter);
@@ -817,7 +818,7 @@
         noise.stop(now + 0.05);
       }
 
-      // #333333 Area ---
+      // --- Plastic ---
       function playPlasticTap() {
         const ctx = ensureDialAudio();
         if (!ctx) return;
@@ -825,12 +826,12 @@
 
         const osc = ctx.createOscillator();
         osc.type = 'triangle';
-        osc.frequency.setValueAtTime(700, now);
-        osc.frequency.exponentialRampToValueAtTime(150, now + 0.04);
+        osc.frequency.setValueAtTime(750, now);
+        osc.frequency.exponentialRampToValueAtTime(180, now + 0.04);
 
         const oscGain = ctx.createGain();
         oscGain.gain.setValueAtTime(0, now);
-        oscGain.gain.linearRampToValueAtTime(0.04, now + 0.001); // // Volume -> 0.04
+        oscGain.gain.linearRampToValueAtTime(0.18, now + 0.001); // Main tone -> 0.18
         oscGain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
 
         osc.connect(oscGain);
@@ -847,11 +848,11 @@
 
         const filter = ctx.createBiquadFilter();
         filter.type = 'highpass';
-        filter.frequency.setValueAtTime(1500, now);
+        filter.frequency.setValueAtTime(1800, now);
 
         const noiseGain = ctx.createGain();
         noiseGain.gain.setValueAtTime(0, now);
-        noiseGain.gain.linearRampToValueAtTime(0.015, now + 0.001); // // Volume -> 0.015
+        noiseGain.gain.linearRampToValueAtTime(0.04, now + 0.001); // Impact tissue -> 0.04
         noiseGain.gain.exponentialRampToValueAtTime(0.001, now + 0.02);
 
         noise.connect(filter);
