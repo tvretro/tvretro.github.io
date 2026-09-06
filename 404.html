@@ -72,17 +72,15 @@
       #innerBlackCase, #controlPanel rect[fill="#333333"] {
         cursor: default;
       }
-      #polishedSurface {
+      #polishedSurface, #bezelBottomHitbox {
         touch-action: none;
         cursor: -webkit-grab;
         cursor: grab;
       }
-
-      #polishedSurface.active-rub {
+      #polishedSurface.active-rub, #bezelBottomHitbox.active-rub {
         cursor: -webkit-grabbing !important;
         cursor: grabbing !important;
       }
-
     </style>
   </head>
   <body>
@@ -893,7 +891,8 @@
             target.closest('#clickOverlay') ||
             target.closest('#playerObject') ||
             target.tagName.toLowerCase() === 'text' ||
-            target.closest('#polishedSurface')
+            target.closest('#polishedSurface') ||
+            target.closest('#bezelBottomHitbox')
           ) {
             return;
           }
@@ -907,9 +906,9 @@
             playPlasticTap();
           }
         });
-      // --- Area Click Sound ---
+       // --- Area Click Sound
 
-       // --- Parlak Yüzey Sürtünme Sentezleyicisi (Sürekli Çalar) ---
+       // --- Bej 
         let rubAudioParams = null;
 
         function startRubbingSound() {
@@ -976,32 +975,31 @@
         }
 
         // --- Parlak Yüzey İçin Doğrudan Event Dinleyiciler ---
-        const polishedSurfaceElement = document.getElementById('polishedSurface');
+        const rubbingSurfaces = [
+          document.getElementById('polishedSurface'),
+          document.getElementById('bezelBottomHitbox')
+        ];
 
-        if (polishedSurfaceElement) {
-          polishedSurfaceElement.addEventListener('pointerdown', (e) => {
-            try { e.target.setPointerCapture(e.pointerId); } catch(err){}
-            
-            // Açık eli, kapalı yumruk yapar
-            e.target.classList.add('active-rub'); 
-            
-            startRubbingSound();
-          });
+        rubbingSurfaces.forEach(surface => {
+          if (surface) {
+            surface.addEventListener('pointerdown', (e) => {
+              try { e.target.setPointerCapture(e.pointerId); } catch(err){}
+              e.target.classList.add('active-rub'); 
+              startRubbingSound();
+            });
 
-          polishedSurfaceElement.addEventListener('pointerup', (e) => {
-            try { e.target.releasePointerCapture(e.pointerId); } catch(err){}
+            surface.addEventListener('pointerup', (e) => {
+              try { e.target.releasePointerCapture(e.pointerId); } catch(err){}
+              e.target.classList.remove('active-rub'); 
+              stopRubbingSound();
+            });
             
-            // İmleci tekrar açık ele döndürür
-            e.target.classList.remove('active-rub'); 
-            
-            stopRubbingSound();
-          });
-          
-          polishedSurfaceElement.addEventListener('pointercancel', (e) => {
-            e.target.classList.remove('active-rub');
-            stopRubbingSound();
-          });
-        }
+            surface.addEventListener('pointercancel', (e) => {
+              e.target.classList.remove('active-rub');
+              stopRubbingSound();
+            });
+          }
+        });
 
            // Finger
         function renderDial(config, rotation) {
@@ -1082,7 +1080,9 @@
         renderDial(config, snappedRotation);
         event.preventDefault();
       }
-      // --- Parlak Yüzey Sürtünme Bitiş---
+      
+      // --- Bej
+
       function endDialDrag(event) {
         if (!activeDial) return;
         if (event?.pointerId != null && event.pointerId !== activeDial.pointerId) {
