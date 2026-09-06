@@ -909,97 +909,173 @@
        // --- Area Click Sound
 
        // --- Bej 
-        let rubAudioParams = null;
+        let rubAudio = null;
+        let isRubbing = false;
+        let lastPointerPos = null;
+        let rubFadeTimeout = null;
 
-        function startRubbingSound() {
+        function initRubAudio() {
           const ctx = ensureDialAudio();
-          if (!ctx || rubAudioParams) return;
+          if (!ctx) return null;
+          if (ctx.state === 'suspended') {
+            ctx.resume();
+          }
+          if (rubAudio) return rubAudio;
+
           const now = ctx.currentTime;
 
-          // 1. Kadifemsi / Pürüzsüz Yüzey Sürtünmesi (Hışırtısız Brownian Gürültü)
+          // Ana Ses Seviyesi (Master Gain)
+          const masterGain = ctx.createGain();
+          masterGain.gain.setValueAtTime(0, now);
+          masterGain.connect(ctx.destination);
+
+          // 1. Kadifemsi / Pürüzsüz Karbon Sürtünme Dokusu (Pembe Gürültü)
           const bufferSize = ctx.sampleRate * 2;
           const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
           const data = buffer.getChannelData(0);
-          let lastOut = 0.0;
+          let b0 = 0, b1 = 0, b2 = 0;
           for (let i = 0; i < bufferSize; i++) {
             const white = Math.random() * 2 - 1;
-            // Entegre gürültü (Brownian/Kırmızı gürültü) cızırtıyı tamamen yok eder, ipeksi bir sürtünme hissi verir
-            lastOut = (lastOut + (0.02 * white)) / 1.02;
-            data[i] = lastOut * 3.5;
+            b0 = 0.99765 * b0 + white * 0.0990460;
+            b1 = 0.96300 * b1 + white * 0.0905860;
+            b2 = 0.57000 * b2 + white * 0.534191;
+            data[i] = (b0 + b1 + b2 + white * 0.5362) * 0.35;
           }
 
           const noise = ctx.createBufferSource();
           noise.buffer = buffer;
           noise.loop = true;
 
-          // Sürtünme filtresi (Pürüzsüz cilalı yüzey karakteristiği)
-          const noiseFilter = ctx.createBiquadFilter();
-          noiseFilter.type = 'lowpass';
-          noiseFilter.frequency.setValueAtTime(550, now);
+          // Parlak Cila / Yüzey Filtresi
+          const filter = ctx.createBiquadFilter();
+          filter.type = 'bandpass';
+          filter.frequency.setValueAtTime(450, now);
+          filter.Q.setValueAtTime(2.0, now);
 
-          const noiseGain = ctx.createGain();
-          noiseGain.gain.setValueAtTime(0.001, now);
-          noiseGain.gain.linearRampToValueAtTime(0.22, now + 0.08);
+          noise.connect(filter);
+          filter.connect(masterGain);
 
-          noise.connect(noiseFilter);
-          noiseFilter.connect(noiseGain);
-          noiseGain.connect(ctx.destination);
+          // 2. Karbon Fiber Gövde Titreşimi (Hafif alt rezonans)
+          const osc = ctx.createOscillator();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(130, now);
 
-          // 2. Karbon Fiber Gövde Rezonansı (Tok ve hafif kompozit titreşimi)
-          const bodyOsc = ctx.createOscillator();
-          bodyOsc.type = 'sine';
-          bodyOsc.frequency.setValueAtTime(145, now);
+          const oscGain = ctx.createGain();
+          oscGain.gain.setValueAtTime(0.18, now);
 
-          const bodyGain = ctx.createGain();
-          bodyGain.gain.setValueAtTime(0.001, now);
-          bodyGain.gain.linearRampToValueAtTime(0.07, now + 0.08);
-
-          bodyOsc.connect(bodyGain);
-          bodyGain.connect(ctx.destination);
-
-          // 3. Parlak Cila / Vernik Kayma Tonu (Glossy Glide Tınısı)
-          const glossOsc = ctx.createOscillator();
-          glossOsc.type = 'triangle';
-          glossOsc.frequency.setValueAtTime(620, now);
-          // Sürtünme hissi için hafif organik frekans salınımı
-          glossOsc.frequency.linearRampToValueAtTime(580, now + 0.3);
-
-          const glossFilter = ctx.createBiquadFilter();
-          glossFilter.type = 'bandpass';
-          glossFilter.frequency.setValueAtTime(600, now);
-          glossFilter.Q.setValueAtTime(3.0, now);
-
-          const glossGain = ctx.createGain();
-          glossGain.gain.setValueAtTime(0.001, now);
-          glossGain.gain.linearRampToValueAtTime(0.035, now + 0.06);
-
-          glossOsc.connect(glossFilter);
-          glossFilter.connect(glossGain);
-          glossGain.connect(ctx.destination);
+          osc.connect(oscGain);
+          oscGain.connect(masterGain);
 
           noise.start(now);
-          bodyOsc.start(now);
-          glossOsc.start(now);
+          osc.start(now);
 
-          rubAudioParams = { noise, noiseGain, bodyOsc, bodyGain, glossOsc, glossGain };
+          rubAudio = { ctx, masterGain, filter, osc, noise };
+          return rubAudio;
         }
 
-        function stopRubbingSound() {
-          if (!rubAudioParams) return;
-          const ctx = ensureDialAudio();
+        function onRubMove(e) {
+          if (!isRubbing || !rubAudio) return;
+          const ctx = rubAudio.ctx;
           const now = ctx.currentTime;
 
-          // Yumuşak sönümlenme (Fade-Out)
-          rubAudioParams.noiseGain.gain.linearRampToValueAtTime(0.0001, now + 0.12);
-          rubAudioParams.bodyGain.gain.linearRampToValueAtTime(0.0001, now + 0.12);
-          rubAudioParams.glossGain.gain.linearRampToValueAtTime(0.0001, now + 0.12);
+          if (!lastPointerPos) {
+            lastPointerPos = { x: e.clientX, y: e.clientY, time: performance.now() };
+            return;
+          }
 
-          rubAudioParams.noise.stop(now + 0.15);
-          rubAudioParams.bodyOsc.stop(now + 0.15);
-          rubAudioParams.glossOsc.stop(now + 0.15);
+          const dx = e.clientX - lastPointerPos.x;
+          const dy = e.clientY - lastPointerPos.y;
+          const dt = Math.max(1, performance.now() - lastPointerPos.time);
+          const dist = Math.hypot(dx, dy);
+          const speed = dist / dt;
 
-          rubAudioParams = null;
+          lastPointerPos = { x: e.clientX, y: e.clientY, time: performance.now() };
+
+          if (dist < 1) return; // Hareket yoksa ses yok
+
+          // Sürükleme hızına bağlı dinamik ses ve tını değişimi
+          const targetGain = Math.min(0.5, Math.max(0.1, speed * 0.3));
+          const targetFreq = Math.min(900, 350 + speed * 400);
+
+          rubAudio.masterGain.gain.cancelScheduledValues(now);
+          rubAudio.masterGain.gain.linearRampToValueAtTime(targetGain, now + 0.02);
+
+          rubAudio.filter.frequency.cancelScheduledValues(now);
+          rubAudio.filter.frequency.linearRampToValueAtTime(targetFreq, now + 0.03);
+
+          // Sürükleme durduğunda sesi söndür
+          clearTimeout(rubFadeTimeout);
+          rubFadeTimeout = setTimeout(() => {
+            if (rubAudio && isRubbing) {
+              const stopNow = rubAudio.ctx.currentTime;
+              rubAudio.masterGain.gain.linearRampToValueAtTime(0.0001, stopNow + 0.08);
+            }
+          }, 50);
         }
+
+        function startRubbing(e) {
+          isRubbing = true;
+          lastPointerPos = { x: e.clientX, y: e.clientY, time: performance.now() };
+
+          // Açık el -> Kapalı el (grabbing)
+          document.body.style.cursor = 'grabbing';
+          if (e.currentTarget) {
+            e.currentTarget.style.cursor = 'grabbing';
+            try { e.currentTarget.setPointerCapture(e.pointerId); } catch(err){}
+          }
+
+          initRubAudio();
+        }
+
+        function stopRubbing(e) {
+          if (!isRubbing) return;
+          isRubbing = false;
+          lastPointerPos = null;
+          clearTimeout(rubFadeTimeout);
+
+          // Kapalı el -> Açık el (grab)
+          document.body.style.cursor = '';
+          if (e && e.currentTarget) {
+            e.currentTarget.style.cursor = 'grab';
+            try { e.currentTarget.releasePointerCapture(e.pointerId); } catch(err){}
+          }
+
+          if (rubAudio) {
+            const now = rubAudio.ctx.currentTime;
+            rubAudio.masterGain.gain.cancelScheduledValues(now);
+            rubAudio.masterGain.gain.linearRampToValueAtTime(0.0001, now + 0.08);
+            setTimeout(() => {
+              if (!isRubbing && rubAudio) {
+                try {
+                  rubAudio.noise.stop();
+                  rubAudio.osc.stop();
+                  rubAudio.noise.disconnect();
+                  rubAudio.osc.disconnect();
+                } catch(err){}
+                rubAudio = null;
+              }
+            }, 100);
+          }
+        }
+
+        // --- Etkileşim Dinleyicileri ---
+        const rubbingSurfaces = [
+          document.getElementById('polishedSurface'),
+          document.getElementById('bezelBottomHitbox')
+        ];
+
+        rubbingSurfaces.forEach(surface => {
+          if (surface) {
+            // Üzerine gelince açık el imleci belirginleşir
+            surface.style.cursor = 'grab';
+
+            surface.addEventListener('pointerdown', startRubbing);
+            surface.addEventListener('pointermove', onRubMove);
+            surface.addEventListener('pointerup', stopRubbing);
+            surface.addEventListener('pointercancel', stopRubbing);
+            surface.addEventListener('lostpointercapture', stopRubbing);
+          }
+        });
         // Finger End
 
         
