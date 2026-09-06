@@ -1,1236 +1,1198 @@
 <!DOCTYPE html>
 <html lang="tr">
- <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" type="image/x-icon" href="tv.ico">
-  <title>Watch the YouTube video on "Retro TV"</title>
-  <style>
-   :root,
-   body {
-    margin: 0;
-    padding: 0;
-    width: 100vw;
-    height: 100vh;
-    overflow: hidden;
-    background-color: #080a0c;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-   }
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="tv.ico">
+    <title>Watch the YouTube video on "Retro TV"</title>
+    <style>
+      :root,
+      body {
+        margin: 0;
+        padding: 0;
+        width: 100vw;
+        height: 100vh;
+        overflow: hidden;
+        background-color: #080a0c;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
 
-   svg {
-    display: block;
-    width: 100vw;
-    height: 100vh;
-   }
+      svg {
+        display: block;
+        width: 100vw;
+        height: 100vh;
+      }
 
-   .viewport-home-btn {
-    position: fixed;
-    bottom: 30px;
-    right: 30px;
-    width: 52px;
-    height: 52px;
-    background: rgba(10, 12, 16, 0.7);
-    border: 1.5px solid rgba(255, 255, 255, 0.15);
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    backdrop-filter: blur(4px);
-   }
+      .viewport-home-btn {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        width: 52px;
+        height: 52px;
+        background: rgba(10, 12, 16, 0.7);
+        border: 1.5px solid rgba(255, 255, 255, 0.15);
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        backdrop-filter: blur(4px);
+      }
 
-   .viewport-home-btn:hover {
-    background: rgba(230, 57, 70, 0.9);
-    border-color: rgba(255, 255, 255, 0.6);
-    transform: scale(1.08) translateY(-2px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
-   }
+      .viewport-home-btn:hover {
+        background: rgba(230, 57, 70, 0.9);
+        border-color: rgba(255, 255, 255, 0.6);
+        transform: scale(1.08) translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+      }
 
-   .viewport-home-btn svg {
-    width: 24px;
-    height: 24px;
-   }
+      .viewport-home-btn svg {
+        width: 24px;
+        height: 24px;
+      }
 
-   .interactive-dial {
-    cursor: grab;
-    touch-action: none;
-    user-select: none;
-   }
+      .interactive-dial {
+        cursor: grab;
+        touch-action: none;
+        user-select: none;
+      }
 
-   .interactive-dial.dragging {
-    cursor: grabbing;
-   }
+      .interactive-dial.dragging {
+        cursor: grabbing;
+      }
 
-   .dial-hit-area {
-    pointer-events: all;
-   }
+      .dial-hit-area {
+        pointer-events: all;
+      }
 
-   #tvWoodOuter, #tvWoodGrain, #tvWoodVignette, #tvWoodBorder, 
-   #tvWoodStroke1, #tvWoodStroke2, #woodGlare,
-   #innerBlackCase, #controlPanel rect[fill="#333333"] {
-    cursor: help;
-   }
-   #polishedSurface, #bezelBottomHitbox {
-    touch-action: none;
-    cursor: -webkit-grab;
-    cursor: grab;
-   }
-   #polishedSurface.active-rub, #bezelBottomHitbox.active-rub {
-    cursor: -webkit-grabbing !important;
-    cursor: grabbing !important;
-   }
-  </style>
- </head>
- <body>
-  <svg id="retroTvSvg" xmlns="http://www.w3.org/2000/svg" viewBox="86 75 867 585" width="100vw" height="100vh" preserveAspectRatio="xMidYMid meet">
-   <defs>
-    <pattern id="safeWoodGrain" width="400" height="20" patternUnits="userSpaceOnUse" patternTransform="rotate(1)">
-     <path d="M 0 5 Q 100 2 200 5 T 400 5" fill="none" stroke="#2B0E03" stroke-width="0.8" opacity="0.3" />
-     <path d="M 0 12 Q 100 15 200 12 T 400 12" fill="none" stroke="#1A0500" stroke-width="1.2" opacity="0.2" />
-     <path d="M 0 18 Q 100 17 200 18 T 400 18" fill="none" stroke="#3D1200" stroke-width="0.5" opacity="0.4" />
-    </pattern>
-    <filter id="realisticWall" x="-20%" y="-20%" width="140%" height="140%">
-     <feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="4" result="noise" />
-     <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.045 0" in="noise" result="coloredNoise" />
-     <feComposite operator="over" in="coloredNoise" in2="SourceGraphic" />
-    </filter>
-    <radialGradient id="backWallRealistic" cx="50%" cy="50%" r="75%">
-     <stop offset="0%" stop-color="#14171f" />
-     <stop offset="100%" stop-color="#06070a" />
-    </radialGradient>
-    <linearGradient id="leftWallRealistic" x1="100%" y1="50%" x2="0%" y2="50%">
-     <stop offset="0%" stop-color="#191d26" />
-     <stop offset="85%" stop-color="#080a0d" />
-     <stop offset="100%" stop-color="#040507" />
-    </linearGradient>
-    <linearGradient id="rightWallRealistic" x1="0%" y1="50%" x2="100%" y2="50%">
-     <stop offset="0%" stop-color="#191d26" />
-     <stop offset="85%" stop-color="#080a0d" />
-     <stop offset="100%" stop-color="#040507" />
-    </linearGradient>
-    <linearGradient id="ceilingRealistic" x1="50%" y1="100%" x2="50%" y2="0%">
-     <stop offset="0%" stop-color="#10131a" />
-     <stop offset="100%" stop-color="#030406" />
-    </linearGradient>
-    <radialGradient id="antennaDomeGrad" cx="50%" cy="30%" r="70%">
-     <stop offset="0%" stop-color="#9CA3AF" />
-     <stop offset="30%" stop-color="#4B5563" />
-     <stop offset="70%" stop-color="#1F2937" />
-     <stop offset="100%" stop-color="#030712" />
-    </radialGradient>
-    <linearGradient id="antennaRodGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-     <stop offset="0%" stop-color="#1F2937" />
-     <stop offset="25%" stop-color="#9CA3AF" />
-     <stop offset="50%" stop-color="#E5E7EB" />
-     <stop offset="75%" stop-color="#6B7280" />
-     <stop offset="100%" stop-color="#111827" />
-    </linearGradient>
-    <radialGradient id="floorGlow" cx="50%" cy="30%" r="80%">
-     <stop offset="0%" stop-color="#1a1c23" />
-     <stop offset="60%" stop-color="#0a0c12" />
-     <stop offset="100%" stop-color="#020304" />
-    </radialGradient>
-    <filter id="tvDropShadow" x="-10%" y="-10%" width="120%" height="120%">
-     <feDropShadow dx="0" dy="25" stdDeviation="18" flood-color="#000000" flood-opacity="0.65" />
-    </filter>
-    <filter id="innerBevel" x="-20%" y="-20%" width="140%" height="140%">
-     <feGaussianBlur stdDeviation="3" result="blur" />
-     <feComposite in2="SourceAlpha" operator="arithmetic" k2="-1" k3="1" result="shadowDiff" />
-     <feFlood flood-color="#000000" flood-opacity="0.5" />
-     <feComposite in2="shadowDiff" operator="in" />
-     <feComposite in2="SourceGraphic" operator="over" />
-    </filter>
-    <filter id="knobShadow" x="-40%" y="-40%" width="180%" height="180%">
-     <feDropShadow dx="2" dy="3" stdDeviation="2" flood-color="#000000" flood-opacity="0.8" />
-    </filter>
-    <filter id="dialShadow" x="-20%" y="-20%" width="140%" height="140%">
-     <feDropShadow dx="0" dy="1" stdDeviation="1" flood-color="#000000" flood-opacity="0.9" />
-    </filter>
-    <filter id="speakerInset" x="-10%" y="-10%" width="120%" height="120%">
-     <feOffset dx="0" dy="3" />
-     <feGaussianBlur stdDeviation="3" result="blur" />
-     <feComposite operator="out" in="SourceGraphic" in2="blur" result="inverse" />
-     <feFlood flood-color="#000000" flood-opacity="0.85" result="color" />
-     <feComposite operator="in" in="color" in2="inverse" result="shadow" />
-     <feComposite operator="over" in="shadow" in2="SourceGraphic" />
-    </filter>
-    <filter id="woodTexture" x="0%" y="0%" width="100%" height="100%">
-     <feTurbulence type="fractalNoise" baseFrequency="0.005 0.15" numOctaves="4" result="noise" />
-     <feColorMatrix type="matrix" values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 0.18 0" in="noise" result="coloredNoise" />
-     <feBlend mode="multiply" in="SourceGraphic" in2="coloredNoise" result="woodBlend" />
-     <feGaussianBlur in="SourceAlpha" stdDeviation="6" result="blur" />
-     <feComposite in2="SourceAlpha" operator="arithmetic" k2="-1" k3="1" result="shadowDiff" />
-     <feFlood flood-color="#0f0500" flood-opacity="0.95" />
-     <feComposite in2="shadowDiff" operator="in" result="vignette" />
-     <feComposite in="vignette" in2="woodBlend" operator="over" />
-    </filter>
-    <linearGradient id="woodFrame" x1="0%" y1="0%" x2="100%" y2="100%">
-     <stop offset="0%" stop-color="#5C2511" />
-     <stop offset="15%" stop-color="#8B3A15" />
-     <stop offset="40%" stop-color="#A54921" />
-     <stop offset="70%" stop-color="#732D10" />
-     <stop offset="100%" stop-color="#3D1200" />
-    </linearGradient>
-    <radialGradient id="woodVignette" cx="50%" cy="50%" r="75%">
-     <stop offset="50%" stop-color="#000000" stop-opacity="0" />
-     <stop offset="90%" stop-color="#2a0a00" stop-opacity="0.6" />
-     <stop offset="100%" stop-color="#1a0500" stop-opacity="0.95" />
-    </radialGradient>
-    <linearGradient id="silverFrameGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-     <stop offset="0%" stop-color="#E5E7EB" />
-     <stop offset="20%" stop-color="#FFFFFF" />
-     <stop offset="50%" stop-color="#9CA3AF" />
-     <stop offset="80%" stop-color="#F3F4F6" />
-     <stop offset="100%" stop-color="#4B5563" />
-    </linearGradient>
-    <clipPath id="woodFrameClip">
-     <rect id="woodFrameClipRect" x="178.3" y="150" width="683.4" height="469" rx="12" />
-    </clipPath>
-    <linearGradient id="sharpChrome" x1="0%" y1="0%" x2="100%" y2="0%">
-     <stop offset="0%" stop-color="#e2e8f0" />
-     <stop offset="25%" stop-color="#ffffff" />
-     <stop offset="40%" stop-color="#475569" />
-     <stop offset="60%" stop-color="#94a3b8" />
-     <stop offset="80%" stop-color="#0f172a" />
-     <stop offset="100%" stop-color="#cbd5e1" />
-    </linearGradient>
-    <radialGradient id="chromeDome" cx="40%" cy="30%" r="70%">
-     <stop offset="0%" stop-color="#ffffff" />
-     <stop offset="30%" stop-color="#cbd5e1" />
-     <stop offset="60%" stop-color="#475569" />
-     <stop offset="90%" stop-color="#0f172a" />
-     <stop offset="100%" stop-color="#000000" />
-    </radialGradient>
-    <linearGradient id="creamBezelGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-     <stop offset="0%" stop-color="#ede7d3" />
-     <stop offset="50%" stop-color="#ded7c0" />
-     <stop offset="100%" stop-color="#bbb39b" />
-    </linearGradient>
-    <linearGradient id="metalCylinder" x1="0%" y1="0%" x2="100%" y2="100%">
-     <stop offset="0%" stop-color="#888888" />
-     <stop offset="30%" stop-color="#ffffff" />
-     <stop offset="50%" stop-color="#aaaaaa" />
-     <stop offset="80%" stop-color="#333333" />
-     <stop offset="100%" stop-color="#111111" />
-    </linearGradient>
-    <radialGradient id="plasticCap" cx="35%" cy="35%" r="65%">
-     <stop offset="0%" stop-color="#4a4a4a" />
-     <stop offset="40%" stop-color="#333333" />
-     <stop offset="100%" stop-color="#050505" />
-    </radialGradient>
-    <radialGradient id="crtGlass" cx="50%" cy="50%" r="70%">
-     <stop offset="0%" stop-color="#ffffff" stop-opacity="0" />
-     <stop offset="100%" stop-color="#ffffff" stop-opacity="0.12" />
-    </radialGradient>
-    <linearGradient id="glare" x1="0%" y1="0%" x2="100%" y2="100%">
-     <stop offset="0%" stop-color="#ffffff" stop-opacity="0.25" />
-     <stop offset="30%" stop-color="#ffffff" stop-opacity="0.05" />
-     <stop offset="100%" stop-color="#ffffff" stop-opacity="0" />
-    </linearGradient>
-    <radialGradient id="speakerCone" cx="50%" cy="50%" r="50%">
-     <stop offset="0%" stop-color="#1a1a1a" />
-     <stop offset="20%" stop-color="#242424" />
-     <stop offset="60%" stop-color="#050505" />
-     <stop offset="100%" stop-color="#000000" />
-    </radialGradient>
-    <pattern id="speakerMesh" width="3" height="3" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-     <circle cx="1.5" cy="1.5" r="1" fill="#0d0d0d" />
-    </pattern>
-    <pattern id="scanlines" width="100" height="4" patternUnits="userSpaceOnUse">
-     <line x1="0" y1="0" x2="100" y2="0" stroke="#000000" stroke-width="1.2" opacity="0.3" />
-    </pattern>
-    <clipPath id="screenCustomClip">
-     <path id="screenCustomClipPath" d="M 203.3 542 L 203.3 195 A 22 22 0 0 1 225.3 173 L 700.7 173 A 22 22 0 0 1 722.7 195 L 722.7 542 Z" />
-    </clipPath>
-    <clipPath id="grilleHoles">
-     <rect x="12" y="46.3" width="2.6" height="18.7" rx="1.3" />
-     <rect x="16.8" y="30.7" width="2.6" height="34.3" rx="1.3" />
-     <rect x="21.6" y="22.1" width="2.6" height="42.9" rx="1.3" />
-     <rect x="26.4" y="16.8" width="2.6" height="48.2" rx="1.3" />
-     <rect x="31.2" y="14" width="2.6" height="51" rx="1.3" />
-     <rect x="36" y="13" width="2.6" height="52" rx="1.3" />
-     <rect x="40.8" y="14" width="2.6" height="51" rx="1.3" />
-     <rect x="45.6" y="16.8" width="2.6" height="48.2" rx="1.3" />
-     <rect x="50.4" y="22.1" width="2.6" height="42.9" rx="1.3" />
-     <rect x="55.2" y="30.7" width="2.6" height="34.3" rx="1.3" />
-     <rect x="60" y="46.3" width="2.6" height="18.7" rx="1.3" />
+      #tvWoodOuter, #tvWoodGrain, #tvWoodVignette, #tvWoodBorder, 
+      #tvWoodStroke1, #tvWoodStroke2, #woodGlare,
+      #innerBlackCase, #controlPanel rect[fill="#333333"] {
+        cursor: help;
+      }
+      #polishedSurface, #bezelBottomHitbox {
+        touch-action: none;
+        cursor: -webkit-grab;
+        cursor: grab;
+      }
+      #polishedSurface.active-rub, #bezelBottomHitbox.active-rub {
+        cursor: -webkit-grabbing !important;
+        cursor: grabbing !important;
+      }
+    </style>
+  </head>
+  <body>
+    <svg id="retroTvSvg" xmlns="http://www.w3.org/2000/svg" viewBox="86 75 867 585" width="100vw" height="100vh" preserveAspectRatio="xMidYMid meet">
+      <defs>
+        <pattern id="safeWoodGrain" width="400" height="20" patternUnits="userSpaceOnUse" patternTransform="rotate(1)">
+          <path d="M 0 5 Q 100 2 200 5 T 400 5" fill="none" stroke="#2B0E03" stroke-width="0.8" opacity="0.3" />
+          <path d="M 0 12 Q 100 15 200 12 T 400 12" fill="none" stroke="#1A0500" stroke-width="1.2" opacity="0.2" />
+          <path d="M 0 18 Q 100 17 200 18 T 400 18" fill="none" stroke="#3D1200" stroke-width="0.5" opacity="0.4" />
+        </pattern>
+        <filter id="realisticWall" x="-20%" y="-20%" width="140%" height="140%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="4" result="noise" />
+          <feColorMatrix type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.045 0" in="noise" result="coloredNoise" />
+          <feComposite operator="over" in="coloredNoise" in2="SourceGraphic" />
+        </filter>
+        <radialGradient id="backWallRealistic" cx="50%" cy="50%" r="75%">
+          <stop offset="0%" stop-color="#14171f" />
+          <stop offset="100%" stop-color="#06070a" />
+        </radialGradient>
+        <linearGradient id="leftWallRealistic" x1="100%" y1="50%" x2="0%" y2="50%">
+          <stop offset="0%" stop-color="#191d26" />
+          <stop offset="85%" stop-color="#080a0d" />
+          <stop offset="100%" stop-color="#040507" />
+        </linearGradient>
+        <linearGradient id="rightWallRealistic" x1="0%" y1="50%" x2="100%" y2="50%">
+          <stop offset="0%" stop-color="#191d26" />
+          <stop offset="85%" stop-color="#080a0d" />
+          <stop offset="100%" stop-color="#040507" />
+        </linearGradient>
+        <linearGradient id="ceilingRealistic" x1="50%" y1="100%" x2="50%" y2="0%">
+          <stop offset="0%" stop-color="#10131a" />
+          <stop offset="100%" stop-color="#030406" />
+        </linearGradient>
+        <radialGradient id="antennaDomeGrad" cx="50%" cy="30%" r="70%">
+          <stop offset="0%" stop-color="#9CA3AF" />
+          <stop offset="30%" stop-color="#4B5563" />
+          <stop offset="70%" stop-color="#1F2937" />
+          <stop offset="100%" stop-color="#030712" />
+        </radialGradient>
+        <linearGradient id="antennaRodGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#1F2937" />
+          <stop offset="25%" stop-color="#9CA3AF" />
+          <stop offset="50%" stop-color="#E5E7EB" />
+          <stop offset="75%" stop-color="#6B7280" />
+          <stop offset="100%" stop-color="#111827" />
+        </linearGradient>
+        <radialGradient id="floorGlow" cx="50%" cy="30%" r="80%">
+          <stop offset="0%" stop-color="#1a1c23" />
+          <stop offset="60%" stop-color="#0a0c12" />
+          <stop offset="100%" stop-color="#020304" />
+        </radialGradient>
+        <filter id="tvDropShadow" x="-10%" y="-10%" width="120%" height="120%">
+          <feDropShadow dx="0" dy="25" stdDeviation="18" flood-color="#000000" flood-opacity="0.65" />
+        </filter>
+        <filter id="innerBevel" x="-20%" y="-20%" width="140%" height="140%">
+          <feGaussianBlur stdDeviation="3" result="blur" />
+          <feComposite in2="SourceAlpha" operator="arithmetic" k2="-1" k3="1" result="shadowDiff" />
+          <feFlood flood-color="#000000" flood-opacity="0.5" />
+          <feComposite in2="shadowDiff" operator="in" />
+          <feComposite in2="SourceGraphic" operator="over" />
+        </filter>
+        <filter id="knobShadow" x="-40%" y="-40%" width="180%" height="180%">
+          <feDropShadow dx="2" dy="3" stdDeviation="2" flood-color="#000000" flood-opacity="0.8" />
+        </filter>
+        <filter id="dialShadow" x="-20%" y="-20%" width="140%" height="140%">
+          <feDropShadow dx="0" dy="1" stdDeviation="1" flood-color="#000000" flood-opacity="0.9" />
+        </filter>
+        <filter id="speakerInset" x="-10%" y="-10%" width="120%" height="120%">
+          <feOffset dx="0" dy="3" />
+          <feGaussianBlur stdDeviation="3" result="blur" />
+          <feComposite operator="out" in="SourceGraphic" in2="blur" result="inverse" />
+          <feFlood flood-color="#000000" flood-opacity="0.85" result="color" />
+          <feComposite operator="in" in="color" in2="inverse" result="shadow" />
+          <feComposite operator="over" in="shadow" in2="SourceGraphic" />
+        </filter>
+        <filter id="woodTexture" x="0%" y="0%" width="100%" height="100%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.005 0.15" numOctaves="4" result="noise" />
+          <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 0.18 0" in="noise" result="coloredNoise" />
+          <feBlend mode="multiply" in="SourceGraphic" in2="coloredNoise" result="woodBlend" />
+          <feGaussianBlur in="SourceAlpha" stdDeviation="6" result="blur" />
+          <feComposite in2="SourceAlpha" operator="arithmetic" k2="-1" k3="1" result="shadowDiff" />
+          <feFlood flood-color="#0f0500" flood-opacity="0.95" />
+          <feComposite in2="shadowDiff" operator="in" result="vignette" />
+          <feComposite in="vignette" in2="woodBlend" operator="over" />
+        </filter>
+        <linearGradient id="woodFrame" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#5C2511" />
+          <stop offset="15%" stop-color="#8B3A15" />
+          <stop offset="40%" stop-color="#A54921" />
+          <stop offset="70%" stop-color="#732D10" />
+          <stop offset="100%" stop-color="#3D1200" />
+        </linearGradient>
+        <radialGradient id="woodVignette" cx="50%" cy="50%" r="75%">
+          <stop offset="50%" stop-color="#000000" stop-opacity="0" />
+          <stop offset="90%" stop-color="#2a0a00" stop-opacity="0.6" />
+          <stop offset="100%" stop-color="#1a0500" stop-opacity="0.95" />
+        </radialGradient>
+        <linearGradient id="silverFrameGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#E5E7EB" />
+          <stop offset="20%" stop-color="#FFFFFF" />
+          <stop offset="50%" stop-color="#9CA3AF" />
+          <stop offset="80%" stop-color="#F3F4F6" />
+          <stop offset="100%" stop-color="#4B5563" />
+        </linearGradient>
+        <clipPath id="woodFrameClip">
+          <rect id="woodFrameClipRect" x="178.3" y="150" width="683.4" height="469" rx="12" />
+        </clipPath>
+        <linearGradient id="sharpChrome" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#e2e8f0" />
+          <stop offset="25%" stop-color="#ffffff" />
+          <stop offset="40%" stop-color="#475569" />
+          <stop offset="60%" stop-color="#94a3b8" />
+          <stop offset="80%" stop-color="#0f172a" />
+          <stop offset="100%" stop-color="#cbd5e1" />
+        </linearGradient>
+        <radialGradient id="chromeDome" cx="40%" cy="30%" r="70%">
+          <stop offset="0%" stop-color="#ffffff" />
+          <stop offset="30%" stop-color="#cbd5e1" />
+          <stop offset="60%" stop-color="#475569" />
+          <stop offset="90%" stop-color="#0f172a" />
+          <stop offset="100%" stop-color="#000000" />
+        </radialGradient>
+        <linearGradient id="creamBezelGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#ede7d3" />
+          <stop offset="50%" stop-color="#ded7c0" />
+          <stop offset="100%" stop-color="#bbb39b" />
+        </linearGradient>
+        <linearGradient id="metalCylinder" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#888888" />
+          <stop offset="30%" stop-color="#ffffff" />
+          <stop offset="50%" stop-color="#aaaaaa" />
+          <stop offset="80%" stop-color="#333333" />
+          <stop offset="100%" stop-color="#111111" />
+        </linearGradient>
+        <radialGradient id="plasticCap" cx="35%" cy="35%" r="65%">
+          <stop offset="0%" stop-color="#4a4a4a" />
+          <stop offset="40%" stop-color="#333333" />
+          <stop offset="100%" stop-color="#050505" />
+        </radialGradient>
+        <radialGradient id="crtGlass" cx="50%" cy="50%" r="70%">
+          <stop offset="0%" stop-color="#ffffff" stop-opacity="0" />
+          <stop offset="100%" stop-color="#ffffff" stop-opacity="0.12" />
+        </radialGradient>
+        <linearGradient id="glare" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#ffffff" stop-opacity="0.25" />
+          <stop offset="30%" stop-color="#ffffff" stop-opacity="0.05" />
+          <stop offset="100%" stop-color="#ffffff" stop-opacity="0" />
+        </linearGradient>
+        <radialGradient id="speakerCone" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#1a1a1a" />
+          <stop offset="20%" stop-color="#242424" />
+          <stop offset="60%" stop-color="#050505" />
+          <stop offset="100%" stop-color="#000000" />
+        </radialGradient>
+        <pattern id="speakerMesh" width="3" height="3" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+          <circle cx="1.5" cy="1.5" r="1" fill="#0d0d0d" />
+        </pattern>
+        <pattern id="scanlines" width="100" height="4" patternUnits="userSpaceOnUse">
+          <line x1="0" y1="0" x2="100" y2="0" stroke="#000000" stroke-width="1.2" opacity="0.3" />
+        </pattern>
+        <clipPath id="screenCustomClip">
+          <path id="screenCustomClipPath" d="M 203.3 542 L 203.3 195 A 22 22 0 0 1 225.3 173 L 700.7 173 A 22 22 0 0 1 722.7 195 L 722.7 542 Z" />
+        </clipPath>
+        <clipPath id="grilleHoles">
 
-     <rect x="12" y="69" width="2.6" height="18.7" rx="1.3" />
-     <rect x="16.8" y="69" width="2.6" height="34.3" rx="1.3" />
-     <rect x="21.6" y="69" width="2.6" height="42.9" rx="1.3" />
-     <rect x="26.4" y="69" width="2.6" height="48.2" rx="1.3" />
-     <rect x="31.2" y="69" width="2.6" height="51" rx="1.3" />
-     <rect x="36" y="69" width="2.6" height="52" rx="1.3" />
-     <rect x="40.8" y="69" width="2.6" height="51" rx="1.3" />
-     <rect x="45.6" y="69" width="2.6" height="48.2" rx="1.3" />
-     <rect x="50.4" y="69" width="2.6" height="42.9" rx="1.3" />
-     <rect x="55.2" y="69" width="2.6" height="34.3" rx="1.3" />
-     <rect x="60" y="69" width="2.6" height="18.7" rx="1.3" />
-    </clipPath>
-    <clipPath id="woodFrameClip">
-     <rect id="woodFrameClipRect" x="178.3" y="150" width="683.4" height="469" rx="8" />
-    </clipPath>
+          <rect x="12" y="46.3" width="2.6" height="18.7" rx="1.3" />
+          <rect x="16.8" y="30.7" width="2.6" height="34.3" rx="1.3" />
+          <rect x="21.6" y="22.1" width="2.6" height="42.9" rx="1.3" />
+          <rect x="26.4" y="16.8" width="2.6" height="48.2" rx="1.3" />
+          <rect x="31.2" y="14" width="2.6" height="51" rx="1.3" />
+          <rect x="36" y="13" width="2.6" height="52" rx="1.3" />
+          <rect x="40.8" y="14" width="2.6" height="51" rx="1.3" />
+          <rect x="45.6" y="16.8" width="2.6" height="48.2" rx="1.3" />
+          <rect x="50.4" y="22.1" width="2.6" height="42.9" rx="1.3" />
+          <rect x="55.2" y="30.7" width="2.6" height="34.3" rx="1.3" />
+          <rect x="60" y="46.3" width="2.6" height="18.7" rx="1.3" />
 
-    <!-- Retro Çubuk Ayak Gradiyentleri -->
-    <linearGradient id="pegWood" x1="0%" y1="0%" x2="100%" y2="0%">
-     <stop offset="0%" stop-color="#2a0f05" />
-     <stop offset="35%" stop-color="#5a240c" />
-     <stop offset="70%" stop-color="#732f10" />
-     <stop offset="100%" stop-color="#1c0701" />
-    </linearGradient>
-    <linearGradient id="pegBrass" x1="0%" y1="0%" x2="100%" y2="0%">
-     <stop offset="0%" stop-color="#7a5515" />
-     <stop offset="45%" stop-color="#e8c253" />
-     <stop offset="70%" stop-color="#fff1a8" />
-     <stop offset="100%" stop-color="#523707" />
-    </linearGradient>
-   </defs>
-   <g id="perspectiveRoom" filter="url(#realisticWall)">
-    <polygon points="-120,-110 1160,-110 840,120 200,120" fill="url(#ceilingRealistic)" />
-    <polygon points="-120,810 1160,810 840,580 200,580" fill="url(#floorGlow)" />
-    <polygon points="200,120 840,120 840,580 200,580" fill="url(#backWallRealistic)" />
-    <polygon points="-120,-110 200,120 200,580 -120,810" fill="url(#leftWallRealistic)" />
-    <polygon points="1160,-110 840,120 840,580 1160,810" fill="url(#rightWallRealistic)" />
-    <polygon points="160,120 200,120 200,580 160,620" fill="#000000" opacity="0.5" filter="blur(12px)" />
-    <polygon points="880,120 840,120 840,580 880,620" fill="#000000" opacity="0.5" filter="blur(12px)" />
-    <polygon points="200,120 840,120 800,150 240,150" fill="#000000" opacity="0.6" filter="blur(10px)" />
-    <polygon points="200,580 840,580 800,550 240,550" fill="#000000" opacity="0.8" filter="blur(10px)" />
-    <polygon points="-120,770 200,550 200,580 -120,810" fill="#090b0f" />
-    <polygon points="-120,770 200,550 200,553 -120,774" fill="#252a36" opacity="0.8" />
-    <polygon points="1160,770 840,550 840,580 1160,810" fill="#090b0f" />
-    <polygon points="1160,770 840,550 840,553 1160,774" fill="#252a36" opacity="0.8" />
-    <polygon points="200,550 840,550 840,580 200,580" fill="#06070a" />
-    <polygon points="200,550 840,550 840,552 200,552" fill="#1c2029" opacity="0.6" />
-    <polygon points="-120,770 200,550 210,555 -110,775" fill="#000000" opacity="0.4" filter="blur(2px)" />
-    <polygon points="1160,770 840,550 830,555 1170,775" fill="#000000" opacity="0.4" filter="blur(2px)" />
-    <polygon points="200,550 840,550 840,554 200,554" fill="#000000" opacity="0.5" filter="blur(2px)" />
-   </g>
-   <ellipse cx="520" cy="648" rx="420" ry="28" fill="#000000" opacity="0.85" filter="blur(14px)" />
-
-   <!-- 60-70'ler Sol Çubuk Ayak Grubu -->
-   <g id="tvFeetLeft">
-    <!-- Arka Çubuk Ayak (Gölge ve derinlik) -->
-    <polygon points="268,632 274,632 281,652 276.5,652" fill="#160802" />
-    <polygon points="274.5,647.5 279.5,647.5 281,652 276.5,652" fill="url(#pegBrass)" opacity="0.75" />
-    <ellipse cx="278.8" cy="652.5" rx="2.2" ry="0.8" fill="#0a0a0a" />
-    <!-- Ön Ana Çubuk Ayak (Dışa açılı konik çubuk) -->
-    <polygon points="252,632 260,632 238,655 233,655" fill="url(#pegWood)" />
-    <line x1="255" y1="633" x2="236" y2="649" stroke="#ffffff" stroke-width="0.8" opacity="0.3" stroke-linecap="round" />
-    <!-- Pirinç Pabuç / Ferrule -->
-    <polygon points="238.5,648.5 244,648.5 238,655 233,655" fill="url(#pegBrass)" stroke="#452e05" stroke-width="0.3" />
-    <ellipse cx="235.5" cy="655.4" rx="2.6" ry="0.9" fill="#111111" />
-    <!-- Metal Montaj Plakası -->
-    <polygon points="244,631 280,631 276,634 248,634" fill="#1f242d" stroke="#000000" stroke-width="0.5" />
-   </g>
-
-   <!-- 60-70'ler Sağ Çubuk Ayak Grubu -->
-   <g id="tvFeetRight">
-    <!-- Arka Çubuk Ayak (Gölge ve derinlik) -->
-    <polygon points="772,632 766,632 759,652 763.5,652" fill="#160802" />
-    <polygon points="765.5,647.5 760.5,647.5 759,652 763.5,652" fill="url(#pegBrass)" opacity="0.75" />
-    <ellipse cx="761.2" cy="652.5" rx="2.2" ry="0.8" fill="#0a0a0a" />
-    <!-- Ön Ana Çubuk Ayak (Dışa açılı konik çubuk) -->
-    <polygon points="788,632 780,632 802,655 807,655" fill="url(#pegWood)" />
-    <line x1="785" y1="633" x2="804" y2="649" stroke="#ffffff" stroke-width="0.8" opacity="0.3" stroke-linecap="round" />
-    <!-- Pirinç Pabuç / Ferrule -->
-    <polygon points="801.5,648.5 796,648.5 802,655 807,655" fill="url(#pegBrass)" stroke="#452e05" stroke-width="0.3" />
-    <ellipse cx="804.5" cy="655.4" rx="2.6" ry="0.9" fill="#111111" />
-    <!-- Metal Montaj Plakası -->
-    <polygon points="796,631 760,631 764,634 792,634" fill="#1f242d" stroke="#000000" stroke-width="0.5" />
-   </g>
-
-   <g id="antennas">
-    <ellipse cx="520" cy="155" rx="42" ry="8" fill="#111111" />
-    <ellipse cx="520" cy="154" rx="40" ry="7" fill="#1A1A1A" />
-    <g transform="rotate(-32, 505, 150)">
-     <rect x="501.5" y="80" width="7" height="70" fill="url(#antennaRodGrad)" />
-     <rect x="499.5" y="65" width="11" height="16" rx="1.5" fill="url(#antennaRodGrad)" />
-     <line x1="501.5" y1="65" x2="501.5" y2="81" stroke="#1F2937" stroke-width="0.8" opacity="0.6" />
-     <line x1="503.5" y1="65" x2="503.5" y2="81" stroke="#1F2937" stroke-width="0.8" opacity="0.6" />
-     <line x1="505.5" y1="65" x2="505.5" y2="81" stroke="#1F2937" stroke-width="0.8" opacity="0.6" />
-     <line x1="507.5" y1="65" x2="507.5" y2="81" stroke="#1F2937" stroke-width="0.8" opacity="0.6" />
-     <rect x="502.5" y="65" width="5" height="1.5" fill="#111827" opacity="0.8" />
-    </g>
-    <g transform="rotate(32, 535, 150)">
-   
-     <rect x="531.5" y="80" width="7" height="70" fill="url(#antennaRodGrad)" />
-     <rect x="529.5" y="65" width="11" height="16" rx="1.5" fill="url(#antennaRodGrad)" />
-     <line x1="531.5" y1="65" x2="531.5" y2="81" stroke="#1F2937" stroke-width="0.8" opacity="0.6" />
-     <line x1="533.5" y1="65" x2="533.5" y2="81" stroke="#1F2937" stroke-width="0.8" opacity="0.6" />
-     <line x1="535.5" y1="65" x2="535.5" y2="81" stroke="#1F2937" stroke-width="0.8" opacity="0.6" />
-     <line x1="537.5" y1="65" x2="537.5" y2="81" stroke="#1F2937" stroke-width="0.8" opacity="0.6" />
-     <rect x="532.5" y="65" width="5" height="1.5" fill="#111827" opacity="0.8" />
-    </g>
-    <path d="M 480,154 C 480,115 560,115 560,154 Z" fill="url(#antennaDomeGrad)" />
-    <path d="M 488,145 C 495,130 545,130 552,145 C 530,138 510,138 488,145 Z" fill="#FFFFFF" opacity="0.15" />
-   </g>
-   <g id="tvMainGroup">
-    <rect id="tvWoodOuter" x="164.3" y="136" width="711.4" height="497" rx="16" fill="url(#woodFrame)" filter="url(#tvDropShadow)" />
-    <rect id="tvWoodGrain" x="164.3" y="136" width="711.4" height="497" rx="16" fill="url(#safeWoodGrain)" />
-    <rect id="tvWoodVignette" x="164.3" y="136" width="711.4" height="497" rx="16" fill="url(#woodVignette)" />
-    <rect id="tvWoodBorder" x="164.3" y="136" width="711.4" height="497" rx="16" fill="none" stroke="#2a0a00" stroke-width="1.5" opacity="0.8" />
-    <rect id="tvWoodStroke1" x="179.3" y="151" width="681.4" height="467" rx="10" fill="none" stroke="#111111" stroke-width="2" opacity="0.9" />
-    <rect id="tvWoodStroke2" x="181.3" y="153" width="677.4" height="463" rx="8" fill="none" stroke="url(#silverFrameGrad)" stroke-width="3" />
-    <g clip-path="url(#woodFrameClip)">
-     <line id="woodLineTL" x1="164.3" y1="136" x2="179.3" y2="151" stroke="#111" stroke-width="2" opacity="0.4" />
-     <line id="woodLineTR" x1="875.7" y1="136" x2="860.7" y2="151" stroke="#111" stroke-width="2" opacity="0.4" />
-     <line id="woodLineBL" x1="164.3" y1="633" x2="179.3" y2="618" stroke="#111" stroke-width="2" opacity="0.4" />
-     <line id="woodLineBR" x1="875.7" y1="633" x2="860.7" y2="618" stroke="#111" stroke-width="2" opacity="0.4" />
-    </g>
-    <g clip-path="url(#woodFrameClip)">
-     <path id="woodGlare" d="M 165.3,475 L 320,136 L 520,136 L 165.3,605 Z" fill="#ffffff" opacity="0.04" />
-    </g>
-    <rect id="innerBlackCase" x="184.3" y="156" width="671.4" height="457" rx="6" fill="#333333" stroke="#1C1C1C" stroke-width="2" />
-    <rect id="innerBlackCaseStroke" x="186.3" y="158" width="667.4" height="453" rx="4" fill="none" stroke="#4A4A4A" stroke-width="1.5" />
-    <g id="screenArea">
-     <rect id="creamBezel" x="198.3" y="170" width="529.4" height="429" rx="22" ry="22" fill="url(#creamBezelGrad)" filter="url(#innerBevel)" />
-     <rect id="creamBezelStroke" x="198.3" y="170" width="529.4" height="429" rx="22" ry="22" fill="none" stroke="#8c846d" stroke-width="3" />
-     <path id="blackScreenBg" d="M 201.3 544 L 201.3 193 A 22 22 0 0 1 223.3 171 L 702.7 171 A 22 22 0 0 1 724.7 193 L 724.7 544 Z" fill="#050505" stroke="#99927c" stroke-width="2" />
-     <foreignObject id="playerObject" x="203.3" y="173" width="519.4" height="369" clip-path="url(#screenCustomClip)">
-      <div xmlns="http://www.w3.org/1999/xhtml" class="yt" style="width: 100%; height: 100%; margin: 0; padding: 0; background-color: #000; border-radius: 22px 22px 0 0; overflow: hidden;">
-       <div id="ytIframe" style="width: 100%; height: 100%;"></div>
-      </div>
-     </foreignObject>
-     <g id="screenEffects" clip-path="url(#screenCustomClip)" style="pointer-events: none;">
-      <rect id="effectScanlines" x="203.3" y="173" width="519.4" height="369" fill="url(#scanlines)" />
-      <rect id="effectCrtGlass" x="203.3" y="173" width="519.4" height="369" fill="url(#crtGlass)" />
-      <path id="effectGlare" d="M 203.3,173 L 487.7,173 L 288.3,542 L 203.3,542 Z" fill="url(#glare)" />
-      <rect id="effectOvalStroke" x="203.3" y="173" width="519.4" height="369" fill="none" stroke="#050505" stroke-width="16" rx="22" ry="22" />
-      <rect id="effectInnerLine" x="203.3" y="173" width="519.4" height="369" fill="none" stroke="#000000" stroke-width="4" opacity="0.8" />
-     </g>
-     <rect id="clickOverlay" x="203.3" y="173" width="519.4" height="369" fill="#000000" opacity="0" cursor="pointer" clip-path="url(#screenCustomClip)" />
-     <!-- 1. Ekran Çerçevesi Hitbox'ı (Alta Çizilecek) -->
-     <rect id="bezelBottomHitbox" x="198.3" y="542" width="529.4" height="57" fill="rgba(0,0,0,0.01)" pointer-events="all" />
-     <g transform="translate(448, 568)">
-      <!-- Görsel Katmanlar (pointer-events="none" ile tıklamaya kapatıldı) -->
-      <rect x="0" y="0" width="30" height="7" rx="2" fill="#F5F5DC" filter="url(#dialShadow)" pointer-events="none" />
-      <rect x="3" y="2" width="7" height="3" fill="#ff2222" opacity="0.8" pointer-events="none" />
-      <rect x="11.5" y="2" width="7" height="3" fill="#22ff22" opacity="0.8" pointer-events="none" />
-      <rect x="20" y="2" width="7" height="3" fill="#2266ff" opacity="0.8" pointer-events="none" />
-       
-      <!-- Etkileşim (Hitbox) Katmanı (%1 Siyahlık ile Görünmez ama Kesin Tıklanabilir) -->
-      <rect id="polishedSurface" x="0" y="0" width="30" height="7" rx="2" fill="rgba(0,0,0,0.01)" pointer-events="all" />
-     </g>
-    </g> 
-    <g id="controlPanelGroup">
-     <g id="controlPanel">
-      <rect x="735.7" y="170" width="106" height="429" rx="9" fill="#333333" stroke="#1C1C1C" stroke-width="2" />
-      <g transform="translate(765.7, 210)">
-       <text x="-10" y="-13" font-family="sans-serif" font-size="3.5" font-weight="bold" fill="#E5E7EB" text-anchor="end" letter-spacing="0.2">ON/VOL</text>
-       <polygon points="-22,-2 -14,-2 -14,-7" fill="#E5E7EB" opacity="0.85" />
-       <circle cx="-21" cy="2" r="0.8" fill="#E5E7EB" opacity="0.85" />
-       <circle cx="0" cy="0" r="14" fill="none" stroke="#D1D5DB" stroke-width="0.8" stroke-dasharray="1 6.33" opacity="0.5" />
-       <g transform="rotate(-40)">
-        <circle cx="0" cy="0" r="11" fill="url(#metalCylinder)" filter="url(#knobShadow)" />
-        <circle cx="0" cy="0" r="10.5" fill="none" stroke="#FFFFFF" stroke-width="0.3" opacity="0.6" />
-        <circle cx="0" cy="0" r="7.5" fill="#18181B" />
-        <circle cx="0" cy="0" r="7" fill="none" stroke="#27272A" stroke-width="0.5" />
-        <rect x="-0.75" y="-7" width="1.5" height="3.5" fill="#E63946" />
-        <circle cx="0" cy="0" r="4.5" fill="url(#chromeDome)" />
-       </g>
+          <rect x="12" y="69" width="2.6" height="18.7" rx="1.3" />
+          <rect x="16.8" y="69" width="2.6" height="34.3" rx="1.3" />
+          <rect x="21.6" y="69" width="2.6" height="42.9" rx="1.3" />
+          <rect x="26.4" y="69" width="2.6" height="48.2" rx="1.3" />
+          <rect x="31.2" y="69" width="2.6" height="51" rx="1.3" />
+          <rect x="36" y="69" width="2.6" height="52" rx="1.3" />
+          <rect x="40.8" y="69" width="2.6" height="51" rx="1.3" />
+          <rect x="45.6" y="69" width="2.6" height="48.2" rx="1.3" />
+          <rect x="50.4" y="69" width="2.6" height="42.9" rx="1.3" />
+          <rect x="55.2" y="69" width="2.6" height="34.3" rx="1.3" />
+          <rect x="60" y="69" width="2.6" height="18.7" rx="1.3" />
+        </clipPath>
+        <clipPath id="woodFrameClip">
+          <rect id="woodFrameClipRect" x="178.3" y="150" width="683.4" height="469" rx="8" />
+        </clipPath>
+      </defs>
+      <g id="perspectiveRoom" filter="url(#realisticWall)">
+        <polygon points="-120,-110 1160,-110 840,120 200,120" fill="url(#ceilingRealistic)" />
+        <polygon points="-120,810 1160,810 840,580 200,580" fill="url(#floorGlow)" />
+        <polygon points="200,120 840,120 840,580 200,580" fill="url(#backWallRealistic)" />
+        <polygon points="-120,-110 200,120 200,580 -120,810" fill="url(#leftWallRealistic)" />
+        <polygon points="1160,-110 840,120 840,580 1160,810" fill="url(#rightWallRealistic)" />
+        <polygon points="160,120 200,120 200,580 160,620" fill="#000000" opacity="0.5" filter="blur(12px)" />
+        <polygon points="880,120 840,120 840,580 880,620" fill="#000000" opacity="0.5" filter="blur(12px)" />
+        <polygon points="200,120 840,120 800,150 240,150" fill="#000000" opacity="0.6" filter="blur(10px)" />
+        <polygon points="200,580 840,580 800,550 240,550" fill="#000000" opacity="0.8" filter="blur(10px)" />
+        <polygon points="-120,770 200,550 200,580 -120,810" fill="#090b0f" />
+        <polygon points="-120,770 200,550 200,553 -120,774" fill="#252a36" opacity="0.8" />
+        <polygon points="1160,770 840,550 840,580 1160,810" fill="#090b0f" />
+        <polygon points="1160,770 840,550 840,553 1160,774" fill="#252a36" opacity="0.8" />
+        <polygon points="200,550 840,550 840,580 200,580" fill="#06070a" />
+        <polygon points="200,550 840,550 840,552 200,552" fill="#1c2029" opacity="0.6" />
+        <polygon points="-120,770 200,550 210,555 -110,775" fill="#000000" opacity="0.4" filter="blur(2px)" />
+        <polygon points="1160,770 840,550 830,555 1170,775" fill="#000000" opacity="0.4" filter="blur(2px)" />
+        <polygon points="200,550 840,550 840,554 200,554" fill="#000000" opacity="0.5" filter="blur(2px)" />
       </g>
-      <g transform="translate(811.7, 210)">
-       <text x="10" y="-13" font-family="sans-serif" font-size="3.5" font-weight="bold" fill="#E5E7EB" text-anchor="start" letter-spacing="0.2">CONT</text>
-       <circle cx="18" cy="-3.5" r="3" fill="none" stroke="#E5E7EB" stroke-width="0.8" opacity="0.85" />
-       <path d="M 18 -6.5 A 3 3 0 0 1 18 -0.5 Z" fill="#E5E7EB" opacity="0.85" />
-       <circle cx="0" cy="0" r="14" fill="none" stroke="#D1D5DB" stroke-width="0.8" stroke-dasharray="1 6.33" opacity="0.5" />
-       <g transform="rotate(30)">
-        <circle cx="0" cy="0" r="11" fill="url(#metalCylinder)" filter="url(#knobShadow)" />
-        <circle cx="0" cy="0" r="10.5" fill="none" stroke="#FFFFFF" stroke-width="0.3" opacity="0.6" />
-        <circle cx="0" cy="0" r="7.5" fill="#18181B" />
-        <circle cx="0" cy="0" r="7" fill="none" stroke="#27272A" stroke-width="0.5" />
-        <rect x="-0.75" y="-7" width="1.5" height="3.5" fill="#E63946" />
-        <circle cx="0" cy="0" r="4.5" fill="url(#chromeDome)" />
-       </g>
+      <ellipse cx="520" cy="648" rx="420" ry="28" fill="#000000" opacity="0.85" filter="blur(14px)" />
+      <g id="tvFeetLeft">
+        <rect x="248.3" y="628" width="35" height="14" rx="3" fill="url(#silverFrameGrad)" />
+        <rect x="250.3" y="639" width="31" height="9" rx="4" fill="#9CA3AF" stroke="#6B7280" stroke-width="1" />
       </g>
-      <g transform="translate(765.7, 255)">
-       <text x="-10" y="-13" font-family="sans-serif" font-size="3.5" font-weight="bold" fill="#E5E7EB" text-anchor="end" letter-spacing="0.2">BRIGHT</text>
-       <g transform="translate(-18, -3.5)" opacity="0.85">
-        <circle cx="0" cy="0" r="1.5" fill="none" stroke="#E5E7EB" stroke-width="0.8" />
-        <path d="M 0 -3 L 0 -2 M 0 2 L 0 3 M -3 0 L -2 0 M 2 0 L 3 0 M -2 -2 L -1.5 -1.5 M 1.5 1.5 L 2 2 M -2 2 L -1.5 1.5 M 1.5 -1.5 L 2 -2" stroke="#E5E7EB" stroke-width="0.6" />
-       </g>
-       <circle cx="0" cy="0" r="14" fill="none" stroke="#D1D5DB" stroke-width="0.8" stroke-dasharray="1 6.33" opacity="0.5" />
-       <g transform="rotate(-15)">
-        <circle cx="0" cy="0" r="11" fill="url(#metalCylinder)" filter="url(#knobShadow)" />
-        <circle cx="0" cy="0" r="10.5" fill="none" stroke="#FFFFFF" stroke-width="0.3" opacity="0.6" />
-        <circle cx="0" cy="0" r="7.5" fill="#18181B" />
-        <circle cx="0" cy="0" r="7" fill="none" stroke="#27272A" stroke-width="0.5" />
-        <rect x="-0.75" y="-7" width="1.5" height="3.5" fill="#E63946" />
-        <circle cx="0" cy="0" r="4.5" fill="url(#chromeDome)" />
-       </g>
+      <g id="tvFeetRight">
+        <rect x="756.7" y="628" width="35" height="14" rx="3" fill="url(#silverFrameGrad)" />
+        <rect x="758.7" y="639" width="31" height="9" rx="4" fill="#9CA3AF" stroke="#6B7280" stroke-width="1" />
       </g>
-      <g transform="translate(811.7, 255)">
-       <text x="10" y="-13" font-family="sans-serif" font-size="3.5" font-weight="bold" fill="#E5E7EB" text-anchor="start" letter-spacing="0.2">TONE</text>
-       <g transform="translate(18, -3.5)" fill="#E5E7EB" opacity="0.85">
-        <rect x="-2" y="-2" width="1" height="4" />
-        <rect x="0" y="-3.5" width="1" height="7" />
-        <rect x="2" y="-1.5" width="1" height="3" />
-       </g>
-       <circle cx="0" cy="0" r="14" fill="none" stroke="#D1D5DB" stroke-width="0.8" stroke-dasharray="1 6.33" opacity="0.5" />
-       <g transform="rotate(45)">
-        <circle cx="0" cy="0" r="11" fill="url(#metalCylinder)" filter="url(#knobShadow)" />
-        <circle cx="0" cy="0" r="10.5" fill="none" stroke="#FFFFFF" stroke-width="0.3" opacity="0.6" />
-        <circle cx="0" cy="0" r="7.5" fill="#18181B" />
-        <circle cx="0" cy="0" r="7" fill="none" stroke="#27272A" stroke-width="0.5" />
-        <rect x="-0.75" y="-7" width="1.5" height="3.5" fill="#E63946" />
-        <circle cx="0" cy="0" r="4.5" fill="url(#chromeDome)" />
-       </g>
-      </g>
-      <g id="vhfDial" class="interactive-dial" transform="translate(788.7, 330)">
-       <circle cx="0" cy="0" r="28" fill="#2B2B2B" filter="url(#dialShadow)"></circle>
-       <circle cx="0" cy="0" r="28" fill="none" stroke="#111111" stroke-width="4" stroke-dasharray="4 4"></circle>
-       <g id="vhfRotatingFace" transform="rotate(-30)">
-        <circle cx="0" cy="0" r="25.5" fill="#E5E7EB" />
-        <circle cx="0" cy="0" r="24.5" fill="none" stroke="#FFFFFF" stroke-width="1" />
-        <circle cx="0" cy="0" r="15" fill="none" stroke="#C0C0C0" stroke-width="0.5" />
-       </g>
-       <circle cx="0" cy="0" r="24.5" fill="none" stroke="#FFFFFF" stroke-width="1" />
-       <circle cx="0" cy="0" r="15" fill="none" stroke="#C0C0C0" stroke-width="0.5" />
-       <circle cx="-38" cy="0" r="1.5" fill="#FFFFFF" filter="url(#dialShadow)" />
-       <text x="28" y="-22" font-family="sans-serif" font-size="7" font-weight="normal" fill="#FFFFFF" letter-spacing="0.5" filter="url(#dialShadow)">VHF</text>
-       <g font-family="sans-serif" font-size="3.5" font-weight="bold" fill="#333333" text-anchor="middle" dominant-baseline="middle">
-        <text transform="rotate(0) translate(0, -21)">U</text>
-        <text transform="rotate(27.6) translate(0, -21)">2</text>
-        <text transform="rotate(55.3) translate(0, -21)">3</text>
-        <text transform="rotate(83) translate(0, -21)">4</text>
-        <text transform="rotate(110.7) translate(0, -21)">5</text>
-        <text transform="rotate(138.4) translate(0, -21)">6</text>
-        <text transform="rotate(166.1) translate(0, -21)">7</text>
-        <text transform="rotate(193.8) translate(0, -21)">8</text>
-        <text transform="rotate(221.5) translate(0, -21)">9</text>
-        <text transform="rotate(249.2) translate(0, -21)">10</text>
-        <text transform="rotate(276.9) translate(0, -21)">11</text>
-        <text transform="rotate(304.6) translate(0, -21)">12</text>
-        <text transform="rotate(332.3) translate(0, -21)">13</text>
-       </g>
-       <g id="vhfRotatingPointer" transform="rotate(-30)">
-        <circle cx="0" cy="0" r="13.5" fill="#111111" />
-        <circle cx="0" cy="0" r="12.5" fill="none" stroke="#2B2B2B" stroke-width="0.5" />
-        <circle cx="0" cy="0" r="8" fill="#050505" />
-        <circle cx="0" cy="0" r="5" fill="#1A1A1A" />
-        <g filter="url(#knobShadow)">
-         <rect x="-26" y="-3" width="52" height="8" rx="1" fill="#0A0A0A" />
-         <rect x="-25.5" y="-4" width="51" height="6.5" rx="1" fill="#F3F4F6" />
-         <rect x="-24" y="-1.5" width="16" height="1.5" fill="#E63946" />
-         <rect x="-24" y="-2" width="16" height="0.5" fill="#FFFFFF" opacity="0.6" />
+      <g id="antennas">
+        <ellipse cx="520" cy="155" rx="42" ry="8" fill="#111111" />
+        <ellipse cx="520" cy="154" rx="40" ry="7" fill="#1A1A1A" />
+        <g transform="rotate(-32, 505, 150)">
+          <rect x="501.5" y="80" width="7" height="70" fill="url(#antennaRodGrad)" />
+          <rect x="499.5" y="65" width="11" height="16" rx="1.5" fill="url(#antennaRodGrad)" />
+          <line x1="501.5" y1="65" x2="501.5" y2="81" stroke="#1F2937" stroke-width="0.8" opacity="0.6" />
+          <line x1="503.5" y1="65" x2="503.5" y2="81" stroke="#1F2937" stroke-width="0.8" opacity="0.6" />
+          <line x1="505.5" y1="65" x2="505.5" y2="81" stroke="#1F2937" stroke-width="0.8" opacity="0.6" />
+          <line x1="507.5" y1="65" x2="507.5" y2="81" stroke="#1F2937" stroke-width="0.8" opacity="0.6" />
+          <rect x="502.5" y="65" width="5" height="1.5" fill="#111827" opacity="0.8" />
         </g>
-       </g>
-       <circle class="dial-hit-area" cx="0" cy="0" r="30" fill="#FFFFFF" fill-opacity="0.001" />
-      </g>
-      <g id="uhfDial" class="interactive-dial" transform="translate(788.7, 405)">
-       <circle cx="0" cy="0" r="28" fill="#2B2B2B" filter="url(#dialShadow)" />
-       <circle cx="0" cy="0" r="28" fill="none" stroke="#111111" stroke-width="4" stroke-dasharray="4 4" />
-       <g id="uhfRotatingFace" transform="rotate(75)">
-        <circle cx="0" cy="0" r="25.5" fill="#E5E7EB" />
-        <circle cx="0" cy="0" r="24.5" fill="none" stroke="#FFFFFF" stroke-width="1" />
-        <circle cx="0" cy="0" r="15" fill="none" stroke="#C0C0C0" stroke-width="0.5" />
-       </g>
-       <circle cx="-38" cy="0" r="1.5" fill="#FFFFFF" filter="url(#dialShadow)" />
-       <text x="28" y="-22" font-family="sans-serif" font-size="7" font-weight="normal" fill="#FFFFFF" letter-spacing="0.5" filter="url(#dialShadow)">UHF</text>
-       <circle cx="0" cy="0" r="21" fill="none" stroke="#555555" stroke-width="1.2" stroke-dasharray="0.5 4" />
-       <g font-family="sans-serif" font-size="3" font-weight="bold" fill="#333333" text-anchor="middle" dominant-baseline="middle">
-        <text transform="rotate(30) translate(0, -17)">14</text>
-        <text transform="rotate(75) translate(0, -17)">20</text>
-        <text transform="rotate(120) translate(0, -17)">30</text>
-        <text transform="rotate(165) translate(0, -17)">40</text>
-        <text transform="rotate(210) translate(0, -17)">50</text>
-        <text transform="rotate(255) translate(0, -17)">60</text>
-        <text transform="rotate(300) translate(0, -17)">70</text>
-        <text transform="rotate(345) translate(0, -17)">83</text>
-       </g>
-       <g id="uhfRotatingPointer" transform="rotate(75)">
-        <circle cx="0" cy="0" r="13.5" fill="#111111" />
-        <circle cx="0" cy="0" r="12.5" fill="none" stroke="#2B2B2B" stroke-width="0.5" />
-        <circle cx="0" cy="0" r="8" fill="#050505" />
-        <circle cx="0" cy="0" r="5" fill="#1A1A1A" />
-        <g filter="url(#knobShadow)">
-         <rect x="-26" y="-3" width="52" height="8" rx="1" fill="#0A0A0A" />
-         <rect x="-25.5" y="-4" width="51" height="6.5" rx="1" fill="#F3F4F6" />
-         <rect x="-24" y="-1.5" width="16" height="1.5" fill="#E63946" />
-         <rect x="-24" y="-2" width="16" height="0.5" fill="#FFFFFF" opacity="0.6" />
+        <g transform="rotate(32, 535, 150)">
+    
+          <rect x="531.5" y="80" width="7" height="70" fill="url(#antennaRodGrad)" />
+          <rect x="529.5" y="65" width="11" height="16" rx="1.5" fill="url(#antennaRodGrad)" />
+          <line x1="531.5" y1="65" x2="531.5" y2="81" stroke="#1F2937" stroke-width="0.8" opacity="0.6" />
+          <line x1="533.5" y1="65" x2="533.5" y2="81" stroke="#1F2937" stroke-width="0.8" opacity="0.6" />
+          <line x1="535.5" y1="65" x2="535.5" y2="81" stroke="#1F2937" stroke-width="0.8" opacity="0.6" />
+          <line x1="537.5" y1="65" x2="537.5" y2="81" stroke="#1F2937" stroke-width="0.8" opacity="0.6" />
+          <rect x="532.5" y="65" width="5" height="1.5" fill="#111827" opacity="0.8" />
         </g>
-       </g>
-       <circle class="dial-hit-area" cx="0" cy="0" r="30" fill="#FFFFFF" fill-opacity="0.001" />
+        <path d="M 480,154 C 480,115 560,115 560,154 Z" fill="url(#antennaDomeGrad)" />
+        <path d="M 488,145 C 495,130 545,130 552,145 C 530,138 510,138 488,145 Z" fill="#FFFFFF" opacity="0.15" />
       </g>
-      <g transform="translate(752.7, 450)">
-       <g clip-path="url(#grilleHoles)">
-        <rect x="0" y="0" width="72" height="134" fill="#080808" />
-        <circle cx="36" cy="67" r="38" fill="url(#speakerCone)" />
-        <circle cx="36" cy="67" r="12" fill="#050505" />
-        <rect x="0" y="0" width="72" height="134" fill="url(#speakerMesh)" opacity="0.4" />
-       </g>
-       <g clip-path="url(#grilleHoles)" fill="none" stroke-width="1.5">
-        <rect x="-1" y="-1" width="74" height="136" stroke="#1C1C1C" transform="translate(0.5, 0.5)" opacity="0.9" />
-        <rect x="-1" y="-1" width="74" height="136" stroke="#0A0A0A" />
-       </g>
+      <g id="tvMainGroup">
+        <rect id="tvWoodOuter" x="164.3" y="136" width="711.4" height="497" rx="16" fill="url(#woodFrame)" filter="url(#tvDropShadow)" />
+        <rect id="tvWoodGrain" x="164.3" y="136" width="711.4" height="497" rx="16" fill="url(#safeWoodGrain)" />
+        <rect id="tvWoodVignette" x="164.3" y="136" width="711.4" height="497" rx="16" fill="url(#woodVignette)" />
+        <rect id="tvWoodBorder" x="164.3" y="136" width="711.4" height="497" rx="16" fill="none" stroke="#2a0a00" stroke-width="1.5" opacity="0.8" />
+        <rect id="tvWoodStroke1" x="179.3" y="151" width="681.4" height="467" rx="10" fill="none" stroke="#111111" stroke-width="2" opacity="0.9" />
+        <rect id="tvWoodStroke2" x="181.3" y="153" width="677.4" height="463" rx="8" fill="none" stroke="url(#silverFrameGrad)" stroke-width="3" />
+        <g clip-path="url(#woodFrameClip)">
+          <line id="woodLineTL" x1="164.3" y1="136" x2="179.3" y2="151" stroke="#111" stroke-width="2" opacity="0.4" />
+          <line id="woodLineTR" x1="875.7" y1="136" x2="860.7" y2="151" stroke="#111" stroke-width="2" opacity="0.4" />
+          <line id="woodLineBL" x1="164.3" y1="633" x2="179.3" y2="618" stroke="#111" stroke-width="2" opacity="0.4" />
+          <line id="woodLineBR" x1="875.7" y1="633" x2="860.7" y2="618" stroke="#111" stroke-width="2" opacity="0.4" />
+        </g>
+        <g clip-path="url(#woodFrameClip)">
+          <path id="woodGlare" d="M 165.3,475 L 320,136 L 520,136 L 165.3,605 Z" fill="#ffffff" opacity="0.04" />
+        </g>
+        <rect id="innerBlackCase" x="184.3" y="156" width="671.4" height="457" rx="6" fill="#333333" stroke="#1C1C1C" stroke-width="2" />
+        <rect id="innerBlackCaseStroke" x="186.3" y="158" width="667.4" height="453" rx="4" fill="none" stroke="#4A4A4A" stroke-width="1.5" />
+        <g id="screenArea">
+          <rect id="creamBezel" x="198.3" y="170" width="529.4" height="429" rx="22" ry="22" fill="url(#creamBezelGrad)" filter="url(#innerBevel)" />
+          <rect id="creamBezelStroke" x="198.3" y="170" width="529.4" height="429" rx="22" ry="22" fill="none" stroke="#8c846d" stroke-width="3" />
+          <path id="blackScreenBg" d="M 201.3 544 L 201.3 193 A 22 22 0 0 1 223.3 171 L 702.7 171 A 22 22 0 0 1 724.7 193 L 724.7 544 Z" fill="#050505" stroke="#99927c" stroke-width="2" />
+          <foreignObject id="playerObject" x="203.3" y="173" width="519.4" height="369" clip-path="url(#screenCustomClip)">
+            <div xmlns="http://www.w3.org/1999/xhtml" class="yt" style="width: 100%; height: 100%; margin: 0; padding: 0; background-color: #000; border-radius: 22px 22px 0 0; overflow: hidden;">
+              <div id="ytIframe" style="width: 100%; height: 100%;"></div>
+            </div>
+          </foreignObject>
+          <g id="screenEffects" clip-path="url(#screenCustomClip)" style="pointer-events: none;">
+            <rect id="effectScanlines" x="203.3" y="173" width="519.4" height="369" fill="url(#scanlines)" />
+            <rect id="effectCrtGlass" x="203.3" y="173" width="519.4" height="369" fill="url(#crtGlass)" />
+            <path id="effectGlare" d="M 203.3,173 L 487.7,173 L 288.3,542 L 203.3,542 Z" fill="url(#glare)" />
+            <rect id="effectOvalStroke" x="203.3" y="173" width="519.4" height="369" fill="none" stroke="#050505" stroke-width="16" rx="22" ry="22" />
+            <rect id="effectInnerLine" x="203.3" y="173" width="519.4" height="369" fill="none" stroke="#000000" stroke-width="4" opacity="0.8" />
+          </g>
+          <rect id="clickOverlay" x="203.3" y="173" width="519.4" height="369" fill="#000000" opacity="0" cursor="pointer" clip-path="url(#screenCustomClip)" />
+          <!-- 1. Ekran Çerçevesi Hitbox'ı (Alta Çizilecek) -->
+          <rect id="bezelBottomHitbox" x="198.3" y="542" width="529.4" height="57" fill="rgba(0,0,0,0.01)" pointer-events="all" />
+          <g transform="translate(448, 568)">
+            <!-- Görsel Katmanlar (pointer-events="none" ile tıklamaya kapatıldı) -->
+            <rect x="0" y="0" width="30" height="7" rx="2" fill="#F5F5DC" filter="url(#dialShadow)" pointer-events="none" />
+            <rect x="3" y="2" width="7" height="3" fill="#ff2222" opacity="0.8" pointer-events="none" />
+            <rect x="11.5" y="2" width="7" height="3" fill="#22ff22" opacity="0.8" pointer-events="none" />
+            <rect x="20" y="2" width="7" height="3" fill="#2266ff" opacity="0.8" pointer-events="none" />
+            
+            <!-- Etkileşim (Hitbox) Katmanı (%1 Siyahlık ile Görünmez ama Kesin Tıklanabilir) -->
+            <rect id="polishedSurface" x="0" y="0" width="30" height="7" rx="2" fill="rgba(0,0,0,0.01)" pointer-events="all" />
+          </g>
+        </g> 
+        <g id="controlPanelGroup">
+          <g id="controlPanel">
+            <rect x="735.7" y="170" width="106" height="429" rx="9" fill="#333333" stroke="#1C1C1C" stroke-width="2" />
+            <g transform="translate(765.7, 210)">
+              <text x="-10" y="-13" font-family="sans-serif" font-size="3.5" font-weight="bold" fill="#E5E7EB" text-anchor="end" letter-spacing="0.2">ON/VOL</text>
+              <polygon points="-22,-2 -14,-2 -14,-7" fill="#E5E7EB" opacity="0.85" />
+              <circle cx="-21" cy="2" r="0.8" fill="#E5E7EB" opacity="0.85" />
+              <circle cx="0" cy="0" r="14" fill="none" stroke="#D1D5DB" stroke-width="0.8" stroke-dasharray="1 6.33" opacity="0.5" />
+              <g transform="rotate(-40)">
+                <circle cx="0" cy="0" r="11" fill="url(#metalCylinder)" filter="url(#knobShadow)" />
+                <circle cx="0" cy="0" r="10.5" fill="none" stroke="#FFFFFF" stroke-width="0.3" opacity="0.6" />
+                <circle cx="0" cy="0" r="7.5" fill="#18181B" />
+                <circle cx="0" cy="0" r="7" fill="none" stroke="#27272A" stroke-width="0.5" />
+                <rect x="-0.75" y="-7" width="1.5" height="3.5" fill="#E63946" />
+                <circle cx="0" cy="0" r="4.5" fill="url(#chromeDome)" />
+              </g>
+            </g>
+            <g transform="translate(811.7, 210)">
+              <text x="10" y="-13" font-family="sans-serif" font-size="3.5" font-weight="bold" fill="#E5E7EB" text-anchor="start" letter-spacing="0.2">CONT</text>
+              <circle cx="18" cy="-3.5" r="3" fill="none" stroke="#E5E7EB" stroke-width="0.8" opacity="0.85" />
+              <path d="M 18 -6.5 A 3 3 0 0 1 18 -0.5 Z" fill="#E5E7EB" opacity="0.85" />
+              <circle cx="0" cy="0" r="14" fill="none" stroke="#D1D5DB" stroke-width="0.8" stroke-dasharray="1 6.33" opacity="0.5" />
+              <g transform="rotate(30)">
+                <circle cx="0" cy="0" r="11" fill="url(#metalCylinder)" filter="url(#knobShadow)" />
+                <circle cx="0" cy="0" r="10.5" fill="none" stroke="#FFFFFF" stroke-width="0.3" opacity="0.6" />
+                <circle cx="0" cy="0" r="7.5" fill="#18181B" />
+                <circle cx="0" cy="0" r="7" fill="none" stroke="#27272A" stroke-width="0.5" />
+                <rect x="-0.75" y="-7" width="1.5" height="3.5" fill="#E63946" />
+                <circle cx="0" cy="0" r="4.5" fill="url(#chromeDome)" />
+              </g>
+            </g>
+            <g transform="translate(765.7, 255)">
+              <text x="-10" y="-13" font-family="sans-serif" font-size="3.5" font-weight="bold" fill="#E5E7EB" text-anchor="end" letter-spacing="0.2">BRIGHT</text>
+              <g transform="translate(-18, -3.5)" opacity="0.85">
+                <circle cx="0" cy="0" r="1.5" fill="none" stroke="#E5E7EB" stroke-width="0.8" />
+                <path d="M 0 -3 L 0 -2 M 0 2 L 0 3 M -3 0 L -2 0 M 2 0 L 3 0 M -2 -2 L -1.5 -1.5 M 1.5 1.5 L 2 2 M -2 2 L -1.5 1.5 M 1.5 -1.5 L 2 -2" stroke="#E5E7EB" stroke-width="0.6" />
+              </g>
+              <circle cx="0" cy="0" r="14" fill="none" stroke="#D1D5DB" stroke-width="0.8" stroke-dasharray="1 6.33" opacity="0.5" />
+              <g transform="rotate(-15)">
+                <circle cx="0" cy="0" r="11" fill="url(#metalCylinder)" filter="url(#knobShadow)" />
+                <circle cx="0" cy="0" r="10.5" fill="none" stroke="#FFFFFF" stroke-width="0.3" opacity="0.6" />
+                <circle cx="0" cy="0" r="7.5" fill="#18181B" />
+                <circle cx="0" cy="0" r="7" fill="none" stroke="#27272A" stroke-width="0.5" />
+                <rect x="-0.75" y="-7" width="1.5" height="3.5" fill="#E63946" />
+                <circle cx="0" cy="0" r="4.5" fill="url(#chromeDome)" />
+              </g>
+            </g>
+            <g transform="translate(811.7, 255)">
+              <text x="10" y="-13" font-family="sans-serif" font-size="3.5" font-weight="bold" fill="#E5E7EB" text-anchor="start" letter-spacing="0.2">TONE</text>
+              <g transform="translate(18, -3.5)" fill="#E5E7EB" opacity="0.85">
+                <rect x="-2" y="-2" width="1" height="4" />
+                <rect x="0" y="-3.5" width="1" height="7" />
+                <rect x="2" y="-1.5" width="1" height="3" />
+              </g>
+              <circle cx="0" cy="0" r="14" fill="none" stroke="#D1D5DB" stroke-width="0.8" stroke-dasharray="1 6.33" opacity="0.5" />
+              <g transform="rotate(45)">
+                <circle cx="0" cy="0" r="11" fill="url(#metalCylinder)" filter="url(#knobShadow)" />
+                <circle cx="0" cy="0" r="10.5" fill="none" stroke="#FFFFFF" stroke-width="0.3" opacity="0.6" />
+                <circle cx="0" cy="0" r="7.5" fill="#18181B" />
+                <circle cx="0" cy="0" r="7" fill="none" stroke="#27272A" stroke-width="0.5" />
+                <rect x="-0.75" y="-7" width="1.5" height="3.5" fill="#E63946" />
+                <circle cx="0" cy="0" r="4.5" fill="url(#chromeDome)" />
+              </g>
+            </g>
+            <g id="vhfDial" class="interactive-dial" transform="translate(788.7, 330)">
+              <circle cx="0" cy="0" r="28" fill="#2B2B2B" filter="url(#dialShadow)"></circle>
+              <circle cx="0" cy="0" r="28" fill="none" stroke="#111111" stroke-width="4" stroke-dasharray="4 4"></circle>
+              <g id="vhfRotatingFace" transform="rotate(-30)">
+                <circle cx="0" cy="0" r="25.5" fill="#E5E7EB" />
+                <circle cx="0" cy="0" r="24.5" fill="none" stroke="#FFFFFF" stroke-width="1" />
+                <circle cx="0" cy="0" r="15" fill="none" stroke="#C0C0C0" stroke-width="0.5" />
+              </g>
+              <circle cx="0" cy="0" r="24.5" fill="none" stroke="#FFFFFF" stroke-width="1" />
+              <circle cx="0" cy="0" r="15" fill="none" stroke="#C0C0C0" stroke-width="0.5" />
+              <circle cx="-38" cy="0" r="1.5" fill="#FFFFFF" filter="url(#dialShadow)" />
+              <text x="28" y="-22" font-family="sans-serif" font-size="7" font-weight="normal" fill="#FFFFFF" letter-spacing="0.5" filter="url(#dialShadow)">VHF</text>
+              <g font-family="sans-serif" font-size="3.5" font-weight="bold" fill="#333333" text-anchor="middle" dominant-baseline="middle">
+                <text transform="rotate(0) translate(0, -21)">U</text>
+                <text transform="rotate(27.6) translate(0, -21)">2</text>
+                <text transform="rotate(55.3) translate(0, -21)">3</text>
+                <text transform="rotate(83) translate(0, -21)">4</text>
+                <text transform="rotate(110.7) translate(0, -21)">5</text>
+                <text transform="rotate(138.4) translate(0, -21)">6</text>
+                <text transform="rotate(166.1) translate(0, -21)">7</text>
+                <text transform="rotate(193.8) translate(0, -21)">8</text>
+                <text transform="rotate(221.5) translate(0, -21)">9</text>
+                <text transform="rotate(249.2) translate(0, -21)">10</text>
+                <text transform="rotate(276.9) translate(0, -21)">11</text>
+                <text transform="rotate(304.6) translate(0, -21)">12</text>
+                <text transform="rotate(332.3) translate(0, -21)">13</text>
+              </g>
+              <g id="vhfRotatingPointer" transform="rotate(-30)">
+                <circle cx="0" cy="0" r="13.5" fill="#111111" />
+                <circle cx="0" cy="0" r="12.5" fill="none" stroke="#2B2B2B" stroke-width="0.5" />
+                <circle cx="0" cy="0" r="8" fill="#050505" />
+                <circle cx="0" cy="0" r="5" fill="#1A1A1A" />
+                <g filter="url(#knobShadow)">
+                  <rect x="-26" y="-3" width="52" height="8" rx="1" fill="#0A0A0A" />
+                  <rect x="-25.5" y="-4" width="51" height="6.5" rx="1" fill="#F3F4F6" />
+                  <rect x="-24" y="-1.5" width="16" height="1.5" fill="#E63946" />
+                  <rect x="-24" y="-2" width="16" height="0.5" fill="#FFFFFF" opacity="0.6" />
+                </g>
+              </g>
+              <circle class="dial-hit-area" cx="0" cy="0" r="30" fill="#FFFFFF" fill-opacity="0.001" />
+            </g>
+            <g id="uhfDial" class="interactive-dial" transform="translate(788.7, 405)">
+              <circle cx="0" cy="0" r="28" fill="#2B2B2B" filter="url(#dialShadow)" />
+              <circle cx="0" cy="0" r="28" fill="none" stroke="#111111" stroke-width="4" stroke-dasharray="4 4" />
+              <g id="uhfRotatingFace" transform="rotate(75)">
+                <circle cx="0" cy="0" r="25.5" fill="#E5E7EB" />
+                <circle cx="0" cy="0" r="24.5" fill="none" stroke="#FFFFFF" stroke-width="1" />
+                <circle cx="0" cy="0" r="15" fill="none" stroke="#C0C0C0" stroke-width="0.5" />
+              </g>
+              <circle cx="-38" cy="0" r="1.5" fill="#FFFFFF" filter="url(#dialShadow)" />
+              <text x="28" y="-22" font-family="sans-serif" font-size="7" font-weight="normal" fill="#FFFFFF" letter-spacing="0.5" filter="url(#dialShadow)">UHF</text>
+              <circle cx="0" cy="0" r="21" fill="none" stroke="#555555" stroke-width="1.2" stroke-dasharray="0.5 4" />
+              <g font-family="sans-serif" font-size="3" font-weight="bold" fill="#333333" text-anchor="middle" dominant-baseline="middle">
+                <text transform="rotate(30) translate(0, -17)">14</text>
+                <text transform="rotate(75) translate(0, -17)">20</text>
+                <text transform="rotate(120) translate(0, -17)">30</text>
+                <text transform="rotate(165) translate(0, -17)">40</text>
+                <text transform="rotate(210) translate(0, -17)">50</text>
+                <text transform="rotate(255) translate(0, -17)">60</text>
+                <text transform="rotate(300) translate(0, -17)">70</text>
+                <text transform="rotate(345) translate(0, -17)">83</text>
+              </g>
+              <g id="uhfRotatingPointer" transform="rotate(75)">
+                <circle cx="0" cy="0" r="13.5" fill="#111111" />
+                <circle cx="0" cy="0" r="12.5" fill="none" stroke="#2B2B2B" stroke-width="0.5" />
+                <circle cx="0" cy="0" r="8" fill="#050505" />
+                <circle cx="0" cy="0" r="5" fill="#1A1A1A" />
+                <g filter="url(#knobShadow)">
+                  <rect x="-26" y="-3" width="52" height="8" rx="1" fill="#0A0A0A" />
+                  <rect x="-25.5" y="-4" width="51" height="6.5" rx="1" fill="#F3F4F6" />
+                  <rect x="-24" y="-1.5" width="16" height="1.5" fill="#E63946" />
+                  <rect x="-24" y="-2" width="16" height="0.5" fill="#FFFFFF" opacity="0.6" />
+                </g>
+              </g>
+              <circle class="dial-hit-area" cx="0" cy="0" r="30" fill="#FFFFFF" fill-opacity="0.001" />
+            </g>
+            <g transform="translate(752.7, 450)">
+              <g clip-path="url(#grilleHoles)">
+                <rect x="0" y="0" width="72" height="134" fill="#080808" />
+                <circle cx="36" cy="67" r="38" fill="url(#speakerCone)" />
+                <circle cx="36" cy="67" r="12" fill="#050505" />
+                <rect x="0" y="0" width="72" height="134" fill="url(#speakerMesh)" opacity="0.4" />
+              </g>
+              <g clip-path="url(#grilleHoles)" fill="none" stroke-width="1.5">
+                <rect x="-1" y="-1" width="74" height="136" stroke="#1C1C1C" transform="translate(0.5, 0.5)" opacity="0.9" />
+                <rect x="-1" y="-1" width="74" height="136" stroke="#0A0A0A" />
+              </g>
+            </g>
+          </g>
+        </g>
       </g>
-     </g>
-    </g>
-   </g>
-  </svg>
-  <a href="https://tvretro.github.io/" class="viewport-home-btn" title="Home">
-   <svg viewBox="0 0 24 24" fill="none" stroke="#dedede" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M2 10.5L12 2.5L22 10.5" />
-    <path d="M5 8.5V20.5C5 21.05 5.45 21.5 6 21.5H18C18.55 21.5 19 21.05 19 20.5V8.5" />
-    <path d="M10 21.5V14.5C10 13.95 10.45 13.5 11 13.5H13C13.55 13.5 14 13.95 14 14.5V21.5" />
-    <path d="M18 7.5V3.5C18 3.22 17.78 3 17.5 3H15.5C15.22 3 15 3.22 15 3.5V5" />
-   </svg>
-  </a>
-  <script>
-   const urlParams = new URLSearchParams(window.location.search);
-   let videoId = urlParams.get('v');
-   if (!videoId) {
-    const pathSegments = window.location.pathname.split('/').filter(Boolean);
-    const lastSegment = pathSegments.pop();
-    if (lastSegment && !['watch', 'watch.html', 'index.html'].includes(lastSegment)) {
-     videoId = lastSegment;
-    }
-   }
-   const PROXY_URL = "https://tvretro-proxy.biserkanla.workers.dev/?url=";
-   let player;
-   const tag = document.createElement('script');
-   tag.src = "https://www.youtube.com/iframe_api";
-   const firstScriptTag = document.getElementsByTagName('script')[0];
-   firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-   window.addEventListener('DOMContentLoaded', async () => {
-    if (!videoId) return;
-    try {
-     const targetVideoUrl = `https://www.youtube.com/watch?v=$`;
-     const response = await fetch(`$${encodeURIComponent(targetVideoUrl)}`);
-     const data = await response.json();
-     if (data.width && data.height) {
-      adjustTvSymmetrically(data.width / data.height);
-     }
-    } catch (err) {
-     console.warn("Oran verisi çekilemedi, standart 16:9 uygulanıyor.");
-     adjustTvSymmetrically(16 / 9);
-    }
-   });
-   let isFirstInteraction = true;
-   window.onYouTubeIframeAPIReady = function() {
-    if (!videoId) return;
-    player = new YT.Player('ytIframe', {
-     videoId: videoId,
-     playerVars: {
-      'controls': 0,
-      'modestbranding': 1,
-      'rel': 0,
-      'iv_load_policy': 3,
-      'cc_load_policy': 0,
-      'disablekb': 1,
-      'fs': 0,
-      'autoplay': 0,
-      'mute': 0
-     },
-     events: {
-      'onReady': onPlayerReady,
-      'onStateChange': onPlayerStateChange
-     }
-    });
-   };
-
-   function onPlayerReady(event) {
-    const clickOverlay = document.getElementById('clickOverlay');
-    if (clickOverlay) {
-     clickOverlay.addEventListener('click', () => {
-      const state = player.getPlayerState();
-      if (state === YT.PlayerState.PLAYING || state === YT.PlayerState.BUFFERING) {
-       player.pauseVideo();
-      } else {
-       player.playVideo();
-      }
-     });
-    }
-   }
-
-   function onPlayerStateChange(event) {
-    if (event.data === YT.PlayerState.PLAYING) {
-     try {
-      event.target.unloadModule("captions");
-      event.target.unloadModule("cc");
-     } catch (err) {}
-    }
-   }
-
-   function adjustTvSymmetrically(ratio) {
-    const baseHeight = 369;
-    const baseWidth = 519.4;
-    let newWidth = baseHeight * ratio;
-    newWidth = Math.max(380, Math.min(newWidth, 680));
-    const deltaX = newWidth - baseWidth;
-    const shift = deltaX / 2;
-    const startX = 203.3 - shift;
-    document.getElementById('playerObject').setAttribute('x', startX);
-    document.getElementById('playerObject').setAttribute('width', newWidth);
-    document.getElementById('effectScanlines').setAttribute('x', startX);
-    document.getElementById('effectScanlines').setAttribute('width', newWidth);
-    document.getElementById('effectCrtGlass').setAttribute('x', startX);
-    document.getElementById('effectCrtGlass').setAttribute('width', newWidth);
-    document.getElementById('effectOvalStroke').setAttribute('x', startX);
-    document.getElementById('effectOvalStroke').setAttribute('width', newWidth);
-    document.getElementById('effectInnerLine').setAttribute('x', startX);
-    document.getElementById('effectInnerLine').setAttribute('width', newWidth);
-    document.getElementById('clickOverlay').setAttribute('x', startX);
-    document.getElementById('clickOverlay').setAttribute('width', newWidth);
-    document.getElementById('screenCustomClipPath').setAttribute('d', `M $ 542 L $ 195 A 22 22 0 0 1 ${startX + 22} 173 L ${startX + newWidth - 22} 173 A 22 22 0 0 1 ${startX + newWidth} 195 L ${startX + newWidth} 542 Z`);
-    document.getElementById('blackScreenBg').setAttribute('d', `M ${startX - 2} 544 L ${startX - 2} 193 A 22 22 0 0 1 ${startX + 20} 171 L ${startX + newWidth - 20} 171 A 22 22 0 0 1 ${startX + newWidth + 2} 193 L ${startX + newWidth + 2} 544 Z`);
-    document.getElementById('effectGlare').setAttribute('d', `M $,173 L 487.7,173 L 288.3,542 L $,542 Z`);
-    const caseShiftX = 184.3 - shift;
-    const caseWidth = 671.4 + deltaX;
-    document.getElementById('innerBlackCase').setAttribute('x', caseShiftX);
-    document.getElementById('innerBlackCase').setAttribute('width', caseWidth);
-    document.getElementById('innerBlackCaseStroke').setAttribute('x', caseShiftX + 2);
-    document.getElementById('innerBlackCaseStroke').setAttribute('width', caseWidth - 4);
-    document.getElementById('creamBezel').setAttribute('x', startX - 5);
-    document.getElementById('creamBezel').setAttribute('width', newWidth + 10);
-    document.getElementById('creamBezelStroke').setAttribute('x', startX - 5);
-    document.getElementById('creamBezelStroke').setAttribute('width', newWidth + 10);
-    document.getElementById('bezelBottomHitbox').setAttribute('x', startX - 5);
-    document.getElementById('bezelBottomHitbox').setAttribute('width', newWidth + 10);
-    const woodStartX = caseShiftX - 20;
-    const woodWidth = caseWidth + 40;
-    document.getElementById('tvWoodOuter').setAttribute('x', woodStartX);
-    document.getElementById('tvWoodOuter').setAttribute('width', woodWidth);
-    document.getElementById('tvWoodGrain').setAttribute('x', woodStartX);
-    document.getElementById('tvWoodGrain').setAttribute('width', woodWidth);
-    document.getElementById('tvWoodVignette').setAttribute('x', woodStartX);
-    document.getElementById('tvWoodVignette').setAttribute('width', woodWidth);
-    document.getElementById('tvWoodBorder').setAttribute('x', woodStartX);
-    document.getElementById('tvWoodBorder').setAttribute('width', woodWidth);
-    document.getElementById('tvWoodStroke1').setAttribute('x', caseShiftX - 5);
-    document.getElementById('tvWoodStroke1').setAttribute('width', caseWidth + 10);
-    document.getElementById('tvWoodStroke2').setAttribute('x', caseShiftX - 3);
-    document.getElementById('tvWoodStroke2').setAttribute('width', caseWidth + 6);
-    document.getElementById('woodFrameClipRect').setAttribute('x', woodStartX);
-    document.getElementById('woodFrameClipRect').setAttribute('width', woodWidth);
-    document.getElementById('woodGlare').setAttribute('d', `M ${woodStartX + 1},475 L 320,136 L 520,136 L ${woodStartX + 1},605 Z`);
-    document.getElementById('woodLineTL').setAttribute('x1', woodStartX);
-    document.getElementById('woodLineTL').setAttribute('x2', woodStartX + 15);
-    document.getElementById('woodLineBL').setAttribute('x1', woodStartX);
-    document.getElementById('woodLineBL').setAttribute('x2', woodStartX + 15);
-    document.getElementById('woodLineTR').setAttribute('x1', woodStartX + woodWidth);
-    document.getElementById('woodLineTR').setAttribute('x2', woodStartX + woodWidth - 15);
-    document.getElementById('woodLineBR').setAttribute('x1', woodStartX + woodWidth);
-    document.getElementById('woodLineBR').setAttribute('x2', woodStartX + woodWidth - 15);
-    document.getElementById('controlPanelGroup').setAttribute('transform', `translate($, 0)`);
-    document.getElementById('tvFeetRight').setAttribute('transform', `translate($, 0)`);
-    document.getElementById('tvFeetLeft').setAttribute('transform', `translate(${-shift}, 0)`);
-   }
-   // VHF / UHF tuner 
-   const dialConfigs = {
-    vhf: {
-     element: document.getElementById('vhfDial'),
-     face: document.getElementById('vhfRotatingFace'),
-     pointer: document.getElementById('vhfRotatingPointer'),
-     step: 360 / 13,
-     rotation: -30
-    },
-    uhf: {
-     element: document.getElementById('uhfDial'),
-     face: document.getElementById('uhfRotatingFace'),
-     pointer: document.getElementById('uhfRotatingPointer'),
-     step: 45,
-     rotation: 75
-    }
-   };
-   // Videos
-   const stationList = ["vdJthIdDR6w", "IufsocTXfMY", "jx0llzSntd8", "CGj85pVzRJs", "S2ujotDMluo"];
-   let hasDialBeenMoved = false;
-
-   function changeChannel(detentIndex) {
-    if (!player || typeof player.loadVideoById !== 'function') return;
- 
-    if (!hasDialBeenMoved) return;
-    const listLength = stationList.length;
-    const safeIndex = ((detentIndex % listLength) + listLength) % listLength;
- 
-    try {
-     player.loadVideoById(stationList[safeIndex]);
-    } catch (e) {
-     console.warn("YouTube Player henüz hazır değil.", e);
-    }
-   }
- 
-   let activeDial = null;
-   let audioContext = null;
-   let lastTickAt = 0;
- 
-   function ensureDialAudio() {
-    if (!audioContext) {
-     const AudioCtx = window.AudioContext || window.webkitAudioContext;
-     if (!AudioCtx) return null;
-     audioContext = new AudioCtx();
-    }
-    if (audioContext.state === 'suspended') {
-     audioContext.resume().catch(() => {});
-    }
-    return audioContext;
-   }
-
-   function playMechanicalTick(direction) {
-    const ctx = ensureDialAudio();
-    if (!ctx) return;
-    const now = ctx.currentTime;
-
-    if (now - lastTickAt < 0.015) return;
-    lastTickAt = now;
-  
-    const bufferSize = ctx.sampleRate * 0.05; 
-    const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
-    const data = buffer.getChannelData(0);
-    for (let i = 0; i < bufferSize; i++) {
-     data[i] = Math.random() * 2 - 1;
-    }
-    const noiseSource = ctx.createBufferSource();
-    noiseSource.buffer = buffer;
- 
-    const filter = ctx.createBiquadFilter();
-    filter.type = 'bandpass';
-
-    const freq = direction >= 0 ? 800 : 700;
-    filter.frequency.setValueAtTime(freq, now);
-    filter.Q.setValueAtTime(1.5, now); 
-  
-    const gain = ctx.createGain();
-  
-    gain.gain.setValueAtTime(0.001, now);
-    gain.gain.linearRampToValueAtTime(0.8, now + 0.005); 
-    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.04); 
-
-    noiseSource.connect(filter);
-    filter.connect(gain);
-    gain.connect(ctx.destination);
-   
-    noiseSource.start(now);
-    noiseSource.stop(now + 0.05);
-   }
- 
-   function dialCenterScreen(element) {
-    const ctm = element?.getScreenCTM();
-    return ctm ? new DOMPoint(0, 0).matrixTransform(ctm) : null;
-   }
-
-   function pointerAngle(element, event) {
-    const center = dialCenterScreen(element);
-    if (!center) return null;
-    return Math.atan2(event.clientY - center.y, event.clientX - center.x) * 180 / Math.PI;
-   }
-
-   function angleDelta(from, to) {
-    let delta = to - from;
-    while (delta > 180) delta -= 360;
-    while (delta < -180) delta += 360;
-    return delta;
-   }
-
-   // --- Area Click Sound ---
-    // Wood Sound
-    function playWoodKnock() {
-     const ctx = ensureDialAudio();
-     if (!ctx) return;
-     const now = ctx.currentTime;
-
-     const osc = ctx.createOscillator();
-     osc.type = 'sine';
-     osc.frequency.setValueAtTime(320, now);
-     osc.frequency.exponentialRampToValueAtTime(50, now + 0.08);
-
-     const oscGain = ctx.createGain();
-     oscGain.gain.setValueAtTime(0, now);
-     oscGain.gain.linearRampToValueAtTime(0.25, now + 0.005); // Main tone -> 0.25
-     oscGain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
-
-     osc.connect(oscGain);
-     oscGain.connect(ctx.destination);
-
-     const bufferSize = ctx.sampleRate * 0.05;
-     const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
-     const data = buffer.getChannelData(0);
-     for (let i = 0; i < bufferSize; i++) {
-      data[i] = Math.random() * 2 - 1;
-     }
-     const noise = ctx.createBufferSource();
-     noise.buffer = buffer;
-
-     const filter = ctx.createBiquadFilter();
-     filter.type = 'lowpass';
-     filter.frequency.setValueAtTime(1200, now);
-
-     const noiseGain = ctx.createGain();
-     noiseGain.gain.setValueAtTime(0, now);
-     noiseGain.gain.linearRampToValueAtTime(0.1, now + 0.002); // Impact tissue -> 0.1
-     noiseGain.gain.exponentialRampToValueAtTime(0.001, now + 0.03);
-
-     noise.connect(filter);
-     filter.connect(noiseGain);
-     noiseGain.connect(ctx.destination);
-
-     osc.start(now);
-     noise.start(now);
-     osc.stop(now + 0.15);
-     noise.stop(now + 0.05);
-    }
-
-    // --- Plastic Sound---
-    function playPlasticTap() {
-     const ctx = ensureDialAudio();
-     if (!ctx) return;
-     const now = ctx.currentTime;
-
-     const osc = ctx.createOscillator();
-     osc.type = 'triangle';
-     osc.frequency.setValueAtTime(750, now);
-     osc.frequency.exponentialRampToValueAtTime(180, now + 0.04);
-
-     const oscGain = ctx.createGain();
-     oscGain.gain.setValueAtTime(0, now);
-     oscGain.gain.linearRampToValueAtTime(0.18, now + 0.001); // Main tone -> 0.18
-     oscGain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
-
-     osc.connect(oscGain);
-     oscGain.connect(ctx.destination);
-
-     const bufferSize = ctx.sampleRate * 0.02;
-     const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
-     const data = buffer.getChannelData(0);
-     for (let i = 0; i < bufferSize; i++) {
-      data[i] = Math.random() * 2 - 1;
-     }
-     const noise = ctx.createBufferSource();
-     noise.buffer = buffer;
-
-     const filter = ctx.createBiquadFilter();
-     filter.type = 'highpass';
-     filter.frequency.setValueAtTime(1800, now);
-
-     const noiseGain = ctx.createGain();
-     noiseGain.gain.setValueAtTime(0, now);
-     noiseGain.gain.linearRampToValueAtTime(0.04, now + 0.001); // Impact tissue -> 0.04
-     noiseGain.gain.exponentialRampToValueAtTime(0.001, now + 0.02);
-
-     noise.connect(filter);
-     filter.connect(noiseGain);
-     noiseGain.connect(ctx.destination);
-
-     osc.start(now);
-     noise.start(now);
-     osc.stop(now + 0.06);
-     noise.stop(now + 0.03);
-    }
-
-    
-    document.getElementById('retroTvSvg').addEventListener('pointerdown', (e) => {
-     const target = e.target;
-     if (!target) return;
-     if (
-      target.closest('.interactive-dial') ||
-      target.closest('#clickOverlay') ||
-      target.closest('#playerObject') ||
-      target.tagName.toLowerCase() === 'text' ||
-      target.closest('#polishedSurface') ||
-      target.closest('#bezelBottomHitbox')
-     ) {
-      return;
-     }
-     const isWood = target.closest('#tvWoodOuter, #tvWoodGrain, #tvWoodVignette, #tvWoodBorder, #tvWoodStroke1, #tvWoodStroke2, #woodGlare');
-     if (isWood) {
-      playWoodKnock();
-      return;
-     }
-     const isPlastic = target.closest('#innerBlackCase, #innerBlackCaseStroke, #controlPanelGroup');
-     if (isPlastic) {
-      playPlasticTap();
-     }
-    });
-    // --- Area Click Sound
-
-    // --- Bej 
-    let rubAudio = null;
-    let isRubbing = false;
-    let lastPointerPos = null;
-    let rubFadeTimeout = null;
-
-    function initRubAudio() {
-     const ctx = ensureDialAudio();
-     if (!ctx) return null;
-     if (ctx.state === 'suspended') {
-      ctx.resume();
-     }
-     if (rubAudio) return rubAudio;
-
-     const now = ctx.currentTime;
-
-     // (Master Gain)
-     const masterGain = ctx.createGain();
-     masterGain.gain.setValueAtTime(0, now);
-     masterGain.connect(ctx.destination);
-
-     // 1. Smooth Carbon Friction Texture (Pink Noise)
-     const bufferSize = ctx.sampleRate * 2;
-     const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
-     const data = buffer.getChannelData(0);
-     let b0 = 0, b1 = 0, b2 = 0;
-     for (let i = 0; i < bufferSize; i++) {
-      const white = Math.random() * 2 - 1;
-      b0 = 0.99765 * b0 + white * 0.0990460;
-      b1 = 0.96300 * b1 + white * 0.0905860;
-      b2 = 0.57000 * b2 + white * 0.534191;
-      data[i] = (b0 + b1 + b2 + white * 0.5362) * 0.35;
-     }
-
-     const noise = ctx.createBufferSource();
-     noise.buffer = buffer;
-     noise.loop = true;
-
-     const filter = ctx.createBiquadFilter();
-     filter.type = 'bandpass';
-     filter.frequency.setValueAtTime(450, now);
-     filter.Q.setValueAtTime(2.0, now);
-
-     noise.connect(filter);
-     filter.connect(masterGain);
-
-     // 2. Carbon Fiber Body Vibration
-     const osc = ctx.createOscillator();
-     osc.type = 'sine';
-     osc.frequency.setValueAtTime(130, now);
-
-     const oscGain = ctx.createGain();
-     oscGain.gain.setValueAtTime(0.09, now);
-
-     osc.connect(oscGain);
-     oscGain.connect(masterGain);
-
-     noise.start(now);
-     osc.start(now);
-
-     rubAudio = { ctx, masterGain, filter, osc, noise };
-     return rubAudio;
-    }
-
-    function onRubMove(e) {
-     if (!isRubbing || !rubAudio) return;
-     const ctx = rubAudio.ctx;
-     const now = ctx.currentTime;
-
-     if (!lastPointerPos) {
-      lastPointerPos = { x: e.clientX, y: e.clientY, time: performance.now() };
-      return;
-     }
-
-     const dx = e.clientX - lastPointerPos.x;
-     const dy = e.clientY - lastPointerPos.y;
-     const dt = Math.max(1, performance.now() - lastPointerPos.time);
-     const dist = Math.hypot(dx, dy);
-     const speed = dist / dt;
-
-     lastPointerPos = { x: e.clientX, y: e.clientY, time: performance.now() };
-
-     if (dist < 1) return;
-
-      
-     const targetGain = Math.min(0.25, Math.max(0.05, speed * 0.15));
-     const targetFreq = Math.min(900, 350 + speed * 400);
-
-     rubAudio.masterGain.gain.cancelScheduledValues(now);
-     rubAudio.masterGain.gain.linearRampToValueAtTime(targetGain, now + 0.02);
-
-     rubAudio.filter.frequency.cancelScheduledValues(now);
-     rubAudio.filter.frequency.linearRampToValueAtTime(targetFreq, now + 0.03);
-
-     clearTimeout(rubFadeTimeout);
-     rubFadeTimeout = setTimeout(() => {
-      if (rubAudio && isRubbing) {
-       const stopNow = rubAudio.ctx.currentTime;
-       rubAudio.masterGain.gain.linearRampToValueAtTime(0.0001, stopNow + 0.08);
-      }
-     }, 50);
-    }
-
-    function startRubbing(e) {
-     isRubbing = true;
-     lastPointerPos = { x: e.clientX, y: e.clientY, time: performance.now() };
-
-     document.body.style.cursor = 'grabbing';
-     if (e.currentTarget) {
-      e.currentTarget.style.cursor = 'grabbing';
-      try { e.currentTarget.setPointerCapture(e.pointerId); } catch(err){}
-     }
-
-     initRubAudio();
-    }
-
-    function stopRubbing(e) {
-     if (!isRubbing) return;
-     isRubbing = false;
-     lastPointerPos = null;
-     clearTimeout(rubFadeTimeout);
-     document.body.style.cursor = '';
-     if (e && e.currentTarget) {
-      e.currentTarget.style.cursor = 'grab';
-      try { e.currentTarget.releasePointerCapture(e.pointerId); } catch(err){}
-     }
-
-     if (rubAudio) {
-      const now = rubAudio.ctx.currentTime;
-      rubAudio.masterGain.gain.cancelScheduledValues(now);
-      rubAudio.masterGain.gain.linearRampToValueAtTime(0.0001, now + 0.08);
-      setTimeout(() => {
-       if (!isRubbing && rubAudio) {
-        try {
-         rubAudio.noise.stop();
-         rubAudio.osc.stop();
-         rubAudio.noise.disconnect();
-         rubAudio.osc.disconnect();
-        } catch(err){}
-        rubAudio = null;
-       }
-      }, 100);
-     }
-    }
-    const rubbingSurfaces = [
-     document.getElementById('polishedSurface'),
-     document.getElementById('bezelBottomHitbox')
-    ];
-
-    rubbingSurfaces.forEach(surface => {
-     if (surface) {
-      surface.style.cursor = 'grab';
-
-      surface.addEventListener('pointerdown', startRubbing);
-      surface.addEventListener('pointermove', onRubMove);
-      surface.addEventListener('pointerup', stopRubbing);
-      surface.addEventListener('pointercancel', stopRubbing);
-      surface.addEventListener('lostpointercapture', stopRubbing);
-     }
-    });
-    // Bej End
-
-
-    function renderDial(config, rotation) {
-     const transform = `rotate($)`;
-     config.face?.setAttribute('transform', transform);
-     config.pointer?.setAttribute('transform', transform);
-    }
-   
-    function animateDialTo(config, target) {
-     const start = config.rotation;
-     const distance = target - start;
-     const duration = 85;
-     const startTime = performance.now();
-
-     function frame(now) {
-      const p = Math.min(1,
-       (now - startTime) / duration);
-      const eased = 1 - Math.pow(1 - p, 3);
-      renderDial(config, start + distance * eased);
-      if (p < 1) {
-       requestAnimationFrame(frame);
-      }
-     }
-     requestAnimationFrame(frame);
-    }
-   
-    function beginDialDrag(name, event) {
-     const config = dialConfigs[name];
-     if (!config?.element) return;
-     const angle = pointerAngle(config.element, event);
-     if (angle == null) return;
-
-     ensureDialAudio();
-     activeDial = {
-      name,
-      config,
-      pointerId: event.pointerId,
-      lastPointerAngle: angle,
-      rawRotation: config.rotation,
-      lastDetent: Math.round(config.rotation / config.step)
-     };
-     config.element.classList.add('dragging');
-     try {
-      config.element.setPointerCapture(event.pointerId);
-     } catch (_) {}
-     event.preventDefault();
-    }
-   
-    function moveDialDrag(event) {
-     if (!activeDial || event.pointerId !== activeDial.pointerId) {
-      return;
-     }
-     const {
-      config
-     } = activeDial;
-     const angle = pointerAngle(config.element, event);
-     if (angle == null) return;
-     const RESISTANCE_FACTOR = 3;
-     const rawDelta = angleDelta(activeDial.lastPointerAngle, angle);
-
-     activeDial.rawRotation += (rawDelta / RESISTANCE_FACTOR);
-     activeDial.lastPointerAngle = angle;
-
-     const newDetent = Math.round(activeDial.rawRotation / config.step);
-     const snappedRotation = newDetent * config.step;
-   
-     if (newDetent !== activeDial.lastDetent) {
-    
-      hasDialBeenMoved = true;
-
-      playMechanicalTick(newDetent > activeDial.lastDetent ? 1 : -1);
-      changeChannel(newDetent);
-
-      activeDial.lastDetent = newDetent;
-     }
-
-     config.rotation = snappedRotation;
-     renderDial(config, snappedRotation);
-     event.preventDefault();
-    }
-
-
-
-    function endDialDrag(event) {
-     if (!activeDial) return;
-     if (event?.pointerId != null && event.pointerId !== activeDial.pointerId) {
-      return;
-     }
-     const {
-      config
-     } = activeDial;
-     const target = Math.round(config.rotation / config.step) * config.step;
-     config.rotation = target;
-     animateDialTo(config, target);
-     config.element.classList.remove('dragging');
-     try {
-      if (event?.pointerId != null) {
-       config.element.releasePointerCapture(event.pointerId);
-      }
-     } catch (_) {}
-     activeDial = null;
-    }
- 
-    Object.entries(dialConfigs).forEach(
-     ([name, config]) => {
-      if (!config.element) return;
-      config.element.addEventListener('pointerdown',
-       (event) => {
-        beginDialDrag(name, event);
-       });
-      config.element.addEventListener('pointermove', moveDialDrag);
-      config.element.addEventListener('pointerup', endDialDrag);
-      config.element.addEventListener('pointercancel', endDialDrag);
-      config.element.addEventListener('lostpointercapture',
-       () => {
-        if (activeDial?.name === name) {
-         endDialDrag();
+    </svg>
+    <a href="https://tvretro.github.io/" class="viewport-home-btn" title="Home">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#dedede" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M2 10.5L12 2.5L22 10.5" />
+        <path d="M5 8.5V20.5C5 21.05 5.45 21.5 6 21.5H18C18.55 21.5 19 21.05 19 20.5V8.5" />
+        <path d="M10 21.5V14.5C10 13.95 10.45 13.5 11 13.5H13C13.55 13.5 14 13.95 14 14.5V21.5" />
+        <path d="M18 7.5V3.5C18 3.22 17.78 3 17.5 3H15.5C15.22 3 15 3.22 15 3.5V5" />
+      </svg>
+    </a>
+    <script>
+      const urlParams = new URLSearchParams(window.location.search);
+      let videoId = urlParams.get('v');
+      if (!videoId) {
+        const pathSegments = window.location.pathname.split('/').filter(Boolean);
+        const lastSegment = pathSegments.pop();
+        if (lastSegment && !['watch', 'watch.html', 'index.html'].includes(lastSegment)) {
+          videoId = lastSegment;
         }
-       });
-     });
+      }
+      const PROXY_URL = "https://tvretro-proxy.biserkanla.workers.dev/?url=";
+      let player;
+      const tag = document.createElement('script');
+      tag.src = "https://www.youtube.com/iframe_api";
+      const firstScriptTag = document.getElementsByTagName('script')[0];
+      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+      window.addEventListener('DOMContentLoaded', async () => {
+        if (!videoId) return;
+        try {
+          const targetVideoUrl = `https://www.youtube.com/watch?v=${videoId}`;
+          const response = await fetch(`${PROXY_URL}${encodeURIComponent(targetVideoUrl)}`);
+          const data = await response.json();
+          if (data.width && data.height) {
+            adjustTvSymmetrically(data.width / data.height);
+          }
+        } catch (err) {
+          console.warn("Oran verisi çekilemedi, standart 16:9 uygulanıyor.");
+          adjustTvSymmetrically(16 / 9);
+        }
+      });
+      let isFirstInteraction = true;
+      window.onYouTubeIframeAPIReady = function() {
+        if (!videoId) return;
+        player = new YT.Player('ytIframe', {
+          videoId: videoId,
+          playerVars: {
+            'controls': 0,
+            'modestbranding': 1,
+            'rel': 0,
+            'iv_load_policy': 3,
+            'cc_load_policy': 0,
+            'disablekb': 1,
+            'fs': 0,
+            'autoplay': 0,
+            'mute': 0
+          },
+          events: {
+            'onReady': onPlayerReady,
+            'onStateChange': onPlayerStateChange
+          }
+        });
+      };
 
-    renderDial(dialConfigs.vhf, dialConfigs.vhf.rotation);
-    renderDial(dialConfigs.uhf, dialConfigs.uhf.rotation);
-  </script>
- </body>
+      function onPlayerReady(event) {
+        const clickOverlay = document.getElementById('clickOverlay');
+        if (clickOverlay) {
+          clickOverlay.addEventListener('click', () => {
+            const state = player.getPlayerState();
+            if (state === YT.PlayerState.PLAYING || state === YT.PlayerState.BUFFERING) {
+              player.pauseVideo();
+            } else {
+              player.playVideo();
+            }
+          });
+        }
+      }
+
+      function onPlayerStateChange(event) {
+        if (event.data === YT.PlayerState.PLAYING) {
+          try {
+            event.target.unloadModule("captions");
+            event.target.unloadModule("cc");
+          } catch (err) {}
+        }
+      }
+
+      function adjustTvSymmetrically(ratio) {
+        const baseHeight = 369;
+        const baseWidth = 519.4;
+        let newWidth = baseHeight * ratio;
+        newWidth = Math.max(380, Math.min(newWidth, 680));
+        const deltaX = newWidth - baseWidth;
+        const shift = deltaX / 2;
+        const startX = 203.3 - shift;
+        document.getElementById('playerObject').setAttribute('x', startX);
+        document.getElementById('playerObject').setAttribute('width', newWidth);
+        document.getElementById('effectScanlines').setAttribute('x', startX);
+        document.getElementById('effectScanlines').setAttribute('width', newWidth);
+        document.getElementById('effectCrtGlass').setAttribute('x', startX);
+        document.getElementById('effectCrtGlass').setAttribute('width', newWidth);
+        document.getElementById('effectOvalStroke').setAttribute('x', startX);
+        document.getElementById('effectOvalStroke').setAttribute('width', newWidth);
+        document.getElementById('effectInnerLine').setAttribute('x', startX);
+        document.getElementById('effectInnerLine').setAttribute('width', newWidth);
+        document.getElementById('clickOverlay').setAttribute('x', startX);
+        document.getElementById('clickOverlay').setAttribute('width', newWidth);
+        document.getElementById('screenCustomClipPath').setAttribute('d', `M ${startX} 542 L ${startX} 195 A 22 22 0 0 1 ${startX + 22} 173 L ${startX + newWidth - 22} 173 A 22 22 0 0 1 ${startX + newWidth} 195 L ${startX + newWidth} 542 Z`);
+        document.getElementById('blackScreenBg').setAttribute('d', `M ${startX - 2} 544 L ${startX - 2} 193 A 22 22 0 0 1 ${startX + 20} 171 L ${startX + newWidth - 20} 171 A 22 22 0 0 1 ${startX + newWidth + 2} 193 L ${startX + newWidth + 2} 544 Z`);
+        document.getElementById('effectGlare').setAttribute('d', `M ${startX},173 L 487.7,173 L 288.3,542 L ${startX},542 Z`);
+        const caseShiftX = 184.3 - shift;
+        const caseWidth = 671.4 + deltaX;
+        document.getElementById('innerBlackCase').setAttribute('x', caseShiftX);
+        document.getElementById('innerBlackCase').setAttribute('width', caseWidth);
+        document.getElementById('innerBlackCaseStroke').setAttribute('x', caseShiftX + 2);
+        document.getElementById('innerBlackCaseStroke').setAttribute('width', caseWidth - 4);
+        document.getElementById('creamBezel').setAttribute('x', startX - 5);
+        document.getElementById('creamBezel').setAttribute('width', newWidth + 10);
+        document.getElementById('creamBezelStroke').setAttribute('x', startX - 5);
+        document.getElementById('creamBezelStroke').setAttribute('width', newWidth + 10);
+        document.getElementById('bezelBottomHitbox').setAttribute('x', startX - 5);
+        document.getElementById('bezelBottomHitbox').setAttribute('width', newWidth + 10);
+        const woodStartX = caseShiftX - 20;
+        const woodWidth = caseWidth + 40;
+        document.getElementById('tvWoodOuter').setAttribute('x', woodStartX);
+        document.getElementById('tvWoodOuter').setAttribute('width', woodWidth);
+        document.getElementById('tvWoodGrain').setAttribute('x', woodStartX);
+        document.getElementById('tvWoodGrain').setAttribute('width', woodWidth);
+        document.getElementById('tvWoodVignette').setAttribute('x', woodStartX);
+        document.getElementById('tvWoodVignette').setAttribute('width', woodWidth);
+        document.getElementById('tvWoodBorder').setAttribute('x', woodStartX);
+        document.getElementById('tvWoodBorder').setAttribute('width', woodWidth);
+        document.getElementById('tvWoodStroke1').setAttribute('x', caseShiftX - 5);
+        document.getElementById('tvWoodStroke1').setAttribute('width', caseWidth + 10);
+        document.getElementById('tvWoodStroke2').setAttribute('x', caseShiftX - 3);
+        document.getElementById('tvWoodStroke2').setAttribute('width', caseWidth + 6);
+        document.getElementById('woodFrameClipRect').setAttribute('x', woodStartX);
+        document.getElementById('woodFrameClipRect').setAttribute('width', woodWidth);
+        document.getElementById('woodGlare').setAttribute('d', `M ${woodStartX + 1},475 L 320,136 L 520,136 L ${woodStartX + 1},605 Z`);
+        document.getElementById('woodLineTL').setAttribute('x1', woodStartX);
+        document.getElementById('woodLineTL').setAttribute('x2', woodStartX + 15);
+        document.getElementById('woodLineBL').setAttribute('x1', woodStartX);
+        document.getElementById('woodLineBL').setAttribute('x2', woodStartX + 15);
+        document.getElementById('woodLineTR').setAttribute('x1', woodStartX + woodWidth);
+        document.getElementById('woodLineTR').setAttribute('x2', woodStartX + woodWidth - 15);
+        document.getElementById('woodLineBR').setAttribute('x1', woodStartX + woodWidth);
+        document.getElementById('woodLineBR').setAttribute('x2', woodStartX + woodWidth - 15);
+        document.getElementById('controlPanelGroup').setAttribute('transform', `translate(${shift}, 0)`);
+        document.getElementById('tvFeetRight').setAttribute('transform', `translate(${shift}, 0)`);
+        document.getElementById('tvFeetLeft').setAttribute('transform', `translate(${-shift}, 0)`);
+      }
+      // VHF / UHF tuner 
+      const dialConfigs = {
+        vhf: {
+          element: document.getElementById('vhfDial'),
+          face: document.getElementById('vhfRotatingFace'),
+          pointer: document.getElementById('vhfRotatingPointer'),
+          step: 360 / 13,
+          rotation: -30
+        },
+        uhf: {
+          element: document.getElementById('uhfDial'),
+          face: document.getElementById('uhfRotatingFace'),
+          pointer: document.getElementById('uhfRotatingPointer'),
+          step: 45,
+          rotation: 75
+        }
+      };
+      // Videos
+      const stationList = ["vdJthIdDR6w", "IufsocTXfMY", "jx0llzSntd8", "CGj85pVzRJs", "S2ujotDMluo"];
+      let hasDialBeenMoved = false;
+
+      function changeChannel(detentIndex) {
+        if (!player || typeof player.loadVideoById !== 'function') return;
+ 
+        if (!hasDialBeenMoved) return;
+        const listLength = stationList.length;
+        const safeIndex = ((detentIndex % listLength) + listLength) % listLength;
+ 
+        try {
+          player.loadVideoById(stationList[safeIndex]);
+        } catch (e) {
+          console.warn("YouTube Player henüz hazır değil.", e);
+        }
+      }
+ 
+      let activeDial = null;
+      let audioContext = null;
+      let lastTickAt = 0;
+ 
+      function ensureDialAudio() {
+        if (!audioContext) {
+          const AudioCtx = window.AudioContext || window.webkitAudioContext;
+          if (!AudioCtx) return null;
+          audioContext = new AudioCtx();
+        }
+        if (audioContext.state === 'suspended') {
+          audioContext.resume().catch(() => {});
+        }
+        return audioContext;
+      }
+
+      function playMechanicalTick(direction) {
+        const ctx = ensureDialAudio();
+        if (!ctx) return;
+        const now = ctx.currentTime;
+
+        if (now - lastTickAt < 0.015) return;
+        lastTickAt = now;
+   
+        const bufferSize = ctx.sampleRate * 0.05; 
+        const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+        const data = buffer.getChannelData(0);
+        for (let i = 0; i < bufferSize; i++) {
+          data[i] = Math.random() * 2 - 1;
+        }
+        const noiseSource = ctx.createBufferSource();
+        noiseSource.buffer = buffer;
+ 
+        const filter = ctx.createBiquadFilter();
+        filter.type = 'bandpass';
+
+        const freq = direction >= 0 ? 800 : 700;
+        filter.frequency.setValueAtTime(freq, now);
+        filter.Q.setValueAtTime(1.5, now); 
+  
+        const gain = ctx.createGain();
+   
+        gain.gain.setValueAtTime(0.001, now);
+        gain.gain.linearRampToValueAtTime(0.8, now + 0.005); 
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.04); 
+
+        noiseSource.connect(filter);
+        filter.connect(gain);
+        gain.connect(ctx.destination);
+     
+        noiseSource.start(now);
+        noiseSource.stop(now + 0.05);
+      }
+ 
+      function dialCenterScreen(element) {
+        const ctm = element?.getScreenCTM();
+        return ctm ? new DOMPoint(0, 0).matrixTransform(ctm) : null;
+      }
+
+      function pointerAngle(element, event) {
+        const center = dialCenterScreen(element);
+        if (!center) return null;
+        return Math.atan2(event.clientY - center.y, event.clientX - center.x) * 180 / Math.PI;
+      }
+
+      function angleDelta(from, to) {
+        let delta = to - from;
+        while (delta > 180) delta -= 360;
+        while (delta < -180) delta += 360;
+        return delta;
+      }
+
+     // --- Area Click Sound ---
+        // Wood Sound
+        function playWoodKnock() {
+          const ctx = ensureDialAudio();
+          if (!ctx) return;
+          const now = ctx.currentTime;
+
+          const osc = ctx.createOscillator();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(320, now);
+          osc.frequency.exponentialRampToValueAtTime(50, now + 0.08);
+
+          const oscGain = ctx.createGain();
+          oscGain.gain.setValueAtTime(0, now);
+          oscGain.gain.linearRampToValueAtTime(0.25, now + 0.005); // Main tone -> 0.25
+          oscGain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+
+          osc.connect(oscGain);
+          oscGain.connect(ctx.destination);
+
+          const bufferSize = ctx.sampleRate * 0.05;
+          const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+          const data = buffer.getChannelData(0);
+          for (let i = 0; i < bufferSize; i++) {
+            data[i] = Math.random() * 2 - 1;
+          }
+          const noise = ctx.createBufferSource();
+          noise.buffer = buffer;
+
+          const filter = ctx.createBiquadFilter();
+          filter.type = 'lowpass';
+          filter.frequency.setValueAtTime(1200, now);
+
+          const noiseGain = ctx.createGain();
+          noiseGain.gain.setValueAtTime(0, now);
+          noiseGain.gain.linearRampToValueAtTime(0.1, now + 0.002);  // Impact tissue -> 0.1
+          noiseGain.gain.exponentialRampToValueAtTime(0.001, now + 0.03);
+
+          noise.connect(filter);
+          filter.connect(noiseGain);
+          noiseGain.connect(ctx.destination);
+
+          osc.start(now);
+          noise.start(now);
+          osc.stop(now + 0.15);
+          noise.stop(now + 0.05);
+        }
+
+        // --- Plastic Sound---
+        function playPlasticTap() {
+          const ctx = ensureDialAudio();
+          if (!ctx) return;
+          const now = ctx.currentTime;
+
+          const osc = ctx.createOscillator();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(750, now);
+          osc.frequency.exponentialRampToValueAtTime(180, now + 0.04);
+
+          const oscGain = ctx.createGain();
+          oscGain.gain.setValueAtTime(0, now);
+          oscGain.gain.linearRampToValueAtTime(0.18, now + 0.001); // Main tone -> 0.18
+          oscGain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+
+          osc.connect(oscGain);
+          oscGain.connect(ctx.destination);
+
+          const bufferSize = ctx.sampleRate * 0.02;
+          const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+          const data = buffer.getChannelData(0);
+          for (let i = 0; i < bufferSize; i++) {
+            data[i] = Math.random() * 2 - 1;
+          }
+          const noise = ctx.createBufferSource();
+          noise.buffer = buffer;
+
+          const filter = ctx.createBiquadFilter();
+          filter.type = 'highpass';
+          filter.frequency.setValueAtTime(1800, now);
+
+          const noiseGain = ctx.createGain();
+          noiseGain.gain.setValueAtTime(0, now);
+          noiseGain.gain.linearRampToValueAtTime(0.04, now + 0.001);  // Impact tissue -> 0.04
+          noiseGain.gain.exponentialRampToValueAtTime(0.001, now + 0.02);
+
+          noise.connect(filter);
+          filter.connect(noiseGain);
+          noiseGain.connect(ctx.destination);
+
+          osc.start(now);
+          noise.start(now);
+          osc.stop(now + 0.06);
+          noise.stop(now + 0.03);
+        }
+
+       
+        document.getElementById('retroTvSvg').addEventListener('pointerdown', (e) => {
+          const target = e.target;
+          if (!target) return;
+          if (
+            target.closest('.interactive-dial') ||
+            target.closest('#clickOverlay') ||
+            target.closest('#playerObject') ||
+            target.tagName.toLowerCase() === 'text' ||
+            target.closest('#polishedSurface') ||
+            target.closest('#bezelBottomHitbox')
+          ) {
+            return;
+          }
+          const isWood = target.closest('#tvWoodOuter, #tvWoodGrain, #tvWoodVignette, #tvWoodBorder, #tvWoodStroke1, #tvWoodStroke2, #woodGlare');
+          if (isWood) {
+            playWoodKnock();
+            return;
+          }
+          const isPlastic = target.closest('#innerBlackCase, #innerBlackCaseStroke, #controlPanelGroup');
+          if (isPlastic) {
+            playPlasticTap();
+          }
+        });
+       // --- Area Click Sound
+
+       // --- Bej 
+        let rubAudio = null;
+        let isRubbing = false;
+        let lastPointerPos = null;
+        let rubFadeTimeout = null;
+
+        function initRubAudio() {
+          const ctx = ensureDialAudio();
+          if (!ctx) return null;
+          if (ctx.state === 'suspended') {
+            ctx.resume();
+          }
+          if (rubAudio) return rubAudio;
+
+          const now = ctx.currentTime;
+
+          // (Master Gain)
+          const masterGain = ctx.createGain();
+          masterGain.gain.setValueAtTime(0, now);
+          masterGain.connect(ctx.destination);
+
+          // 1. Smooth Carbon Friction Texture (Pink Noise)
+          const bufferSize = ctx.sampleRate * 2;
+          const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+          const data = buffer.getChannelData(0);
+          let b0 = 0, b1 = 0, b2 = 0;
+          for (let i = 0; i < bufferSize; i++) {
+            const white = Math.random() * 2 - 1;
+            b0 = 0.99765 * b0 + white * 0.0990460;
+            b1 = 0.96300 * b1 + white * 0.0905860;
+            b2 = 0.57000 * b2 + white * 0.534191;
+            data[i] = (b0 + b1 + b2 + white * 0.5362) * 0.35;
+          }
+
+          const noise = ctx.createBufferSource();
+          noise.buffer = buffer;
+          noise.loop = true;
+
+          const filter = ctx.createBiquadFilter();
+          filter.type = 'bandpass';
+          filter.frequency.setValueAtTime(450, now);
+          filter.Q.setValueAtTime(2.0, now);
+
+          noise.connect(filter);
+          filter.connect(masterGain);
+
+          // 2. Carbon Fiber Body Vibration
+          const osc = ctx.createOscillator();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(130, now);
+
+          const oscGain = ctx.createGain();
+          oscGain.gain.setValueAtTime(0.09, now);
+
+          osc.connect(oscGain);
+          oscGain.connect(masterGain);
+
+          noise.start(now);
+          osc.start(now);
+
+          rubAudio = { ctx, masterGain, filter, osc, noise };
+          return rubAudio;
+        }
+
+        function onRubMove(e) {
+          if (!isRubbing || !rubAudio) return;
+          const ctx = rubAudio.ctx;
+          const now = ctx.currentTime;
+
+          if (!lastPointerPos) {
+            lastPointerPos = { x: e.clientX, y: e.clientY, time: performance.now() };
+            return;
+          }
+
+          const dx = e.clientX - lastPointerPos.x;
+          const dy = e.clientY - lastPointerPos.y;
+          const dt = Math.max(1, performance.now() - lastPointerPos.time);
+          const dist = Math.hypot(dx, dy);
+          const speed = dist / dt;
+
+          lastPointerPos = { x: e.clientX, y: e.clientY, time: performance.now() };
+
+          if (dist < 1) return;
+
+          
+          const targetGain = Math.min(0.25, Math.max(0.05, speed * 0.15));
+          const targetFreq = Math.min(900, 350 + speed * 400);
+
+          rubAudio.masterGain.gain.cancelScheduledValues(now);
+          rubAudio.masterGain.gain.linearRampToValueAtTime(targetGain, now + 0.02);
+
+          rubAudio.filter.frequency.cancelScheduledValues(now);
+          rubAudio.filter.frequency.linearRampToValueAtTime(targetFreq, now + 0.03);
+
+          clearTimeout(rubFadeTimeout);
+          rubFadeTimeout = setTimeout(() => {
+            if (rubAudio && isRubbing) {
+              const stopNow = rubAudio.ctx.currentTime;
+              rubAudio.masterGain.gain.linearRampToValueAtTime(0.0001, stopNow + 0.08);
+            }
+          }, 50);
+        }
+
+        function startRubbing(e) {
+          isRubbing = true;
+          lastPointerPos = { x: e.clientX, y: e.clientY, time: performance.now() };
+
+          document.body.style.cursor = 'grabbing';
+          if (e.currentTarget) {
+            e.currentTarget.style.cursor = 'grabbing';
+            try { e.currentTarget.setPointerCapture(e.pointerId); } catch(err){}
+          }
+
+          initRubAudio();
+        }
+
+        function stopRubbing(e) {
+          if (!isRubbing) return;
+          isRubbing = false;
+          lastPointerPos = null;
+          clearTimeout(rubFadeTimeout);
+          document.body.style.cursor = '';
+          if (e && e.currentTarget) {
+            e.currentTarget.style.cursor = 'grab';
+            try { e.currentTarget.releasePointerCapture(e.pointerId); } catch(err){}
+          }
+
+          if (rubAudio) {
+            const now = rubAudio.ctx.currentTime;
+            rubAudio.masterGain.gain.cancelScheduledValues(now);
+            rubAudio.masterGain.gain.linearRampToValueAtTime(0.0001, now + 0.08);
+            setTimeout(() => {
+              if (!isRubbing && rubAudio) {
+                try {
+                  rubAudio.noise.stop();
+                  rubAudio.osc.stop();
+                  rubAudio.noise.disconnect();
+                  rubAudio.osc.disconnect();
+                } catch(err){}
+                rubAudio = null;
+              }
+            }, 100);
+          }
+        }
+        const rubbingSurfaces = [
+          document.getElementById('polishedSurface'),
+          document.getElementById('bezelBottomHitbox')
+        ];
+
+        rubbingSurfaces.forEach(surface => {
+          if (surface) {
+            surface.style.cursor = 'grab';
+
+            surface.addEventListener('pointerdown', startRubbing);
+            surface.addEventListener('pointermove', onRubMove);
+            surface.addEventListener('pointerup', stopRubbing);
+            surface.addEventListener('pointercancel', stopRubbing);
+            surface.addEventListener('lostpointercapture', stopRubbing);
+          }
+        });
+        // Bej End
+
+
+        function renderDial(config, rotation) {
+          const transform = `rotate(${rotation})`;
+          config.face?.setAttribute('transform', transform);
+          config.pointer?.setAttribute('transform', transform);
+        }
+    
+        function animateDialTo(config, target) {
+          const start = config.rotation;
+          const distance = target - start;
+          const duration = 85;
+          const startTime = performance.now();
+
+          function frame(now) {
+            const p = Math.min(1,
+              (now - startTime) / duration);
+            const eased = 1 - Math.pow(1 - p, 3);
+            renderDial(config, start + distance * eased);
+            if (p < 1) {
+              requestAnimationFrame(frame);
+            }
+          }
+          requestAnimationFrame(frame);
+        }
+    
+        function beginDialDrag(name, event) {
+          const config = dialConfigs[name];
+          if (!config?.element) return;
+          const angle = pointerAngle(config.element, event);
+          if (angle == null) return;
+
+          ensureDialAudio();
+          activeDial = {
+            name,
+            config,
+            pointerId: event.pointerId,
+            lastPointerAngle: angle,
+            rawRotation: config.rotation,
+            lastDetent: Math.round(config.rotation / config.step)
+          };
+          config.element.classList.add('dragging');
+          try {
+            config.element.setPointerCapture(event.pointerId);
+          } catch (_) {}
+          event.preventDefault();
+        }
+    
+        function moveDialDrag(event) {
+          if (!activeDial || event.pointerId !== activeDial.pointerId) {
+            return;
+          }
+          const {
+            config
+          } = activeDial;
+          const angle = pointerAngle(config.element, event);
+          if (angle == null) return;
+          const RESISTANCE_FACTOR = 3;
+          const rawDelta = angleDelta(activeDial.lastPointerAngle, angle);
+
+          activeDial.rawRotation += (rawDelta / RESISTANCE_FACTOR);
+          activeDial.lastPointerAngle = angle;
+
+          const newDetent = Math.round(activeDial.rawRotation / config.step);
+          const snappedRotation = newDetent * config.step;
+     
+          if (newDetent !== activeDial.lastDetent) {
+      
+          hasDialBeenMoved = true;
+
+          playMechanicalTick(newDetent > activeDial.lastDetent ? 1 : -1);
+          changeChannel(newDetent);
+
+          activeDial.lastDetent = newDetent;
+        }
+
+        config.rotation = snappedRotation;
+        renderDial(config, snappedRotation);
+        event.preventDefault();
+      }
+
+
+
+      function endDialDrag(event) {
+        if (!activeDial) return;
+        if (event?.pointerId != null && event.pointerId !== activeDial.pointerId) {
+          return;
+        }
+        const {
+          config
+        } = activeDial;
+        const target = Math.round(config.rotation / config.step) * config.step;
+        config.rotation = target;
+        animateDialTo(config, target);
+        config.element.classList.remove('dragging');
+        try {
+          if (event?.pointerId != null) {
+            config.element.releasePointerCapture(event.pointerId);
+          }
+        } catch (_) {}
+        activeDial = null;
+      }
+ 
+      Object.entries(dialConfigs).forEach(
+        ([name, config]) => {
+          if (!config.element) return;
+          config.element.addEventListener('pointerdown',
+            (event) => {
+              beginDialDrag(name, event);
+            });
+          config.element.addEventListener('pointermove', moveDialDrag);
+          config.element.addEventListener('pointerup', endDialDrag);
+          config.element.addEventListener('pointercancel', endDialDrag);
+          config.element.addEventListener('lostpointercapture',
+            () => {
+              if (activeDial?.name === name) {
+                endDialDrag();
+              }
+            });
+        });
+
+      renderDial(dialConfigs.vhf, dialConfigs.vhf.rotation);
+      renderDial(dialConfigs.uhf, dialConfigs.uhf.rotation);
+    </script>
+  </body>
 </html>
