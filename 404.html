@@ -129,11 +129,11 @@
         100% { opacity: 0; visibility: hidden; }
       }
       #screenEffects, #screenEffects *,
-       #powerOffEffect, #powerOffEffect *,
-       #channelTransition, #channelTransition *,
-       #blackScreenBg {
-        pointer-events: none !important;
-       }
+   #powerOffEffect, #powerOffEffect *,
+   #channelTransition, #channelTransition *,
+   #blackScreenBg {
+    pointer-events: none !important;
+   }
     </style>
   </head>
   <body>
@@ -516,7 +516,7 @@
             <rect id="channelTransitionLines" class="transitionLines" x="203.3" y="173" width="519.4" height="369" fill="url(#channelStaticLines)" />
             <rect x="203.3" y="173" width="519.4" height="369" fill="none" stroke="#ffffff" stroke-width="1.2" opacity="0.10" />
           </g>
-          <rect id="clickOverlay" x="203.3" y="173" width="519.4" height="369" fill="rgba(0,0,0,0.01)" pointer-events="none" clip-path="url(#screenCustomClip)" />
+          <rect id="clickOverlay" x="203.3" y="173" width="519.4" height="270" fill="rgba(0,0,0,0.01)" pointer-events="all" cursor="pointer" clip-path="url(#screenCustomClip)" />
           <!-- 1. Ekran Çerçevesi Hitbox'ı (Alta Çizilecek) -->
           <rect id="bezelBottomHitbox" x="198.3" y="542" width="529.4" height="57" fill="rgba(0,0,0,0.01)" pointer-events="all" />
           <g transform="translate(448, 568)">
@@ -772,47 +772,24 @@
       };
 
       function onPlayerReady(event) {
-    try {
-     event.target.playVideo();
-    } catch (err) {
-     console.warn("Otomatik oynatma tarayıcı tarafından engellendi.", err);
-    }
+        try {
+         event.target.playVideo();
+        } catch (err) {
+         console.warn("Otomatik oynatma tarayıcı tarafından engellendi.", err);
+        }
 
-    const clickOverlay = document.getElementById('clickOverlay');
-    
-    if (clickOverlay) {
-     // 1. Normal Video için Durdur/Başlat Dinleyicisi
-     clickOverlay.addEventListener('click', () => {
-      const state = player.getPlayerState();
-      if (state === YT.PlayerState.PLAYING || state === YT.PlayerState.BUFFERING) {
-       player.pauseVideo();
-      } else {
-       player.playVideo();
-      }
-     });
-
-     // 2. Heartbeat: Dinamik Katman ve Reklam Yönetimi
-     setInterval(() => {
-      if (!player || typeof player.getVideoData !== 'function') return;
-      
-      const videoData = player.getVideoData();
-      // Reklam oynarken video başlığı (title) tanımsızdır veya boştur.
-      const isAdPlaying = !videoData || !videoData.title;
-
-      if (isAdPlaying) {
-       // REKLAM MODU: Katmanı del, tıklamalar (Skip Ad) doğrudan YouTube'a ulaşsın
-       if (clickOverlay.getAttribute('pointer-events') !== 'none') {
-        clickOverlay.setAttribute('pointer-events', 'none');
+        const clickOverlay = document.getElementById('clickOverlay');
+        if (clickOverlay) {
+         clickOverlay.addEventListener('click', () => {
+          const state = player.getPlayerState();
+          if (state === YT.PlayerState.PLAYING || state === YT.PlayerState.BUFFERING) {
+           player.pauseVideo();
+          } else {
+           player.playVideo();
+          }
+         });
+        }
        }
-      } else {
-       // NORMAL VİDEO MODU: Katmanı ört, tıklamalar JS ile pause/play yapsın
-       if (clickOverlay.getAttribute('pointer-events') !== 'all') {
-        clickOverlay.setAttribute('pointer-events', 'all');
-       }
-      }
-     }, 500); // Saniyede iki kez durumu denetle
-    }
-   }
 
       function onPlayerStateChange(event) {
         if (event.data === YT.PlayerState.PLAYING) {
