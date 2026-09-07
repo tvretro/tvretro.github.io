@@ -747,15 +747,15 @@
         player = new YT.Player('ytIframe', {
           videoId: videoId,
           playerVars: {
-            'controls': 0,
-            'modestbranding': 1,
-            'rel': 0,
-            'iv_load_policy': 3,
-            'cc_load_policy': 0,
-            'disablekb': 1,
-            'fs': 0,
-            'autoplay': 1,
-            'mute': 0
+          'controls': 1,
+          'modestbranding': 1,
+          'rel': 0,
+          'iv_load_policy': 3,
+          'cc_load_policy': 0,
+          'disablekb': 1,
+          'fs': 0,
+          'autoplay': 1,
+          'mute': 0
           },
           events: {
             'onReady': onPlayerReady,
@@ -766,9 +766,9 @@
 
       function onPlayerReady(event) {
         try {
-          event.target.playVideo();
+        event.target.playVideo();
         } catch (err) {
-          console.warn("Otomatik oynatma tarayıcı tarafından engellendi.", err);
+        console.warn("Otomatik oynatma tarayıcı tarafından engellendi.", err);
         }
       }
 
