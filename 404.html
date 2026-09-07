@@ -492,9 +492,9 @@
           <rect id="creamBezelStroke" x="198.3" y="170" width="529.4" height="429" rx="22" ry="22" fill="none" stroke="#8c846d" stroke-width="3" />
           <path id="blackScreenBg" d="M 201.3 544 L 201.3 193 A 22 22 0 0 1 223.3 171 L 702.7 171 A 22 22 0 0 1 724.7 193 L 724.7 544 Z" fill="#050505" stroke="#99927c" stroke-width="2" />
           <foreignObject id="playerObject" x="203.3" y="173" width="519.4" height="369" clip-path="url(#screenCustomClip)">
-           <div xmlns="http://www.w3.org/1999/xhtml" class="yt" style="width: 100%; height: 100%; margin: 0; padding: 0; background-color: #000; border-radius: 22px 22px 0 0; overflow: hidden; pointer-events: auto;">
-            <div id="ytIframe" style="width: 100%; height: 100%; pointer-events: auto;"></div>
-           </div>
+            <div xmlns="http://www.w3.org/1999/xhtml" class="yt" style="width: 100%; height: 100%; margin: 0; padding: 0; background-color: #000; border-radius: 22px 22px 0 0; overflow: hidden;">
+              <div id="ytIframe" style="width: 100%; height: 100%;"></div>
+            </div>
           </foreignObject>
           <!-- CRT kapanış ritüeli: kararma → yatay çizgi → nokta → tamamen kapanma -->
           <g id="powerOffEffect" clip-path="url(#screenCustomClip)" pointer-events="none">
@@ -519,7 +519,7 @@
             <rect id="channelTransitionLines" class="transitionLines" x="203.3" y="173" width="519.4" height="369" fill="url(#channelStaticLines)" />
             <rect x="203.3" y="173" width="519.4" height="369" fill="none" stroke="#ffffff" stroke-width="1.2" opacity="0.10" />
           </g>
-       
+          <rect id="clickOverlay" x="203.3" y="173" width="519.4" height="369" fill="transparent" pointer-events="none" clip-path="url(#screenCustomClip)" />
           <!-- 1. Ekran Çerçevesi Hitbox'ı (Alta Çizilecek) -->
           <rect id="bezelBottomHitbox" x="198.3" y="542" width="529.4" height="57" fill="rgba(0,0,0,0.01)" pointer-events="all" />
           <g transform="translate(448, 568)">
@@ -775,12 +775,24 @@
       };
 
       function onPlayerReady(event) {
-    try {
-     event.target.playVideo();
-    } catch (err) {
-     console.warn("Otomatik oynatma tarayıcı tarafından engellendi.", err);
-    }
-   }
+        try {
+          event.target.playVideo();
+        } catch (err) {
+          console.warn("Otomatik oynatma tarayıcı tarafından engellendi.", err);
+        }
+
+        const clickOverlay = document.getElementById('clickOverlay');
+        if (clickOverlay) {
+          clickOverlay.addEventListener('click', () => {
+            const state = player.getPlayerState();
+            if (state === YT.PlayerState.PLAYING || state === YT.PlayerState.BUFFERING) {
+              player.pauseVideo();
+            } else {
+              player.playVideo();
+            }
+          });
+        }
+      }
 
       function onPlayerStateChange(event) {
         if (event.data === YT.PlayerState.PLAYING) {
