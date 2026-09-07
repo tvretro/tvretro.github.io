@@ -23,6 +23,63 @@
         display: block;
         width: 100vw;
         height: 100vh;
+        position: relative;
+        z-index: 10;
+      }
+
+      /* YouTube oynatıcısı gerçek HTML katmanı: reklam/Skip ve iframe içi tıklamalar doğrudan iframe'e gider. */
+      #htmlPlayerShell {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 1px;
+        height: 1px;
+        z-index: 20;
+        overflow: hidden;
+        border-radius: 22px 22px 0 0;
+        background: #000;
+        opacity: 1;
+        transition: opacity 80ms linear;
+      }
+
+      #ytHtmlPlayer {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        background: #000;
+        border: 0;
+        border-radius: 22px 22px 0 0;
+        overflow: hidden;
+      }
+
+      /* CRT yüzey efektleri HTML iframe'in üstünde ama pointer-events kapalıdır. */
+      #crtHtmlOverlay {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 1px;
+        height: 1px;
+        z-index: 21;
+        pointer-events: none;
+        border-radius: 22px 22px 0 0;
+        overflow: hidden;
+        opacity: 1;
+        transition: opacity 80ms linear;
+        background:
+          repeating-linear-gradient(to bottom,
+            rgba(0,0,0,0.00) 0px,
+            rgba(0,0,0,0.00) 2px,
+            rgba(0,0,0,0.26) 2px,
+            rgba(0,0,0,0.26) 3.2px),
+          radial-gradient(ellipse at center,
+            rgba(255,255,255,0.00) 48%,
+            rgba(190,198,210,0.08) 72%,
+            rgba(105,112,122,0.18) 100%),
+          linear-gradient(118deg,
+            rgba(255,255,255,0.11) 0%,
+            rgba(255,255,255,0.035) 23%,
+            rgba(255,255,255,0.00) 45%);
       }
 
       .viewport-home-btn {
@@ -93,11 +150,6 @@
         cursor: grabbing !important;
       }
 
-      /* YouTube iframe tıklamalarını hiçbir görünmez katman engellemez. */
-      #clickOverlay {
-        pointer-events: none !important;
-      }
-
       /* Kanal değişiminde eski CRT televizyon parazit efekti */
       #channelTransition {
         opacity: 0;
@@ -136,6 +188,10 @@
     </style>
   </head>
   <body>
+    <div id="htmlPlayerShell" aria-hidden="true">
+      <div id="ytHtmlPlayer"></div>
+    </div>
+    <div id="crtHtmlOverlay" aria-hidden="true"></div>
     <svg id="retroTvSvg" xmlns="http://www.w3.org/2000/svg" viewBox="86 75 867 585" width="100vw" height="100vh" preserveAspectRatio="xMidYMid meet">
       <defs>
         <pattern id="safeWoodGrain" width="400" height="20" patternUnits="userSpaceOnUse" patternTransform="rotate(1)">
@@ -487,11 +543,7 @@
           <rect id="creamBezel" x="198.3" y="170" width="529.4" height="429" rx="22" ry="22" fill="url(#creamBezelGrad)" filter="url(#innerBevel)" />
           <rect id="creamBezelStroke" x="198.3" y="170" width="529.4" height="429" rx="22" ry="22" fill="none" stroke="#8c846d" stroke-width="3" />
           <path id="blackScreenBg" d="M 201.3 544 L 201.3 193 A 22 22 0 0 1 223.3 171 L 702.7 171 A 22 22 0 0 1 724.7 193 L 724.7 544 Z" fill="#050505" stroke="#99927c" stroke-width="2" />
-          <foreignObject id="playerObject" x="203.3" y="173" width="519.4" height="369" clip-path="url(#screenCustomClip)">
-            <div xmlns="http://www.w3.org/1999/xhtml" class="yt" style="width: 100%; height: 100%; margin: 0; padding: 0; background-color: #000; border-radius: 22px 22px 0 0; overflow: hidden;">
-              <div id="ytIframe" style="width: 100%; height: 100%;"></div>
-            </div>
-          </foreignObject>
+          <!-- YouTube iframe gerçek HTML katmanında; SVG yalnızca fiziksel TV ve CRT görsellerini taşır. -->
           <!-- CRT kapanış ritüeli: kararma → yatay çizgi → nokta → tamamen kapanma -->
           <g id="powerOffEffect" clip-path="url(#screenCustomClip)" pointer-events="none">
             <rect id="powerOffOverlay" x="203.3" y="173" width="519.4" height="369" fill="#000000" opacity="0" />
@@ -515,7 +567,6 @@
             <rect id="channelTransitionLines" class="transitionLines" x="203.3" y="173" width="519.4" height="369" fill="url(#channelStaticLines)" />
             <rect x="203.3" y="173" width="519.4" height="369" fill="none" stroke="#ffffff" stroke-width="1.2" opacity="0.10" />
           </g>
-          <rect id="clickOverlay" x="203.3" y="173" width="519.4" height="369" fill="transparent" fill-opacity="0" pointer-events="none" clip-path="url(#screenCustomClip)" aria-hidden="true" />
           <!-- 1. Ekran Çerçevesi Hitbox'ı (Alta Çizilecek) -->
           <rect id="bezelBottomHitbox" x="198.3" y="542" width="529.4" height="57" fill="rgba(0,0,0,0.01)" pointer-events="all" />
           <g transform="translate(448, 568)">
@@ -747,10 +798,23 @@
           adjustTvSymmetrically(16 / 9);
         }
       });
+
+      // İlk geometriyi hemen 16:9 olarak kur; metadata geldikten sonra gerçek oranla güncellenir.
+      window.addEventListener('DOMContentLoaded', () => {
+        adjustTvSymmetrically(16 / 9);
+      }, { once: true });
+      window.addEventListener('resize', () => {
+        const screen = document.getElementById('effectScanlines');
+        if (!screen) return;
+        const x = parseFloat(screen.getAttribute('x') || '203.3');
+        const width = parseFloat(screen.getAttribute('width') || '519.4');
+        updateHtmlPlayerGeometry(x, width);
+      });
+
       let isFirstInteraction = true;
       window.onYouTubeIframeAPIReady = function() {
         if (!videoId) return;
-        player = new YT.Player('ytIframe', {
+        player = new YT.Player('ytHtmlPlayer', {
           videoId: videoId,
           playerVars: {
             'controls': 0,
@@ -771,13 +835,12 @@
       };
 
       function onPlayerReady(event) {
-        // YouTube iframe'inin kendi tıklamalarını serbest bırak.
-        // Böylece video içindeki bağlantılar, reklam kontrolleri ve Skip düğmesi
-        // doğrudan YouTube iframe'ine ulaşabilir.
-        const clickOverlay = document.getElementById('clickOverlay');
-        if (clickOverlay) {
-          clickOverlay.style.pointerEvents = 'none';
-        }
+        // Oynatıcı gerçek HTML iframe katmanında olduğu için YouTube'un
+        // reklam kontrolleri, Skip düğmesi ve video içi bağlantıları doğrudan tıklanabilir.
+        const shell = document.getElementById('htmlPlayerShell');
+        const crt = document.getElementById('crtHtmlOverlay');
+        if (shell) shell.style.opacity = '1';
+        if (crt) crt.style.opacity = '1';
 
         // Sayfa açıldığında mevcut videoyu otomatik başlatmayı dene.
         try {
@@ -785,6 +848,37 @@
         } catch (err) {
           console.warn("Otomatik oynatma tarayıcı tarafından engellendi.", err);
         }
+      }
+
+      function updateHtmlPlayerGeometry(startX, newWidth) {
+        const svg = document.getElementById('retroTvSvg');
+        const shell = document.getElementById('htmlPlayerShell');
+        const crt = document.getElementById('crtHtmlOverlay');
+        if (!svg || !shell || !crt) return;
+
+        const ctm = svg.getScreenCTM();
+        if (!ctm) return;
+
+        const p1 = new DOMPoint(startX, 173).matrixTransform(ctm);
+        const p2 = new DOMPoint(startX + newWidth, 542).matrixTransform(ctm);
+        const left = Math.min(p1.x, p2.x);
+        const top = Math.min(p1.y, p2.y);
+        const width = Math.abs(p2.x - p1.x);
+        const height = Math.abs(p2.y - p1.y);
+
+        [shell, crt].forEach(el => {
+          el.style.left = `${left}px`;
+          el.style.top = `${top}px`;
+          el.style.width = `${width}px`;
+          el.style.height = `${height}px`;
+        });
+      }
+
+      function setHtmlPlayerTransition(hidden) {
+        const shell = document.getElementById('htmlPlayerShell');
+        const crt = document.getElementById('crtHtmlOverlay');
+        if (shell) shell.style.opacity = hidden ? '0' : '1';
+        if (crt) crt.style.opacity = hidden ? '0' : '1';
       }
 
       function onPlayerStateChange(event) {
@@ -804,8 +898,7 @@
         const deltaX = newWidth - baseWidth;
         const shift = deltaX / 2;
         const startX = 203.3 - shift;
-        document.getElementById('playerObject').setAttribute('x', startX);
-        document.getElementById('playerObject').setAttribute('width', newWidth);
+        updateHtmlPlayerGeometry(startX, newWidth);
         document.getElementById('effectScanlines').setAttribute('x', startX);
         document.getElementById('effectScanlines').setAttribute('width', newWidth);
         document.getElementById('effectCrtGlass').setAttribute('x', startX);
@@ -825,8 +918,6 @@
         document.getElementById('channelTransitionNoise').setAttribute('width', newWidth);
         document.getElementById('channelTransitionLines').setAttribute('x', startX);
         document.getElementById('channelTransitionLines').setAttribute('width', newWidth);
-        document.getElementById('clickOverlay').setAttribute('x', startX);
-        document.getElementById('clickOverlay').setAttribute('width', newWidth);
         document.getElementById('screenCustomClipPath').setAttribute('d', `M ${startX} 542 L ${startX} 195 A 22 22 0 0 1 ${startX + 22} 173 L ${startX + newWidth - 22} 173 A 22 22 0 0 1 ${startX + newWidth} 195 L ${startX + newWidth} 542 Z`);
         document.getElementById('blackScreenBg').setAttribute('d', `M ${startX - 2} 544 L ${startX - 2} 193 A 22 22 0 0 1 ${startX + 20} 171 L ${startX + newWidth - 20} 171 A 22 22 0 0 1 ${startX + newWidth + 2} 193 L ${startX + newWidth + 2} 544 Z`);
         document.getElementById('effectGlare').setAttribute('d', `M ${startX},173 L 487.7,173 L 288.3,542 L ${startX},542 Z`);
@@ -939,6 +1030,7 @@
           channelTransitionTimer = null;
         }
 
+        setHtmlPlayerTransition(true);
         overlay.classList.remove('active');
         void overlay.getBoundingClientRect();
         overlay.classList.add('active');
@@ -949,6 +1041,7 @@
         channelTransitionTimer = setTimeout(() => {
           if (token !== channelTransitionToken) return;
           channelTransitionTimer = null;
+          setHtmlPlayerTransition(false);
         }, 680);
 
         return token;
@@ -1146,8 +1239,6 @@
           if (!target) return;
           if (
             target.closest('.interactive-dial') ||
-            target.closest('#clickOverlay') ||
-            target.closest('#playerObject') ||
             target.tagName.toLowerCase() === 'text' ||
             target.closest('#polishedSurface') ||
             target.closest('#bezelBottomHitbox') ||
@@ -1419,6 +1510,7 @@
           const width = parseFloat(line.getAttribute('width') || '519.4');
           const centerX = x + width / 2;
           overlay.setAttribute('opacity', '0');
+          setHtmlPlayerTransition(false);
           line.setAttribute('x', x);
           line.setAttribute('width', width);
           line.setAttribute('opacity', '0');
@@ -1435,6 +1527,10 @@
               const p = elapsed / 520;
               const eased = 1 - Math.pow(1 - p, 2.2);
               overlay.setAttribute('opacity', String(eased * 0.965));
+              const shell = document.getElementById('htmlPlayerShell');
+              const crt = document.getElementById('crtHtmlOverlay');
+              if (shell) shell.style.opacity = String(Math.max(0, 1 - eased));
+              if (crt) crt.style.opacity = String(Math.max(0, 1 - eased));
               requestAnimationFrame(frame);
               return;
             }
@@ -1470,6 +1566,7 @@
             overlay.setAttribute('opacity', '1');
             line.setAttribute('opacity', '0');
             dot.setAttribute('opacity', '0');
+            setHtmlPlayerTransition(true);
           }
           requestAnimationFrame(frame);
         }
@@ -1488,6 +1585,7 @@
           const width = parseFloat(line.getAttribute('width') || '519.4');
           const centerX = x + width / 2;
           overlay.setAttribute('opacity', '1');
+          setHtmlPlayerTransition(true);
           line.setAttribute('x', String(centerX - 1.5));
           line.setAttribute('width', '3');
           line.setAttribute('height', '2');
@@ -1530,6 +1628,7 @@
               return;
             }
             resetPowerEffectOn();
+            setHtmlPlayerTransition(false);
             if (player && token === powerAnimationToken) {
               try { player.playVideo(); } catch (err) {}
             }
