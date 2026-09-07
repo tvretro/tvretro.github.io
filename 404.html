@@ -93,6 +93,11 @@
         cursor: grabbing !important;
       }
 
+      /* YouTube iframe tıklamalarını hiçbir görünmez katman engellemez. */
+      #clickOverlay {
+        pointer-events: none !important;
+      }
+
       /* Kanal değişiminde eski CRT televizyon parazit efekti */
       #channelTransition {
         opacity: 0;
@@ -510,7 +515,7 @@
             <rect id="channelTransitionLines" class="transitionLines" x="203.3" y="173" width="519.4" height="369" fill="url(#channelStaticLines)" />
             <rect x="203.3" y="173" width="519.4" height="369" fill="none" stroke="#ffffff" stroke-width="1.2" opacity="0.10" />
           </g>
-          <rect id="clickOverlay" x="203.3" y="173" width="519.4" height="369" fill="#000000" opacity="0" cursor="pointer" clip-path="url(#screenCustomClip)" />
+          <rect id="clickOverlay" x="203.3" y="173" width="519.4" height="369" fill="transparent" fill-opacity="0" pointer-events="none" clip-path="url(#screenCustomClip)" aria-hidden="true" />
           <!-- 1. Ekran Çerçevesi Hitbox'ı (Alta Çizilecek) -->
           <rect id="bezelBottomHitbox" x="198.3" y="542" width="529.4" height="57" fill="rgba(0,0,0,0.01)" pointer-events="all" />
           <g transform="translate(448, 568)">
@@ -766,23 +771,19 @@
       };
 
       function onPlayerReady(event) {
+        // YouTube iframe'inin kendi tıklamalarını serbest bırak.
+        // Böylece video içindeki bağlantılar, reklam kontrolleri ve Skip düğmesi
+        // doğrudan YouTube iframe'ine ulaşabilir.
+        const clickOverlay = document.getElementById('clickOverlay');
+        if (clickOverlay) {
+          clickOverlay.style.pointerEvents = 'none';
+        }
+
         // Sayfa açıldığında mevcut videoyu otomatik başlatmayı dene.
         try {
           event.target.playVideo();
         } catch (err) {
           console.warn("Otomatik oynatma tarayıcı tarafından engellendi.", err);
-        }
-
-        const clickOverlay = document.getElementById('clickOverlay');
-        if (clickOverlay) {
-          clickOverlay.addEventListener('click', () => {
-            const state = player.getPlayerState();
-            if (state === YT.PlayerState.PLAYING || state === YT.PlayerState.BUFFERING) {
-              player.pauseVideo();
-            } else {
-              player.playVideo();
-            }
-          });
         }
       }
 
@@ -888,7 +889,7 @@
         }
       };
       // Videos
-      const stationList = ["vdJthIdDR6w", "IufsocTXfMY", "jx0llzSntd8", "VOeEzcCt70A", "S2ujotDMluo"];
+      const stationList = ["vdJthIdDR6w", "IufsocTXfMY", "jx0llzSntd8", "CGj85pVzRJs", "S2ujotDMluo"];
       let hasDialBeenMoved = false;
 
       let channelTransitionTimer = null;
