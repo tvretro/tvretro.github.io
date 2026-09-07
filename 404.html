@@ -128,6 +128,16 @@
         88% { opacity: 0.34; }
         100% { opacity: 0; visibility: hidden; }
       }
+      #screenEffects, #screenEffects *,
+      #powerOffEffect, #powerOffEffect *,
+      #channelTransition, #channelTransition *,
+      #blackScreenBg,
+      #clickOverlay {
+       pointer-events: none !important;
+      }
+      #playerObject, #playerObject * {
+       pointer-events: auto !important;
+      }
     </style>
   </head>
   <body>
@@ -509,7 +519,7 @@
             <rect id="channelTransitionLines" class="transitionLines" x="203.3" y="173" width="519.4" height="369" fill="url(#channelStaticLines)" />
             <rect x="203.3" y="173" width="519.4" height="369" fill="none" stroke="#ffffff" stroke-width="1.2" opacity="0.10" />
           </g>
-          <rect id="clickOverlay" x="203.3" y="173" width="519.4" height="369" fill="transparent" pointer-events="none" clip-path="url(#screenCustomClip)" />
+          <rect id="clickOverlay" x="203.3" y="173" width="519.4" height="369" fill="transparent" style="display: none; pointer-events: none;" clip-path="url(#screenCustomClip)" />
           <!-- 1. Ekran Çerçevesi Hitbox'ı (Alta Çizilecek) -->
           <rect id="bezelBottomHitbox" x="198.3" y="542" width="529.4" height="57" fill="rgba(0,0,0,0.01)" pointer-events="all" />
           <g transform="translate(448, 568)">
@@ -747,15 +757,15 @@
         player = new YT.Player('ytIframe', {
           videoId: videoId,
           playerVars: {
-          'controls': 1,
-          'modestbranding': 1,
-          'rel': 0,
-          'iv_load_policy': 3,
-          'cc_load_policy': 0,
-          'disablekb': 1,
-          'fs': 0,
-          'autoplay': 1,
-          'mute': 0
+            'controls': 1,
+            'modestbranding': 1,
+            'rel': 0,
+            'iv_load_policy': 3,
+            'cc_load_policy': 0,
+            'disablekb': 1,
+            'fs': 0,
+            'autoplay': 1,
+            'mute': 0
           },
           events: {
             'onReady': onPlayerReady,
@@ -766,11 +776,11 @@
 
       function onPlayerReady(event) {
         try {
-        event.target.playVideo();
+         event.target.playVideo();
         } catch (err) {
-        console.warn("Otomatik oynatma tarayıcı tarafından engellendi.", err);
+         console.warn("Otomatik oynatma tarayıcı tarafından engellendi.", err);
         }
-      }
+       }
 
       function onPlayerStateChange(event) {
         if (event.data === YT.PlayerState.PLAYING) {
