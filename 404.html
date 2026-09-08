@@ -27,7 +27,6 @@
         z-index: 10;
       }
 
-      /* YouTube oynatıcısı gerçek HTML katmanı: reklam/Skip ve iframe içi tıklamalar doğrudan iframe'e gider. */
       #htmlPlayerShell {
         position: fixed;
         left: 0;
@@ -53,7 +52,6 @@
         overflow: hidden;
       }
 
-      /* CRT yüzey efektleri HTML iframe'in üstünde ama pointer-events kapalıdır. */
       #crtHtmlOverlay {
         position: fixed;
         left: 0;
@@ -799,7 +797,6 @@
         }
       });
 
-      // İlk geometriyi hemen 16:9 olarak kur; metadata geldikten sonra gerçek oranla güncellenir.
       window.addEventListener('DOMContentLoaded', () => {
         adjustTvSymmetrically(16 / 9);
       }, { once: true });
@@ -835,14 +832,12 @@
       };
 
       function onPlayerReady(event) {
-        // Oynatıcı gerçek HTML iframe katmanında olduğu için YouTube'un
-        // reklam kontrolleri, Skip düğmesi ve video içi bağlantıları doğrudan tıklanabilir.
+
         const shell = document.getElementById('htmlPlayerShell');
         const crt = document.getElementById('crtHtmlOverlay');
         if (shell) shell.style.opacity = '1';
         if (crt) crt.style.opacity = '1';
 
-        // Sayfa açıldığında mevcut videoyu otomatik başlatmayı dene.
         try {
           event.target.playVideo();
         } catch (err) {
@@ -859,8 +854,6 @@
         const ctm = svg.getScreenCTM();
         if (!ctm) return;
 
-        // YouTube görüntüsünü fiziksel ekran boşluğuna birkaç piksel daha aşağı oturt.
-        // Aynı geometri CRT tarama/cam katmanına da uygulanır.
         const screenTopY = 175;
         const screenBottomY = 544;
         const p1 = new DOMPoint(startX, screenTopY).matrixTransform(ctm);
@@ -1041,7 +1034,6 @@
 
         playChannelStaticBurst();
 
-        // Eski TV hissi: kısa karıncalanma, sonra yeni kanalın yüklenmesi.
         channelTransitionTimer = setTimeout(() => {
           if (token !== channelTransitionToken) return;
           channelTransitionTimer = null;
@@ -1059,7 +1051,6 @@
         const safeIndex = ((detentIndex % listLength) + listLength) % listLength;
         const token = startChannelTransition();
 
-        // Parazit oturduktan hemen sonra yeni kanalı yükle.
         setTimeout(() => {
           if (token !== channelTransitionToken) return;
           try {
@@ -1444,8 +1435,6 @@
           const { overlay, line, dot } = powerEffectElements();
           if (overlay) overlay.setAttribute('opacity', '0');
           if (line) {
-            // Her açılıştan/kapanıştan önce çizgiyi ekranın güncel tam genişliğine geri kur.
-            // Böylece ilk kapanıştan sonra genişliği 3px'e düşmüş halde kalmaz.
             const screen = document.getElementById('effectScanlines');
             const x = parseFloat(screen?.getAttribute('x') || '203.3');
             const width = parseFloat(screen?.getAttribute('width') || '519.4');
@@ -1720,7 +1709,7 @@
               setTvPowerState(false);
             }
           } else {
-            // Anahtarı yavaşça eski konumuna geri bırak.
+
             const startX = drag.visualX;
             const targetX = switchLeverX(isTvPoweredOn);
             const started = performance.now();
