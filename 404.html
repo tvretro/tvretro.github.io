@@ -552,7 +552,7 @@
         <g id="screenArea">
           <rect id="creamBezel" x="198.3" y="170" width="529.4" height="429" rx="22" ry="22" fill="url(#creamBezelGrad)" filter="url(#innerBevel)" />
           <rect id="creamBezelStroke" x="198.3" y="170" width="529.4" height="429" rx="22" ry="22" fill="none" stroke="#8c846d" stroke-width="3" />
-          <path id="blackScreenBg" d="M 201.3 544 L 201.3 193 A 22 22 0 0 1 223.3 171 L 702.7 171 A 22 22 0 0 1 724.7 193 L 724.7 544 Z" fill="#050505" stroke="#99927c" stroke-width="2" />
+          <path id="blackScreenBg" d="M 201.3 544 L 201.3 192 A 19 19 0 0 1 220.3 173 L 705.7 173 A 19 19 0 0 1 724.7 192 L 724.7 544 Z" fill="#050505" stroke="#99927c" stroke-width="2" />
 
           <g id="powerOffEffect" clip-path="url(#screenCustomClip)" pointer-events="none">
             <rect id="powerOffOverlay" x="203.3" y="173" width="519.4" height="369" fill="#000000" opacity="0" />
@@ -858,7 +858,7 @@
         const ctm = svg.getScreenCTM();
         if (!ctm) return;
 
-        const screenTopY = 173;
+        const screenTopY = 175; // Bej cercevenin ustunde de yanlardaki gibi 5 birim pay.
         const screenBottomY = 542;
         const p1 = new DOMPoint(startX, screenTopY).matrixTransform(ctm);
         const p2 = new DOMPoint(startX + newWidth, screenBottomY).matrixTransform(ctm);
@@ -867,7 +867,16 @@
         const width = Math.abs(p2.x - p1.x);
         const height = Math.abs(p2.y - p1.y);
 
-        const framePad = 2;
+        // HTML katmanlarini SVG ile ayni olcekte ve es merkezli tut.
+        const scale = Math.hypot(ctm.a, ctm.b);
+        const framePad = 2 * scale;
+        frame.style.borderRadius = `${19 * scale}px ${19 * scale}px 0 0`;
+        frame.style.borderWidth = `${1.5 * scale}px`;
+        shell.style.borderRadius = `${17 * scale}px ${17 * scale}px 0 0`;
+        const video = document.getElementById('ytHtmlPlayer');
+        if (video) video.style.borderRadius = 'inherit';
+        crt.style.borderRadius = `${17 * scale}px ${17 * scale}px ${22 * scale}px ${22 * scale}px`;
+        crt.style.borderWidth = `${8 * scale}px`;
         frame.style.left = `${left - framePad}px`;
         frame.style.top = `${top - framePad}px`;
         frame.style.width = `${width + framePad * 2}px`;
@@ -928,7 +937,7 @@
         document.getElementById('channelTransitionLines').setAttribute('x', startX);
         document.getElementById('channelTransitionLines').setAttribute('width', newWidth);
         document.getElementById('screenCustomClipPath').setAttribute('d', `M ${startX} 542 L ${startX} 195 A 22 22 0 0 1 ${startX + 22} 173 L ${startX + newWidth - 22} 173 A 22 22 0 0 1 ${startX + newWidth} 195 L ${startX + newWidth} 542 Z`);
-        document.getElementById('blackScreenBg').setAttribute('d', `M ${startX - 2} 544 L ${startX - 2} 193 A 22 22 0 0 1 ${startX + 20} 171 L ${startX + newWidth - 20} 171 A 22 22 0 0 1 ${startX + newWidth + 2} 193 L ${startX + newWidth + 2} 544 Z`);
+        document.getElementById('blackScreenBg').setAttribute('d', `M ${startX - 2} 544 L ${startX - 2} 192 A 19 19 0 0 1 ${startX + 17} 173 L ${startX + newWidth - 17} 173 A 19 19 0 0 1 ${startX + newWidth + 2} 192 L ${startX + newWidth + 2} 544 Z`);
         document.getElementById('effectGlare').setAttribute('d', `M ${startX},173 L 487.7,173 L 288.3,542 L ${startX},542 Z`);
         const caseShiftX = 184.3 - shift;
         const caseWidth = 671.4 + deltaX;
@@ -1536,13 +1545,9 @@
               const playerFrame = document.getElementById('htmlPlayerFrame');
               const shell = document.getElementById('htmlPlayerShell');
               const crt = document.getElementById('crtHtmlOverlay');
-
-              if (playerFrame) {
-                playerFrame.style.opacity = String(Math.max(0, 1 - eased));
-              }
+              if (playerFrame) playerFrame.style.opacity = String(Math.max(0, 1 - eased));
               if (shell) shell.style.opacity = String(Math.max(0, 1 - eased));
               if (crt) crt.style.opacity = String(Math.max(0, 1 - eased));
-
               requestAnimationFrame(frame);
               return;
             }
