@@ -138,6 +138,11 @@
         cursor: grabbing;
       }
 
+      .interactive-dial[aria-disabled="true"],
+      .interactive-dial[aria-disabled="true"] * {
+        cursor: not-allowed;
+      }
+
       .dial-hit-area {
         pointer-events: all;
       }
@@ -166,8 +171,6 @@
         cursor: -webkit-grabbing !important;
         cursor: grabbing !important;
       }
-
-      /* Kanal değişiminde eski CRT televizyon parazit efekti */
       #channelTransition {
         opacity: 0;
         pointer-events: none;
@@ -858,7 +861,7 @@
         const ctm = svg.getScreenCTM();
         if (!ctm) return;
 
-        const screenTopY = 175; // Bej cercevenin ustunde de yanlardaki gibi 5 birim pay.
+        const screenTopY = 175; 
         const screenBottomY = 542;
         const p1 = new DOMPoint(startX, screenTopY).matrixTransform(ctm);
         const p2 = new DOMPoint(startX + newWidth, screenBottomY).matrixTransform(ctm);
@@ -867,7 +870,6 @@
         const width = Math.abs(p2.x - p1.x);
         const height = Math.abs(p2.y - p1.y);
 
-        // HTML katmanlarini SVG ile ayni olcekte ve es merkezli tut.
         const scale = Math.hypot(ctm.a, ctm.b);
         const framePad = 2 * scale;
         frame.style.borderRadius = `${19 * scale}px ${19 * scale}px 0 0`;
@@ -1037,6 +1039,7 @@
       }
 
       function startChannelTransition() {
+        if (!isTvPoweredOn) return;
         const overlay = document.getElementById('channelTransition');
         if (!overlay) return;
 
@@ -1056,7 +1059,7 @@
         playChannelStaticBurst();
 
         channelTransitionTimer = setTimeout(() => {
-          if (token !== channelTransitionToken) return;
+          if (!isTvPoweredOn || token !== channelTransitionToken) return;
           channelTransitionTimer = null;
           setHtmlPlayerTransition(false);
         }, 680);
@@ -1065,6 +1068,7 @@
       }
 
       function changeChannel(detentIndex) {
+        if (!isTvPoweredOn) return;
         if (!player || typeof player.loadVideoById !== 'function') return;
         if (!hasDialBeenMoved) return;
 
@@ -1073,7 +1077,7 @@
         const token = startChannelTransition();
 
         setTimeout(() => {
-          if (token !== channelTransitionToken) return;
+          if (!isTvPoweredOn || token !== channelTransitionToken) return;
           try {
             player.loadVideoById(stationList[safeIndex]);
           } catch (e) {
@@ -1656,6 +1660,24 @@
         function setTvPowerState(poweredOn) {
           if (isTvPoweredOn === poweredOn) return;
           isTvPoweredOn = poweredOn;
+          Object.values(dialConfigs).forEach(({ element }) => {
+            element?.setAttribute('aria-disabled', String(!poweredOn));
+          });
+          if (!poweredOn) {
+            channelTransitionToken++;
+            if (channelTransitionTimer !== null) {
+              clearTimeout(channelTransitionTimer);
+              channelTransitionTimer = null;
+            }
+            document.getElementById('channelTransition')?.classList.remove('active');
+    
+            const drag = activeDial;
+            activeDial = null;
+            if (drag) {
+              drag.config.element.classList.remove('dragging');
+              try { drag.config.element.releasePointerCapture(drag.pointerId); } catch (_) {}
+            }
+          }
           renderPowerSwitchLever(switchLeverX(poweredOn));
           if (poweredOn) animatePowerOn();
           else animatePowerOff();
@@ -1769,12 +1791,15 @@
         }
     
         function animateDialTo(config, target) {
+          if (!isTvPoweredOn) return;
+          const powerToken = powerAnimationToken;
           const start = config.rotation;
           const distance = target - start;
           const duration = 85;
           const startTime = performance.now();
 
           function frame(now) {
+            if (!isTvPoweredOn || powerToken !== powerAnimationToken) return;
             const p = Math.min(1,
               (now - startTime) / duration);
             const eased = 1 - Math.pow(1 - p, 3);
@@ -1787,6 +1812,10 @@
         }
     
         function beginDialDrag(name, event) {
+          if (!isTvPoweredOn) {
+            event.preventDefault();
+            return;
+          }
           const config = dialConfigs[name];
           if (!config?.element) return;
           const angle = pointerAngle(config.element, event);
@@ -1809,6 +1838,7 @@
         }
     
         function moveDialDrag(event) {
+          if (!isTvPoweredOn) return;
           if (!activeDial || event.pointerId !== activeDial.pointerId) {
             return;
           }
