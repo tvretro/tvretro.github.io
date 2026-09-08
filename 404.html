@@ -75,7 +75,7 @@
         z-index: 21;
         pointer-events: none;
         border: 8px solid #050505;
-        border-radius: 22px;
+        border-radius: 22px 22px 0 0;
         box-sizing: border-box;
         overflow: hidden;
         opacity: 1;
@@ -875,7 +875,7 @@
         shell.style.borderRadius = `${17 * scale}px ${17 * scale}px 0 0`;
         const video = document.getElementById('ytHtmlPlayer');
         if (video) video.style.borderRadius = 'inherit';
-        crt.style.borderRadius = `${17 * scale}px ${17 * scale}px ${22 * scale}px ${22 * scale}px`;
+        crt.style.borderRadius = `${17 * scale}px ${17 * scale}px 0 0`;
         crt.style.borderWidth = `${8 * scale}px`;
         frame.style.left = `${left - framePad}px`;
         frame.style.top = `${top - framePad}px`;
