@@ -26,9 +26,6 @@
         position: relative;
         z-index: 10;
       }
-
-      /* YouTube oynatıcısının arkasındaki ince siyah CRT iç çerçevesi.
-         iframe tamamen bunun içinde kalır; bu katman tıklamaları yakalamaz. */
       #htmlPlayerFrame {
         position: fixed;
         left: 0;
@@ -44,8 +41,6 @@
         box-shadow: inset 0 0 0 0.8px rgba(255,255,255,0.045);
         overflow: hidden;
       }
-
-      /* YouTube oynatıcısı gerçek HTML katmanı: reklam/Skip ve iframe içi tıklamalar doğrudan iframe'e gider. */
       #htmlPlayerShell {
         position: fixed;
         left: 0;
@@ -71,10 +66,6 @@
         overflow: hidden;
       }
 
-      /* CRT yüzey efektleri HTML iframe'in üstünde ama pointer-events kapalıdır.
-         Eski SVG katmanındaki blackScreenBg + effectOvalStroke yapısı burada
-         görsel olarak yeniden kuruluyor: video, bej çerçevenin içinde kalan
-         ince siyah oval ekran çerçevesinin tam merkezinde görünür. */
       #crtHtmlOverlay {
         position: fixed;
         left: 0;
@@ -308,31 +299,31 @@
           <stop offset="70%" stop-color="#732D10" />
           <stop offset="100%" stop-color="#3D1200" />
         </linearGradient>
-        <!-- Retro 60-70'ler Çubuk Ayak Gradiyentleri -->
+
         <linearGradient id="retroLegWood" x1="0%" y1="0%" x2="100%" y2="0%">
-     <stop offset="0%" stop-color="#2D1106" />
-     <stop offset="25%" stop-color="#54230D" />
-     <stop offset="60%" stop-color="#783415" />
-     <stop offset="85%" stop-color="#431A08" />
-     <stop offset="100%" stop-color="#1B0701" />
-    </linearGradient>
-        <linearGradient id="retroLegWoodRear" x1="0%" y1="0%" x2="100%" y2="0%">
-     <stop offset="0%" stop-color="#140602" />
-     <stop offset="50%" stop-color="#321307" />
-     <stop offset="100%" stop-color="#0E0301" />
-    </linearGradient>
-        <linearGradient id="brassTipGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-     <stop offset="0%" stop-color="#785314" />
-     <stop offset="25%" stop-color="#D4AF37" />
-     <stop offset="50%" stop-color="#FFF3B0" />
-     <stop offset="75%" stop-color="#AA7C11" />
-     <stop offset="100%" stop-color="#4A3205" />
-    </linearGradient>
-        <linearGradient id="legBracketGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-     <stop offset="0%" stop-color="#374151" />
-     <stop offset="50%" stop-color="#1F2937" />
-     <stop offset="100%" stop-color="#111827" />
-    </linearGradient>
+         <stop offset="0%" stop-color="#2D1106" />
+         <stop offset="25%" stop-color="#54230D" />
+         <stop offset="60%" stop-color="#783415" />
+         <stop offset="85%" stop-color="#431A08" />
+         <stop offset="100%" stop-color="#1B0701" />
+        </linearGradient>
+            <linearGradient id="retroLegWoodRear" x1="0%" y1="0%" x2="100%" y2="0%">
+         <stop offset="0%" stop-color="#140602" />
+         <stop offset="50%" stop-color="#321307" />
+         <stop offset="100%" stop-color="#0E0301" />
+        </linearGradient>
+            <linearGradient id="brassTipGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+         <stop offset="0%" stop-color="#785314" />
+         <stop offset="25%" stop-color="#D4AF37" />
+         <stop offset="50%" stop-color="#FFF3B0" />
+         <stop offset="75%" stop-color="#AA7C11" />
+         <stop offset="100%" stop-color="#4A3205" />
+        </linearGradient>
+            <linearGradient id="legBracketGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+         <stop offset="0%" stop-color="#374151" />
+         <stop offset="50%" stop-color="#1F2937" />
+         <stop offset="100%" stop-color="#111827" />
+        </linearGradient>
         <radialGradient id="woodVignette" cx="50%" cy="50%" r="75%">
           <stop offset="50%" stop-color="#000000" stop-opacity="0" />
           <stop offset="90%" stop-color="#2a0a00" stop-opacity="0.6" />
@@ -468,20 +459,18 @@
         <polygon points="200,550 840,550 840,554 200,554" fill="#000000" opacity="0.5" filter="blur(2px)" />
       </g>
       <ellipse cx="520" cy="648" rx="420" ry="28" fill="#000000" opacity="0.85" filter="blur(14px)" />
-      <!-- 60-70'ler Sol Çubuk Ayak Grubu (Mid-Century Tapered Peg Legs) -->
+
       <g id="tvFeetLeft">
-        <!-- Ayak Ucu Zemin Nokta Gölgeleri -->
+ 
         <ellipse cx="236" cy="656" rx="8" ry="2.2" fill="#000000" opacity="0.65" filter="blur(1.5px)" />
         <ellipse cx="279" cy="653" rx="6" ry="1.8" fill="#000000" opacity="0.55" filter="blur(1.5px)" />
 
-        <!-- Arka Sol Çubuk Ayak (Derinlik Hissi Veren Perspektif) -->
         <g id="tvFeetLeftRear">
           <polygon points="269,632.5 275.5,632.5 281.5,652 277,652" fill="url(#retroLegWoodRear)" />
           <polygon points="275,647 280.2,647 281.5,652 277,652" fill="url(#brassTipGrad)" opacity="0.8" />
           <ellipse cx="279.2" cy="652.5" rx="2.4" ry="0.8" fill="#111111" />
         </g>
 
-        <!-- Ön Sol Ana Çubuk Ayak (Dışa Açılı Konik Çubuk) -->
         <g id="tvFeetLeftFront">
           <polygon points="252,632.5 260.5,632.5 238.5,655 233.5,655" fill="url(#retroLegWood)" />
           <line x1="255.5" y1="633.5" x2="236.5" y2="648" stroke="#ffffff" stroke-width="0.8" opacity="0.25" stroke-linecap="round" />
@@ -490,26 +479,21 @@
           <ellipse cx="236" cy="655.4" rx="2.8" ry="1" fill="#111111" />
         </g>
 
-        <!-- Metal Montaj Tablası ve Vidalar -->
         <polygon points="241,631 285,631 281,634.5 245,634.5" fill="url(#legBracketGrad)" stroke="#0a0d14" stroke-width="0.6" />
         <circle cx="249" cy="632.8" r="1" fill="#9CA3AF" />
         <circle cx="277" cy="632.8" r="1" fill="#9CA3AF" />
       </g>
 
-      <!-- 60-70'ler Sağ Çubuk Ayak Grubu (Mid-Century Tapered Peg Legs) -->
       <g id="tvFeetRight">
-        <!-- Ayak Ucu Zemin Nokta Gölgeleri -->
         <ellipse cx="804" cy="656" rx="8" ry="2.2" fill="#000000" opacity="0.65" filter="blur(1.5px)" />
         <ellipse cx="761" cy="653" rx="6" ry="1.8" fill="#000000" opacity="0.55" filter="blur(1.5px)" />
 
-        <!-- Arka Sağ Çubuk Ayak (Derinlik Hissi Veren Perspektif) -->
         <g id="tvFeetRightRear">
           <polygon points="771,632.5 764.5,632.5 758.5,652 763,652" fill="url(#retroLegWoodRear)" />
           <polygon points="765,647 759.8,647 758.5,652 763,652" fill="url(#brassTipGrad)" opacity="0.8" />
           <ellipse cx="760.8" cy="652.5" rx="2.4" ry="0.8" fill="#111111" />
         </g>
 
-        <!-- Ön Sağ Ana Çubuk Ayak (Dışa Açılı Konik Çubuk) -->
         <g id="tvFeetRightFront">
           <polygon points="788,632.5 779.5,632.5 801.5,655 806.5,655" fill="url(#retroLegWood)" />
           <line x1="784.5" y1="633.5" x2="803.5" y2="648" stroke="#ffffff" stroke-width="0.8" opacity="0.25" stroke-linecap="round" />
@@ -518,7 +502,6 @@
           <ellipse cx="804" cy="655.4" rx="2.8" ry="1" fill="#111111" />
         </g>
 
-        <!-- Metal Montaj Tablası ve Vidalar -->
         <polygon points="799,631 755,631 759,634.5 795,634.5" fill="url(#legBracketGrad)" stroke="#0a0d14" stroke-width="0.6" />
         <circle cx="791" cy="632.8" r="1" fill="#9CA3AF" />
         <circle cx="763" cy="632.8" r="1" fill="#9CA3AF" />
@@ -570,15 +553,13 @@
           <rect id="creamBezel" x="198.3" y="170" width="529.4" height="429" rx="22" ry="22" fill="url(#creamBezelGrad)" filter="url(#innerBevel)" />
           <rect id="creamBezelStroke" x="198.3" y="170" width="529.4" height="429" rx="22" ry="22" fill="none" stroke="#8c846d" stroke-width="3" />
           <path id="blackScreenBg" d="M 201.3 544 L 201.3 193 A 22 22 0 0 1 223.3 171 L 702.7 171 A 22 22 0 0 1 724.7 193 L 724.7 544 Z" fill="#050505" stroke="#99927c" stroke-width="2" />
-          <!-- YouTube iframe gerçek HTML katmanında; SVG yalnızca fiziksel TV ve CRT görsellerini taşır. -->
-          <!-- CRT kapanış ritüeli: kararma → yatay çizgi → nokta → tamamen kapanma -->
+
           <g id="powerOffEffect" clip-path="url(#screenCustomClip)" pointer-events="none">
             <rect id="powerOffOverlay" x="203.3" y="173" width="519.4" height="369" fill="#000000" opacity="0" />
             <rect id="powerOffLine" x="203.3" y="356.5" width="519.4" height="2" rx="1" fill="#F5F7FA" opacity="0" />
             <circle id="powerOffDot" cx="462.9" cy="357.5" r="3.2" fill="#FFFFFF" opacity="0" />
           </g>
 
-          <!-- Sürekli CRT katmanı: TV açık/kapalı olsa da hiçbir zaman kaybolmaz. -->
           <g id="screenEffects" clip-path="url(#screenCustomClip)" style="pointer-events: none;">
             <rect id="effectScanlines" x="203.3" y="173" width="519.4" height="369" fill="url(#scanlines)" />
             <rect id="effectCrtGlass" x="203.3" y="173" width="519.4" height="369" fill="url(#crtGlass)" />
@@ -587,23 +568,19 @@
             <rect id="effectInnerLine" x="203.3" y="173" width="519.4" height="369" fill="none" stroke="#000000" stroke-width="4" opacity="0.8" />
           </g>
 
-          <!-- Kanal değiştirme: analog CRT karıncalanma / yatay tarama efekti -->
           <g id="channelTransition" clip-path="url(#screenCustomClip)" style="pointer-events: none;">
             <rect id="channelTransitionBlack" class="transitionBlack" x="203.3" y="173" width="519.4" height="369" fill="#000000" />
             <rect id="channelTransitionNoise" class="transitionNoise" x="203.3" y="173" width="519.4" height="369" fill="#ffffff" filter="url(#channelStatic)" />
             <rect id="channelTransitionLines" class="transitionLines" x="203.3" y="173" width="519.4" height="369" fill="url(#channelStaticLines)" />
             <rect x="203.3" y="173" width="519.4" height="369" fill="none" stroke="#ffffff" stroke-width="1.2" opacity="0.10" />
           </g>
-          <!-- 1. Ekran Çerçevesi Hitbox'ı (Alta Çizilecek) -->
           <rect id="bezelBottomHitbox" x="198.3" y="542" width="529.4" height="57" fill="rgba(0,0,0,0.01)" pointer-events="all" />
           <g transform="translate(448, 568)">
-            <!-- Görsel Katmanlar (pointer-events="none" ile tıklamaya kapatıldı) -->
             <rect x="0" y="0" width="30" height="7" rx="2" fill="#F5F5DC" filter="url(#dialShadow)" pointer-events="none" />
             <rect x="3" y="2" width="7" height="3" fill="#ff2222" opacity="0.8" pointer-events="none" />
             <rect x="11.5" y="2" width="7" height="3" fill="#22ff22" opacity="0.8" pointer-events="none" />
             <rect x="20" y="2" width="7" height="3" fill="#2266ff" opacity="0.8" pointer-events="none" />
             
-            <!-- Etkileşim (Hitbox) Katmanı (%1 Siyahlık ile Görünmez ama Kesin Tıklanabilir) -->
             <rect id="polishedSurface" x="0" y="0" width="30" height="7" rx="2" fill="rgba(0,0,0,0.01)" pointer-events="all" />
           </g>
         </g> 
@@ -747,7 +724,6 @@
               </g>
               <circle class="dial-hit-area" cx="0" cy="0" r="30" fill="#FFFFFF" fill-opacity="0.001" />
             </g>
-            <!-- Hoparlör: boyutu korunarak hafif yukarı alındı -->
             <g transform="translate(752.7, 440)">
               <g clip-path="url(#grilleHoles)">
                 <rect x="0" y="0" width="72" height="134" fill="#080808" />
@@ -761,17 +737,14 @@
               </g>
             </g>
 
-            <!-- Yatay ON / OFF güç anahtarı -->
             <g id="powerSwitch" transform="translate(788.7, 585)" class="power-switch" role="button" aria-label="TV Power Switch">
               <text x="-24" y="2.5" font-family="sans-serif" font-size="4.5" font-weight="bold" fill="#E5E7EB" text-anchor="end" letter-spacing="0.15">OFF</text>
               <text x="24" y="2.5" font-family="sans-serif" font-size="4.5" font-weight="bold" fill="#E5E7EB" text-anchor="start" letter-spacing="0.15">ON</text>
 
-              <!-- Hafif gömülü kaide -->
               <rect x="-14.5" y="-7" width="29" height="14" rx="4.2" fill="#0B0C0F" stroke="#050609" stroke-width="1.1" filter="url(#dialShadow)" />
               <rect x="-12.8" y="-5.8" width="25.6" height="11.6" rx="3.4" fill="#2A2D32" stroke="#111318" stroke-width="0.6" />
               <rect x="-11.4" y="-4.7" width="22.8" height="9.4" rx="2.8" fill="url(#silverFrameGrad)" stroke="#6B7280" stroke-width="0.45" />
 
-              <!-- Çıkıntılı metal anahtar gövdesi -->
               <g id="powerSwitchLever" transform="translate(2.6,0)" filter="url(#knobShadow)">
                 <path d="M -6 -4.1 L 5.7 -4.1 Q 7.6 -4.1 8.1 -2.2 L 8.1 2.15 Q 7.5 4.1 5.7 4.1 L -6 4.1 Q -7.7 4.1 -8.1 2.1 L -8.1 -2.1 Q -7.7 -4.1 -6 -4.1 Z" fill="url(#metalCylinder)" stroke="#4B5563" stroke-width="0.55" />
                 <path d="M -5.8 -2.8 L 5.2 -2.8 Q 6.3 -2.8 6.8 -1.6" fill="none" stroke="#FFFFFF" stroke-width="0.7" opacity="0.7" stroke-linecap="round" />
@@ -779,7 +752,6 @@
                 <path d="M 6.2 -2.6 L 8.1 -1.3 L 8.1 1.6 L 6.3 2.7 Z" fill="#AEB4BC" opacity="0.65" />
               </g>
 
-              <!-- Anahtarın çevresindeki fiziksel gölge ve parmak temas payı -->
               <path d="M -10.2 5.2 L 7.8 5.2 Q 10 5.2 10 3.4" fill="none" stroke="#000000" stroke-width="1" opacity="0.65" stroke-linecap="round" />
               <rect id="powerSwitchHitbox" x="-18" y="-11" width="36" height="22" rx="6" fill="#FFFFFF" fill-opacity="0.001" pointer-events="all" />
             </g>
@@ -826,7 +798,6 @@
         }
       });
 
-      // İlk geometriyi hemen 16:9 olarak kur; metadata geldikten sonra gerçek oranla güncellenir.
       window.addEventListener('DOMContentLoaded', () => {
         adjustTvSymmetrically(16 / 9);
       }, { once: true });
@@ -862,8 +833,7 @@
       };
 
       function onPlayerReady(event) {
-        // Oynatıcı gerçek HTML iframe katmanında olduğu için YouTube'un
-        // reklam kontrolleri, Skip düğmesi ve video içi bağlantıları doğrudan tıklanabilir.
+
         const frame = document.getElementById('htmlPlayerFrame');
         const shell = document.getElementById('htmlPlayerShell');
         const crt = document.getElementById('crtHtmlOverlay');
@@ -871,7 +841,6 @@
         if (shell) shell.style.opacity = '1';
         if (crt) crt.style.opacity = '1';
 
-        // Sayfa açıldığında mevcut videoyu otomatik başlatmayı dene.
         try {
           event.target.playVideo();
         } catch (err) {
@@ -889,8 +858,6 @@
         const ctm = svg.getScreenCTM();
         if (!ctm) return;
 
-        // YouTube görüntüsü fiziksel ekranın gerçek iç görüntü alanına oturur.
-        // Siyah iç çerçeve bunun 2px dışındadır.
         const screenTopY = 173;
         const screenBottomY = 542;
         const p1 = new DOMPoint(startX, screenTopY).matrixTransform(ctm);
@@ -900,7 +867,6 @@
         const width = Math.abs(p2.x - p1.x);
         const height = Math.abs(p2.y - p1.y);
 
-        // İnce siyah çerçeve, player'ın her tarafından yaklaşık 2px dışarıda kalır.
         const framePad = 2;
         frame.style.left = `${left - framePad}px`;
         frame.style.top = `${top - framePad}px`;
@@ -1080,7 +1046,6 @@
 
         playChannelStaticBurst();
 
-        // Eski TV hissi: kısa karıncalanma, sonra yeni kanalın yüklenmesi.
         channelTransitionTimer = setTimeout(() => {
           if (token !== channelTransitionToken) return;
           channelTransitionTimer = null;
@@ -1098,7 +1063,6 @@
         const safeIndex = ((detentIndex % listLength) + listLength) % listLength;
         const token = startChannelTransition();
 
-        // Parazit oturduktan hemen sonra yeni kanalı yükle.
         setTimeout(() => {
           if (token !== channelTransitionToken) return;
           try {
@@ -1483,8 +1447,7 @@
           const { overlay, line, dot } = powerEffectElements();
           if (overlay) overlay.setAttribute('opacity', '0');
           if (line) {
-            // Her açılıştan/kapanıştan önce çizgiyi ekranın güncel tam genişliğine geri kur.
-            // Böylece ilk kapanıştan sonra genişliği 3px'e düşmüş halde kalmaz.
+
             const screen = document.getElementById('effectScanlines');
             const x = parseFloat(screen?.getAttribute('x') || '203.3');
             const width = parseFloat(screen?.getAttribute('width') || '519.4');
@@ -1761,7 +1724,7 @@
               setTvPowerState(false);
             }
           } else {
-            // Anahtarı yavaşça eski konumuna geri bırak.
+
             const startX = drag.visualX;
             const targetX = switchLeverX(isTvPoweredOn);
             const started = performance.now();
