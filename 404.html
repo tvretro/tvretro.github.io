@@ -859,8 +859,12 @@
         const ctm = svg.getScreenCTM();
         if (!ctm) return;
 
-        const p1 = new DOMPoint(startX, 173).matrixTransform(ctm);
-        const p2 = new DOMPoint(startX + newWidth, 542).matrixTransform(ctm);
+        // YouTube görüntüsünü fiziksel ekran boşluğuna birkaç piksel daha aşağı oturt.
+        // Aynı geometri CRT tarama/cam katmanına da uygulanır.
+        const screenTopY = 175;
+        const screenBottomY = 544;
+        const p1 = new DOMPoint(startX, screenTopY).matrixTransform(ctm);
+        const p2 = new DOMPoint(startX + newWidth, screenBottomY).matrixTransform(ctm);
         const left = Math.min(p1.x, p2.x);
         const top = Math.min(p1.y, p2.y);
         const width = Math.abs(p2.x - p1.x);
@@ -980,7 +984,7 @@
         }
       };
       // Videos
-      const stationList = ["vdJthIdDR6w", "IufsocTXfMY", "jx0llzSntd8", "VOeEzcCt70A", "S2ujotDMluo"];
+      const stationList = ["vdJthIdDR6w", "IufsocTXfMY", "jx0llzSntd8", "CGj85pVzRJs", "S2ujotDMluo"];
       let hasDialBeenMoved = false;
 
       let channelTransitionTimer = null;
