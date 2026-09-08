@@ -171,6 +171,8 @@
         cursor: -webkit-grabbing !important;
         cursor: grabbing !important;
       }
+
+      /* Kanal değişiminde eski CRT televizyon parazit efekti */
       #channelTransition {
         opacity: 0;
         pointer-events: none;
@@ -389,9 +391,23 @@
           <stop offset="60%" stop-color="#050505" />
           <stop offset="100%" stop-color="#000000" />
         </radialGradient>
-        <pattern id="speakerMesh" width="3" height="3" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-          <circle cx="1.5" cy="1.5" r="1" fill="#0d0d0d" />
+        <pattern id="speakerMesh" width="1.5" height="1.5" patternUnits="userSpaceOnUse">
+          <path d="M .35 0 V 1.5 M 1.1 0 V 1.5" stroke="#57534a" stroke-width=".22" opacity=".44" />
+          <path d="M 0 .4 H 1.5 M 0 1.15 H 1.5" stroke="#302e29" stroke-width=".3" opacity=".8" />
+          <path d="M .25 .4 H .6 M 1 1.15 H 1.35" stroke="#8b806d" stroke-width=".18" opacity=".36" />
         </pattern>
+        <linearGradient id="grilleCutEdge" x1="0%" y1="0%" x2="100%" y2="65%">
+          <stop offset="0%" stop-color="#191918" />
+          <stop offset="35%" stop-color="#20201e" />
+          <stop offset="72%" stop-color="#4b4943" />
+          <stop offset="100%" stop-color="#5e5b52" />
+        </linearGradient>
+        <linearGradient id="grilleInnerWall" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#000" stop-opacity=".95" />
+          <stop offset="38%" stop-color="#000" stop-opacity=".5" />
+          <stop offset="68%" stop-color="#000" stop-opacity=".05" />
+          <stop offset="100%" stop-color="#625d51" stop-opacity=".14" />
+        </linearGradient>
         <pattern id="scanlines" width="100" height="4" patternUnits="userSpaceOnUse">
           <line x1="0" y1="0" x2="100" y2="0" stroke="#000000" stroke-width="1.2" opacity="0.3" />
         </pattern>
@@ -728,15 +744,60 @@
               <circle class="dial-hit-area" cx="0" cy="0" r="30" fill="#FFFFFF" fill-opacity="0.001" />
             </g>
             <g transform="translate(752.7, 440)">
-              <g clip-path="url(#grilleHoles)">
-                <rect x="0" y="0" width="72" height="134" fill="#080808" />
-                <circle cx="36" cy="67" r="38" fill="url(#speakerCone)" />
-                <circle cx="36" cy="67" r="12" fill="#050505" />
-                <rect x="0" y="0" width="72" height="134" fill="url(#speakerMesh)" opacity="0.4" />
+              <!-- Recessed slot edges; original opening positions are unchanged. -->
+              <g fill="#090908" stroke="url(#grilleCutEdge)" stroke-width=".8">
+                <rect x="12" y="46.3" width="2.6" height="18.7" rx="1.3" />
+                <rect x="16.8" y="30.7" width="2.6" height="34.3" rx="1.3" />
+                <rect x="21.6" y="22.1" width="2.6" height="42.9" rx="1.3" />
+                <rect x="26.4" y="16.8" width="2.6" height="48.2" rx="1.3" />
+                <rect x="31.2" y="14" width="2.6" height="51" rx="1.3" />
+                <rect x="36" y="13" width="2.6" height="52" rx="1.3" />
+                <rect x="40.8" y="14" width="2.6" height="51" rx="1.3" />
+                <rect x="45.6" y="16.8" width="2.6" height="48.2" rx="1.3" />
+                <rect x="50.4" y="22.1" width="2.6" height="42.9" rx="1.3" />
+                <rect x="55.2" y="30.7" width="2.6" height="34.3" rx="1.3" />
+                <rect x="60" y="46.3" width="2.6" height="18.7" rx="1.3" />
+                <rect x="12" y="69" width="2.6" height="18.7" rx="1.3" />
+                <rect x="16.8" y="69" width="2.6" height="34.3" rx="1.3" />
+                <rect x="21.6" y="69" width="2.6" height="42.9" rx="1.3" />
+                <rect x="26.4" y="69" width="2.6" height="48.2" rx="1.3" />
+                <rect x="31.2" y="69" width="2.6" height="51" rx="1.3" />
+                <rect x="36" y="69" width="2.6" height="52" rx="1.3" />
+                <rect x="40.8" y="69" width="2.6" height="51" rx="1.3" />
+                <rect x="45.6" y="69" width="2.6" height="48.2" rx="1.3" />
+                <rect x="50.4" y="69" width="2.6" height="42.9" rx="1.3" />
+                <rect x="55.2" y="69" width="2.6" height="34.3" rx="1.3" />
+                <rect x="60" y="69" width="2.6" height="18.7" rx="1.3" />
               </g>
-              <g clip-path="url(#grilleHoles)" fill="none" stroke-width="1.5">
-                <rect x="-1" y="-1" width="74" height="136" stroke="#1C1C1C" transform="translate(0.5, 0.5)" opacity="0.9" />
-                <rect x="-1" y="-1" width="74" height="136" stroke="#0A0A0A" />
+              <g clip-path="url(#grilleHoles)">
+                <rect x="0" y="0" width="72" height="134" fill="#0b0b0a" />
+                <circle cx="36" cy="67" r="38" fill="url(#speakerCone)" opacity=".7" />
+                <circle cx="36" cy="67" r="12" fill="#080808" />
+                <rect x="0" y="0" width="72" height="134" fill="url(#speakerMesh)" opacity=".8" />
+                <g fill="url(#grilleInnerWall)">
+                <rect x="12" y="46.3" width="2.6" height="18.7" rx="1.3" />
+                <rect x="16.8" y="30.7" width="2.6" height="34.3" rx="1.3" />
+                <rect x="21.6" y="22.1" width="2.6" height="42.9" rx="1.3" />
+                <rect x="26.4" y="16.8" width="2.6" height="48.2" rx="1.3" />
+                <rect x="31.2" y="14" width="2.6" height="51" rx="1.3" />
+                <rect x="36" y="13" width="2.6" height="52" rx="1.3" />
+                <rect x="40.8" y="14" width="2.6" height="51" rx="1.3" />
+                <rect x="45.6" y="16.8" width="2.6" height="48.2" rx="1.3" />
+                <rect x="50.4" y="22.1" width="2.6" height="42.9" rx="1.3" />
+                <rect x="55.2" y="30.7" width="2.6" height="34.3" rx="1.3" />
+                <rect x="60" y="46.3" width="2.6" height="18.7" rx="1.3" />
+                <rect x="12" y="69" width="2.6" height="18.7" rx="1.3" />
+                <rect x="16.8" y="69" width="2.6" height="34.3" rx="1.3" />
+                <rect x="21.6" y="69" width="2.6" height="42.9" rx="1.3" />
+                <rect x="26.4" y="69" width="2.6" height="48.2" rx="1.3" />
+                <rect x="31.2" y="69" width="2.6" height="51" rx="1.3" />
+                <rect x="36" y="69" width="2.6" height="52" rx="1.3" />
+                <rect x="40.8" y="69" width="2.6" height="51" rx="1.3" />
+                <rect x="45.6" y="69" width="2.6" height="48.2" rx="1.3" />
+                <rect x="50.4" y="69" width="2.6" height="42.9" rx="1.3" />
+                <rect x="55.2" y="69" width="2.6" height="34.3" rx="1.3" />
+                <rect x="60" y="69" width="2.6" height="18.7" rx="1.3" />
+                </g>
               </g>
             </g>
 
@@ -861,7 +922,7 @@
         const ctm = svg.getScreenCTM();
         if (!ctm) return;
 
-        const screenTopY = 175; 
+        const screenTopY = 175; // Bej cercevenin ustunde de yanlardaki gibi 5 birim pay.
         const screenBottomY = 542;
         const p1 = new DOMPoint(startX, screenTopY).matrixTransform(ctm);
         const p2 = new DOMPoint(startX + newWidth, screenBottomY).matrixTransform(ctm);
@@ -870,6 +931,7 @@
         const width = Math.abs(p2.x - p1.x);
         const height = Math.abs(p2.y - p1.y);
 
+        // HTML katmanlarini SVG ile ayni olcekte ve es merkezli tut.
         const scale = Math.hypot(ctm.a, ctm.b);
         const framePad = 2 * scale;
         frame.style.borderRadius = `${19 * scale}px ${19 * scale}px 0 0`;
@@ -1664,13 +1726,14 @@
             element?.setAttribute('aria-disabled', String(!poweredOn));
           });
           if (!poweredOn) {
+            // Cancel pending channel loads and screen restoration.
             channelTransitionToken++;
             if (channelTransitionTimer !== null) {
               clearTimeout(channelTransitionTimer);
               channelTransitionTimer = null;
             }
             document.getElementById('channelTransition')?.classList.remove('active');
-    
+            // Stop an in-progress drag without moving the dial.
             const drag = activeDial;
             activeDial = null;
             if (drag) {
