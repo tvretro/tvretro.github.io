@@ -30,14 +30,14 @@ h1{font-family:Georgia,'Times New Roman',serif;font-size:clamp(36px,4.3vw,57px);
 <p class="intro-label">Tune into another era</p>
 <section class="paper" aria-labelledby="welcome-title">
 <div class="paper-top"><span>RETRO TV / VIEWING NOTES</span><span class="paper-stamp">JUST PRESS PLAY</span></div>
-<h1 id="welcome-title">Modern videos.<br><em>Vintage feeling.</em></h1>
+<h1 id="welcome-title"><em>Retro feeling.</em></h1>
 <p class="description">Your favorite YouTube videos, at home in an old-school television. Just bring a link. We’ll bring the nostalgia.</p>
 <form id="urlForm" novalidate>
 <label class="input-label" for="ytUrl">YOUR YOUTUBE VIDEO LINK</label>
 <div class="input-row"><div class="input-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-2 2M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l2-2"/></svg><input type="text" inputmode="url" id="ytUrl" name="url" placeholder="Paste a YouTube link…" required autocomplete="off" autocapitalize="none" spellcheck="false" aria-describedby="formMessage"></div><button type="submit" id="watchButton"><span>Watch on TV</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M4 12h15m-6-6 6 6-6 6"/></svg></button></div>
 <p id="formMessage" class="form-message" aria-live="polite"></p>
 </form>
-<div class="sample-row"><span>No link in mind?</span><a class="sample-link" href="https://tvretro.github.io/watch?v=XEjLoHdbVeE"><svg viewBox="0 0 18 18" fill="currentColor" aria-hidden="true"><path d="M5 3.5v11L14 9Z"/></svg>Try a little nostalgia <span aria-hidden="true">↗</span></a></div>
+<div class="sample-row"><a class="sample-link" href="https://tvretro.github.io/watch?v=XEjLoHdbVeE"><svg viewBox="0 0 18 18" fill="currentColor" aria-hidden="true"><path d="M5 3.5v11L14 9Z"/></svg>Try a little nostalgia <span aria-hidden="true">↗</span></a></div>
 <noscript><p class="noscript">Enable JavaScript to open your video, or use the sample link above.</p></noscript>
 </section>
 <p class="steps"><span><b>01</b> Paste a link</span><i>·</i><span><b>02</b> Tune in</span><i>·</i><span><b>03</b> Sit back</span></p>
@@ -60,37 +60,35 @@ h1{font-family:Georgia,'Times New Roman',serif;font-size:clamp(36px,4.3vw,57px);
       <stop offset="100%" stop-color="#edf1f6"/>
     </linearGradient>
   </defs>
-  <rect x="12" y="14" width="596" height="150" rx="18" fill="url(#chromeBody)" stroke="#aab1bc"/>
-  <path d="M30 14H590Q608 14 608 32V58H12V32Q12 14 30 14Z" fill="url(#chromeTop)"/>
-  <path d="M170 24H282Q298 24 302 42L306 58H146L150 42Q154 24 170 24Z" fill="#f9fbfd" stroke="#c0c7d0"/>
-  <g fill="none" stroke="#6f7782" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M29 40h10M29 40l4-4M29 40l4 4"/>
-    <path d="M55 40h-10M55 40l-4-4M55 40l-4 4" opacity=".45"/>
-    <path d="M77 34a8 8 0 1 1-3 15"/>
-    <path d="M72 34h5v5"/>
+  <rect x="12" y="14" width="596" height="175" rx="18" fill="url(#chromeBody)" stroke="#aab1bc"/>
+  <path d="M30 14H590Q608 14 608 32V68H12V32Q12 14 30 14Z" fill="url(#chromeTop)"/>
+  <g fill="none" stroke="#5f6368" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M37 35l-7 7 7 7M30 42h14"/>
+    <path d="M57 35l7 7-7 7M64 42H50" opacity=".45"/>
+    <path d="M78 42l9-8 9 8M81 40v10h12V40M85 50v-6h4v6"/>
   </g>
-  <rect id="addressRect" x="101" y="32" width="486" height="26" rx="13" fill="#ffffff" stroke="#c6ccd4"/>
-  <g id="omniboxSiteInfo" transform="translate(117 45)" fill="none" stroke="#5f6368" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
-    <rect x="0" y="-6.4" width="10.2" height="8.4" rx="1.7"/>
-    <path d="M2.6-6.8v-1.7a2.5 2.5 0 0 1 5 0v1.7"/>
+  <rect id="addressRect" x="108" y="27" width="479" height="30" rx="15" fill="#ffffff" stroke="#c6ccd4"/>
+  <g id="omniboxSiteInfo" transform="translate(123 43)" fill="none" stroke="#5f6368" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="0" y="-5" width="10" height="8" rx="1.7"/>
+    <path d="M2.4-5v-2a2.6 2.6 0 0 1 5.2 0v2"/>
   </g>
   <g font-family="Arial,Helvetica,sans-serif" font-size="13.5">
-    <text id="demoPrefix" x="135" y="48.5" fill="#7d8591">https://</text>
-    <rect id="domainSelection" x="185" y="33.5" width="110" height="19" rx="2.5" fill="#d2e3fc" opacity="0"/>
-    <text id="demoDomain" x="184" y="48.5" fill="#202124">www.youtube.com</text>
-    <text id="fixedVideoPath" x="298" y="48.5" fill="#475569">/watch?v=zkmnewcUv4A</text>
-    <path id="typeCursor" d="M184 35v16" stroke="#914523" stroke-width="1.5" opacity="0"/>
+    <text id="demoPrefix" x="141" y="47" fill="#7d8591">https://</text>
+    <rect id="domainSelection" x="185" y="31.5" width="110" height="21" rx="2.5" fill="#d2e3fc" opacity="0"/>
+    <text id="demoDomain" x="184" y="47" fill="#202124">www.youtube.com</text>
+    <text id="fixedVideoPath" x="298" y="47" fill="#475569">/watch?v=zkmnewcUv4A</text>
+    <path id="typeCursor" d="M298 32.5v19" stroke="#914523" stroke-width="1.5" opacity="0"/>
   </g>
-  <path id="pathBracket" d="M339 94v8h166v-8" fill="none" stroke="#758666"/>
-  <text id="pathNote" x="422" y="120" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="12" fill="#596a48">Keep this part unchanged</text>
+  <path id="pathBracket" d="M298 91v8H460v-8" fill="none" stroke="#758666"/>
+  <text id="pathNote" x="422" y="116" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="12" fill="#596a48">Keep this part unchanged</text>
   <g id="enterKey">
-    <rect x="466" y="92" width="96" height="36" rx="6" fill="#e8dec6" stroke="#a79b7a"/>
-    <text x="514" y="114.5" text-anchor="middle" font-family="Courier New,monospace" font-size="14" fill="#544b36">Enter ↵</text>
+    <rect x="488" y="121" width="96" height="36" rx="6" fill="#e8dec6" stroke="#a79b7a"/>
+    <text x="536" y="143.5" text-anchor="middle" font-family="Courier New,monospace" font-size="14" fill="#544b36">Enter ↵</text>
   </g>
   <g id="demoSuccess" opacity="0">
-    <circle cx="35" cy="142" r="7" fill="#627b49"/>
-    <path d="M31 142l3 3 5-6" fill="none" stroke="#fff" stroke-width="1.5"/>
-    <text x="50" y="146" font-family="Arial,Helvetica,sans-serif" font-size="13" fill="#4e623d">You’re tuned in.</text>
+    <circle cx="35" cy="157" r="7" fill="#627b49"/>
+    <path d="M31 157l3 3 5-6" fill="none" stroke="#fff" stroke-width="1.5"/>
+    <text x="50" y="161" font-family="Arial,Helvetica,sans-serif" font-size="13" fill="#4e623d">You’re tuned in.</text>
   </g>
 </svg></div>
 <p class="demo-step" id="demoStep" aria-live="polite"></p>
@@ -171,12 +169,16 @@ window.addEventListener('pageshow', function() { button.disabled = false; button
   const domainWidth=domain.getComputedTextLength();
   const pathX=domainX+domainWidth;
   pathText.setAttribute('x', pathX);
-  selection.setAttribute('x', Math.max(0, domainX-1.5));
-  selection.setAttribute('width', Math.max(0, domainWidth+3));
-  cursor.setAttribute('d', `M${pathX + 0.5} 35v16`);
-  const bracketX=Math.max(280, Math.min(360, pathX+24));
-  bracket.setAttribute('d', `M${bracketX} 94v8h166v-8`);
-  note.setAttribute('x', bracketX+83);
+  selection.setAttribute('x', domainX);
+  selection.setAttribute('width', Math.max(0, domainWidth));
+  cursor.setAttribute('d', `M${pathX + 0.5} 32.5v19`);
+  // Measure the immutable /watch?... text itself. The upward bracket begins
+  // exactly at the slash and ends at the final video-ID character.
+  const pathWidth=pathText.getComputedTextLength();
+  const bracketStart=pathX;
+  const bracketEnd=pathX+pathWidth;
+  bracket.setAttribute('d', `M${bracketStart} 91v8H${bracketEnd}v-8`);
+  note.setAttribute('x', (bracketStart+bracketEnd)/2);
  }
  function stop(){run++;timers.forEach(clearTimeout);timers=[];}
  function later(fn,ms){const token=run;timers.push(setTimeout(()=>{if(token===run&&modal.open)fn();},ms));}
