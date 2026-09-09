@@ -40,7 +40,7 @@ h1{font-family:Georgia,'Times New Roman',serif;font-size:clamp(36px,4.3vw,57px);
 <div class="input-row"><div class="input-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-2 2M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l2-2"/></svg><input type="text" inputmode="url" id="ytUrl" name="url" placeholder="Paste a YouTube link…" required autocomplete="off" autocapitalize="none" spellcheck="false" aria-describedby="formMessage"></div><button type="submit" id="watchButton"><span>Watch on TV</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M4 12h15m-6-6 6 6-6 6"/></svg></button></div>
 <p id="formMessage" class="form-message" aria-live="polite"></p>
 </form>
-<div class="sample-row"><span>No link in mind?</span><a class="sample-link" href="https://tvretro.github.io/watch?v=XEjLoHdbVeE"><svg viewBox="0 0 18 18" fill="currentColor" aria-hidden="true"><path d="M5 3.5v11L14 9Z"/></svg>Try a little nostalgia <span aria-hidden="true">↗</span></a></div>
+<div class="sample-row"><a class="sample-link" href="https://tvretro.github.io/watch?v=XEjLoHdbVeE"><svg viewBox="0 0 18 18" fill="currentColor" aria-hidden="true"><path d="M5 3.5v11L14 9Z"/></svg>Try a little nostalgia <span aria-hidden="true">↗</span></a></div>
 <noscript><p class="noscript">Enable JavaScript to open your video, or use the sample link above.</p></noscript>
 </section>
 <p class="steps"><span><b>01</b> Paste a link</span><i>·</i><span><b>02</b> Tune in</span><i>·</i><span><b>03</b> Sit back</span></p>
@@ -105,7 +105,7 @@ h1{font-family:Georgia,'Times New Roman',serif;font-size:clamp(36px,4.3vw,57px);
 <div class="tip-bottom"><span class="tip-note">Keep everything after the domain unchanged.</span><div class="tip-actions"><button type="button" class="tip-replay" id="replayTip">Replay</button><button type="button" id="copyDomain">Copy domain</button></div></div>
 <p id="copyStatus" class="copy-status" role="status"></p><input id="manualDomain" class="manual-copy" value="tvretro.github.io" readonly aria-label="Website name to copy manually">
 </dialog>
-<footer class="site-footer"><span class="footer-line">Old-school looks. Your kind of videos.</span><span class="footer-note">Inspired by the ’60s & ’70s</span></footer>
+<footer class="site-footer"><span class="footer-note">Inspired by the ’60s & ’70s</span></footer>
 <script>
 function extractVideoId(value) {
   const raw = value.trim();
