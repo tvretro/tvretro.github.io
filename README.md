@@ -13,6 +13,10 @@ Retro TV transforms any standard YouTube video into a nostalgic 80s television e
 
 You can easily load any YouTube video by replacing `youtube.com` with `tvretro.github.io` directly in your browser's address bar:
 
+<p align="center">
+  <img src="address-demo.svg" alt="Retro TV URL Trick Animation" width="662" />
+</p>
+
 * **Original YouTube URL:**  
   `https://www.youtube.com/watch?v=XEjLoHdbVeE`
 * **Retro TV URL:**  
