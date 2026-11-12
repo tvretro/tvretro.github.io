@@ -12,6 +12,13 @@ Watch any YouTube video inside an authentic, dynamically scaling 70s CRT televis
 
 Retro TV turns your favorite YouTube videos into a nostalgic 70s viewing experience—just by tweaking the URL. Built purely with Vanilla JS and SVG (crafted with Google Gemini), it automatically adapts the retro TV casing, curved CRT glass, and analog controls to fit any video ratio perfectly.
 
+## Interactive Analog Controls
+
+The vintage control panel isn't just for show—every element can be actively controlled with your mouse:
+
+* **Rotary Channel Knob:** Click or drag with your mouse to switch channels, featuring authentic analog rotation and CRT static noise bursts.
+* **Power Switch:** Flip the physical switch lever with your mouse to power the TV on or off, complete with the iconic retro CRT screen collapse effect (horizontal beam collapse to a fading phosphor dot).
+
 ## Quick Usage & URL Trick
 
 You can easily load any YouTube video by replacing `youtube.com` with `tvretro.github.io` directly in your browser's address bar:
