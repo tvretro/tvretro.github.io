@@ -1,5 +1,8 @@
 # Watch the YouTube video on "Retro TV"
 
+[![Built with Google Gemini](https://img.shields.io/badge/Built%20with-Google%20Gemini-8E75C4?style=flat&logo=googlegemini&logoColor=white)](https://github.com/topics/gemini-pro)
+[![Gemini SVG](https://img.shields.io/badge/Gemini-SVG-4285F4?style=flat)](https://github.com/topics/gemini-svg)
+
 Watch any YouTube video inside an authentic, dynamically scaling 70s CRT television.
 
 [![Retro TV Showcase](home.png)](https://tvretro.github.io/watch?v=XEjLoHdbVeE)
@@ -7,7 +10,7 @@ Watch any YouTube video inside an authentic, dynamically scaling 70s CRT televis
 ## Overview
 ### Try nostalgia: [tvretro.github.io](https://tvretro.github.io/)
 
-Retro TV turns your favorite YouTube videos into a nostalgic 70s viewing experience—just by tweaking the URL. Built purely with Vanilla JS and SVG, it automatically adapts the retro TV casing, curved CRT glass, and analog controls to fit any video ratio perfectly.
+Retro TV turns your favorite YouTube videos into a nostalgic 70s viewing experience—just by tweaking the URL. Built purely with Vanilla JS and SVG (crafted with Google Gemini), it automatically adapts the retro TV casing, curved CRT glass, and analog controls to fit any video ratio perfectly.
 
 ## Quick Usage & URL Trick
 
