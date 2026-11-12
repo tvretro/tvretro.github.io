@@ -1,13 +1,13 @@
 # Watch the YouTube video on "Retro TV"
 
-Watch any YouTube video inside an authentic, dynamically scaling 80s CRT television.
+Watch any YouTube video inside an authentic, dynamically scaling 70s CRT television.
 
 [![Retro TV Showcase](home.png)](https://tvretro.github.io/watch?v=XEjLoHdbVeE)
 
 ## Overview
 ### Try nostalgia: [tvretro.github.io](https://tvretro.github.io/)
 
-Retro TV turns your favorite YouTube videos into a nostalgic 80s viewing experience—just by tweaking the URL. Built purely with Vanilla JS and SVG, it automatically adapts the retro TV casing, curved CRT glass, and analog controls to fit any video ratio perfectly.
+Retro TV turns your favorite YouTube videos into a nostalgic 70s viewing experience—just by tweaking the URL. Built purely with Vanilla JS and SVG, it automatically adapts the retro TV casing, curved CRT glass, and analog controls to fit any video ratio perfectly.
 
 ## Quick Usage & URL Trick
 
