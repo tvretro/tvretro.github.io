@@ -5,25 +5,39 @@
       /* <![CDATA[ */
       /* --- TAB ICONS --- */
       @keyframes ytTabIconAnim {
-        0%, 55% { opacity: 1; }
-        56%, 96% { opacity: 0; }
+        0%, 52% { opacity: 1; }
+        53%, 96% { opacity: 0; }
         97%, 100% { opacity: 1; }
       }
+      @keyframes tabSpinnerVisibility {
+        0%, 52% { opacity: 0; }
+        53%, 68% { opacity: 1; }
+        69%, 100% { opacity: 0; }
+      }
+      @keyframes spinAnim {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
       @keyframes tvTabIconAnim {
-        0%, 55% { opacity: 0; }
-        56%, 95% { opacity: 1; }
+        0%, 68% { opacity: 0; }
+        69%, 95% { opacity: 1; }
         96%, 100% { opacity: 0; }
       }
 
       /* --- TAB TITLES --- */
       @keyframes tabYtTitleAnim {
-        0%, 55% { opacity: 1; }
-        56%, 96% { opacity: 0; }
+        0%, 52% { opacity: 1; }
+        53%, 96% { opacity: 0; }
         97%, 100% { opacity: 1; }
       }
+      @keyframes tabLoadingTitleAnim {
+        0%, 52% { opacity: 0; }
+        53%, 68% { opacity: 1; }
+        69%, 100% { opacity: 0; }
+      }
       @keyframes tabRetroTitleAnim {
-        0%, 55% { opacity: 0; }
-        56%, 95% { opacity: 1; }
+        0%, 68% { opacity: 0; }
+        69%, 95% { opacity: 1; }
         96%, 100% { opacity: 0; }
       }
 
@@ -37,7 +51,7 @@
         67%, 100% { opacity: 0; width: 0px; }
       }
 
-              /* --- SELECTION AND DOMAIN ANIMATIONS --- */
+      /* --- SELECTION AND DOMAIN ANIMATIONS --- */
       @keyframes selectAnim {
         0%, 10% { opacity: 0; }
         11%, 19% { opacity: 1; }
@@ -143,12 +157,12 @@
       }
       @keyframes step4Anim {
         0%, 52% { opacity: 0; }
-        53%, 64% { opacity: 1; }
-        65%, 100% { opacity: 0; }
+        53%, 68% { opacity: 1; }
+        69%, 100% { opacity: 0; }
       }
       @keyframes step5Anim {
-        0%, 64% { opacity: 0; }
-        65%, 95% { opacity: 1; }
+        0%, 68% { opacity: 0; }
+        69%, 95% { opacity: 1; }
         96%, 100% { opacity: 0; }
       }
 
@@ -161,11 +175,14 @@
 
       .scene-content { animation: sceneLoopAnim 11s infinite; }
       .tab-yt-icon { animation: ytTabIconAnim 11s infinite; }
+      .tab-spinner-wrap { opacity: 0; animation: tabSpinnerVisibility 11s infinite; }
+      .tab-spinner-rotate { transform-origin: 26px 20px; animation: spinAnim 0.75s linear infinite; }
       .tab-tv-icon { animation: tvTabIconAnim 11s infinite; opacity: 0; }
       .tab-yt-title { animation: tabYtTitleAnim 11s infinite; }
+      .tab-loading-title { animation: tabLoadingTitleAnim 11s infinite; opacity: 0; }
       .tab-retro-title { animation: tabRetroTitleAnim 11s infinite; opacity: 0; }
       .chrome-progress { animation: chromeLoadingBarAnim 11s infinite; opacity: 0; }
-      
+
       .selection-rect { animation: selectAnim 11s infinite; }
       .yt-domain { animation: ytTextAnim 11s infinite; }
       .retro-domain { animation: retroTextAnim 11s infinite; }
@@ -202,13 +219,20 @@
     <!-- Active Chrome Tab Shape -->
     <path d="M 0 40 C 8 40 11 34 11 26 L 11.378 17.697 C 11.907 9.243 11.176 4.741 20.176 4.741 L 226.007 4.057 C 238.007 4.057 237.967 7.651 238.496 19.651 L 238.835 27 C 238.835 35 246 40 255 40 L 0 40 Z" fill="#fff"/>
 
-    <!-- 1. TAB FAVICON: YouTube (Red rounded play button) -->
+    <!-- 1. TAB FAVICON: YouTube (Red rounded play button, visible 0-52%) -->
     <g class="tab-yt-icon">
       <rect x="18" y="14" width="16" height="12" rx="3.5" fill="#ff0000"/>
       <polygon points="24,17.2 24,22.8 28.5,20" fill="#ffffff"/>
     </g>
 
-    <!-- 2. TAB FAVICON: Retro TV Icon (from tv.ico / brand-mark) -->
+    <!-- 2. TAB FAVICON: Rotating Chrome Loading Spinner (Visible ONLY during Enter/Loading phase 53-68%) -->
+    <g class="tab-spinner-wrap" opacity="0">
+      <g class="tab-spinner-rotate">
+        <circle cx="26" cy="20" r="6.2" fill="none" stroke="#1a73e8" stroke-width="1.8" stroke-dasharray="27 12" stroke-linecap="round"/>
+      </g>
+    </g>
+
+    <!-- 3. TAB FAVICON: Retro TV Icon (Visible on completion 69-95%) -->
     <g class="tab-tv-icon" transform="translate(18, 12)" opacity="0">
       <!-- Antenna -->
       <path d="M4.5 1L8 4L11.5 1" fill="none" stroke="#626454" stroke-width="1.2" stroke-linecap="round"/>
@@ -225,10 +249,13 @@
 
     <!-- TAB TITLES (Clipped gracefully before close button) -->
     <g clip-path="url(#tabTitleClip)" font-family="Arial,Helvetica,sans-serif" font-size="12">
-      <!-- Title 1: YouTube -->
+      <!-- Title 1: YouTube (0-52%) -->
       <text class="tab-yt-title" x="40" y="24" fill="#202124" font-weight="500">YouTube</text>
 
-      <!-- Title 2: Watch the YouTube video on Retro TV -->
+      <!-- Title 2: tvretro.github.io (53-68% loading phase) -->
+      <text class="tab-loading-title" x="40" y="24" fill="#5f6368" font-style="italic" opacity="0">tvretro.github.io</text>
+
+      <!-- Title 3: Watch the YouTube video on Retro TV (69-95% completed) -->
       <text class="tab-retro-title" x="40" y="24" fill="#202124" font-weight="600" opacity="0">Watch the YouTube video on &quot;Retro TV&quot;</text>
     </g>
 
@@ -244,7 +271,6 @@
       <path d="M31 61l-8 8 8 8M23 69h17" opacity=".55"/>
       <path d="M67 61l8 8-8 8M75 69H58" opacity=".55"/>
     </g>
-    
     <g transform="translate(158 59) scale(.04)" fill="none" stroke="#5f6368" stroke-width="44" stroke-linecap="round" stroke-linejoin="round">
       <path d="M48 208L232 47Q256 26 280 47L464 208"/>
       <path d="M80 190V430Q80 464 114 464H398Q432 464 432 430V190"/>

@@ -56,7 +56,7 @@ h1{font-family:Georgia,'Times New Roman',serif;font-size:clamp(36px,4.3vw,57px);
   <img id="demoImg" src="address-demo.svg" alt="Browser Address Demo" width="662" height="215" style="width: 100%; height: auto; display: block;" />
 </div>
 <p class="demo-step" id="demoStep" aria-live="polite"></p>
-<div class="tip-bottom"><span class="tip-note">Keep everything after the domain unchanged.</span><div class="tip-actions"><button type="button" class="tip-replay" id="replayTip">Replay</button><button type="button" id="copyDomain">Copy domain</button></div></div>
+<div class="tip-bottom"><span class="tip-note">Keep everything after the domain unchanged.</span><div class="tip-actions"><button type="button" id="copyDomain">Copy domain</button></div></div>
 <p id="copyStatus" class="copy-status" role="status"></p><input id="manualDomain" class="manual-copy" value="tvretro.github.io" readonly aria-label="Website name to copy manually">
 </dialog>
 <footer class="site-footer"><span class="footer-note">Inspired by the ’60s & ’70s</span></footer>
@@ -176,7 +176,7 @@ window.addEventListener('pageshow', function() { button.disabled = false; button
    document.body.style.overflow = oldOverflow;
    opener.focus({ preventScroll: true });
  });
- $('replayTip').addEventListener('click', play);
+ 
  $('copyDomain').addEventListener('click', async () => {
    try {
      if (!navigator.clipboard?.writeText) throw 0;
