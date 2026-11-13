@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<svg id="tipSvg" viewBox="0 0 662 215" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+<svg id="tipSvg" viewBox="0 0 662 215" xmlns="http://www.w3.org/2000/svg" width="662" height="215">
   <defs>
     <style>
+      /* <![CDATA[ */
       /* --- TAB ICONS --- */
       @keyframes ytTabIconAnim {
         0%, 52% { opacity: 1; }
@@ -9,14 +10,14 @@
         97%, 100% { opacity: 1; }
       }
       @keyframes tabSpinnerAnim {
-        0%, 52% { opacity: 0; visibility: hidden; }
-        53%, 68% { opacity: 1; visibility: visible; }
-        69%, 100% { opacity: 0; visibility: hidden; }
+        0%, 52% { opacity: 0; }
+        53%, 68% { opacity: 1; }
+        69%, 100% { opacity: 0; }
       }
       @keyframes tvTabIconAnim {
-        0%, 68% { opacity: 0; visibility: hidden; }
-        69%, 95% { opacity: 1; visibility: visible; }
-        96%, 100% { opacity: 0; visibility: hidden; }
+        0%, 68% { opacity: 0; }
+        69%, 95% { opacity: 1; }
+        96%, 100% { opacity: 0; }
       }
 
       /* --- TAB TITLES --- */
@@ -53,7 +54,7 @@
         69%, 100% { transform: rotate(0deg); }
       }
 
-      /* --- SELECTION & DOMAIN ANIMATIONS --- */
+      /* --- SELECTION AND DOMAIN ANIMATIONS --- */
       @keyframes selectAnim {
         0%, 10% { opacity: 0; }
         11%, 19% { opacity: 1; }
@@ -70,7 +71,7 @@
         96%, 100% { opacity: 0; }
       }
 
-      /* --- TYPING CLIP & CURSOR --- */
+      /* --- TYPING CLIP AND CURSOR --- */
       @keyframes clipWidthAnim {
         0%, 20% { width: 0px; }
         21% { width: 5px; }
@@ -197,6 +198,7 @@
       .step-3 { animation: step3Anim 11s infinite; }
       .step-4 { animation: step4Anim 11s infinite; }
       .step-5 { animation: step5Anim 11s infinite; }
+      /* ]]> */
     </style>
 
     <clipPath id="retroTypeClip">
@@ -210,7 +212,7 @@
   </defs>
 
   <g class="scene-content">
-    <!-- Container Box with Border & Shadow -->
+    <!-- Container Box with Border and Shadow -->
     <rect x="0.5" y="0.5" width="661" height="214" rx="10" fill="#ffffff" stroke="#aeb5bf" stroke-width="1"/>
 
     <!-- Chrome Header Tabs Background -->
@@ -256,11 +258,11 @@
       <!-- Title 2: tvretro.github.io (Connecting state) -->
       <text class="tab-loading-title" x="40" y="24" fill="#5f6368" font-style="italic">tvretro.github.io...</text>
 
-      <!-- Title 3: Watch the YouTube video on "Retro TV" -->
-      <text class="tab-retro-title" x="40" y="24" fill="#202124" font-weight="600">Watch the YouTube video on "Retro TV"</text>
+      <!-- Title 3: Watch the YouTube video on Retro TV -->
+      <text class="tab-retro-title" x="40" y="24" fill="#202124" font-weight="600">Watch the YouTube video on &quot;Retro TV&quot;</text>
     </g>
 
-    <!-- Tab Close & New Tab Buttons -->
+    <!-- Tab Close and New Tab Buttons -->
     <g fill="none" stroke="#3c4043" stroke-width="2" stroke-linecap="round">
       <path transform="translate(-4 0)" d="M219 16l9 9m0-9-9 9"/>
       <path d="M259 20h11m-5.5-5.5v11"/>
@@ -316,7 +318,7 @@
       <!-- Typing Cursor -->
       <path class="cursor-line" d="M297.5 56v24" stroke="#1a73e8" stroke-width="1.5" opacity="0"/>
 
-      <!-- Fixed Video Path & Bracket Group -->
+      <!-- Fixed Video Path and Bracket Group -->
       <g class="follow-group">
         <text id="fixedVideoPath" x="415.5" y="74.5" fill="#3c4043">/watch?v=XEjLoHdbVeE</text>
         <path id="pathBracket" d="M415.5 115v8H577v-8" fill="none" stroke="#6f815e" stroke-width="1.2"/>
@@ -328,9 +330,9 @@
     <g font-family="Arial,Helvetica,sans-serif" font-size="13.5" font-weight="bold">
       <text class="step-1" x="24" y="194" fill="#74452f">1. Select the website name (www.youtube.com)</text>
       <text class="step-2" x="24" y="194" fill="#74452f" opacity="0">2. Replace it with tvretro.github.io</text>
-      <text class="step-3" x="24" y="194" fill="#1a73e8" opacity="0">3. Press Enter ↵ to open in Retro TV</text>
-      <text class="step-4" x="24" y="194" fill="#1a73e8" opacity="0">⏳ Connecting to Retro TV...</text>
-      <text class="step-5" x="24" y="194" fill="#2e7d32" opacity="0">✓ Loaded! The video opens inside Retro TV.</text>
+      <text class="step-3" x="24" y="194" fill="#1a73e8" opacity="0">3. Press Enter to open in Retro TV</text>
+      <text class="step-4" x="24" y="194" fill="#1a73e8" opacity="0">Connecting to Retro TV...</text>
+      <text class="step-5" x="24" y="194" fill="#2e7d32" opacity="0">Loaded! The video opens inside Retro TV.</text>
     </g>
   </g>
 </svg>
