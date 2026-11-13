@@ -50,14 +50,7 @@
         66% { opacity: 0; width: 438px; }
         67%, 100% { opacity: 0; width: 0px; }
       }
-
-            /* --- RELOAD ICON ROTATION ON ENTER --- */
-      @keyframes reloadIconRotateAnim {
-        0%, 52% { transform: rotate(0deg); }
-        53%, 65% { transform: rotate(360deg); }
-        66%, 100% { transform: rotate(0deg); }
-      }
-      /* --- SELECTION AND DOMAIN ANIMATIONS --- */
+/* --- SELECTION AND DOMAIN ANIMATIONS --- */
       @keyframes selectAnim {
         0%, 10% { opacity: 0; }
         11%, 19% { opacity: 1; }
@@ -188,8 +181,6 @@
       .tab-loading-title { animation: tabLoadingTitleAnim 11s infinite; opacity: 0; }
       .tab-retro-title { animation: tabRetroTitleAnim 11s infinite; opacity: 0; }
       .chrome-progress { animation: chromeLoadingBarAnim 11s infinite; opacity: 0; }
-      .reload-icon-group { animation: reloadIconRotateAnim 11s infinite; transform-origin: 120px 69px; }
-
       .selection-rect { animation: selectAnim 11s infinite; }
       .yt-domain { animation: ytTextAnim 11s infinite; }
       .retro-domain { animation: retroTextAnim 11s infinite; }
