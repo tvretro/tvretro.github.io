@@ -5,35 +5,25 @@
       /* <![CDATA[ */
       /* --- TAB ICONS --- */
       @keyframes ytTabIconAnim {
-        0%, 52% { opacity: 1; }
-        53%, 96% { opacity: 0; }
+        0%, 55% { opacity: 1; }
+        56%, 96% { opacity: 0; }
         97%, 100% { opacity: 1; }
       }
-      @keyframes tabSpinnerAnim {
-        0%, 52% { opacity: 0; }
-        53%, 68% { opacity: 1; }
-        69%, 100% { opacity: 0; }
-      }
       @keyframes tvTabIconAnim {
-        0%, 68% { opacity: 0; }
-        69%, 95% { opacity: 1; }
+        0%, 55% { opacity: 0; }
+        56%, 95% { opacity: 1; }
         96%, 100% { opacity: 0; }
       }
 
       /* --- TAB TITLES --- */
       @keyframes tabYtTitleAnim {
-        0%, 52% { opacity: 1; }
-        53%, 96% { opacity: 0; }
+        0%, 55% { opacity: 1; }
+        56%, 96% { opacity: 0; }
         97%, 100% { opacity: 1; }
       }
-      @keyframes tabLoadingTitleAnim {
-        0%, 52% { opacity: 0; }
-        53%, 68% { opacity: 1; }
-        69%, 100% { opacity: 0; }
-      }
       @keyframes tabRetroTitleAnim {
-        0%, 68% { opacity: 0; }
-        69%, 95% { opacity: 1; }
+        0%, 55% { opacity: 0; }
+        56%, 95% { opacity: 1; }
         96%, 100% { opacity: 0; }
       }
 
@@ -41,17 +31,17 @@
       @keyframes chromeLoadingBarAnim {
         0%, 52% { opacity: 0; width: 0px; }
         53% { opacity: 1; width: 40px; }
-        60% { opacity: 1; width: 260px; }
-        67% { opacity: 1; width: 438px; }
-        68% { opacity: 0; width: 438px; }
-        69%, 100% { opacity: 0; width: 0px; }
+        58% { opacity: 1; width: 280px; }
+        64% { opacity: 1; width: 438px; }
+        66% { opacity: 0; width: 438px; }
+        67%, 100% { opacity: 0; width: 0px; }
       }
 
-      /* --- RELOAD / SPINNER ICON --- */
+      /* --- RELOAD ICON ROTATION ON ENTER --- */
       @keyframes reloadIconRotateAnim {
         0%, 52% { transform: rotate(0deg); }
-        53%, 68% { transform: rotate(360deg); }
-        69%, 100% { transform: rotate(0deg); }
+        53%, 65% { transform: rotate(360deg); }
+        66%, 100% { transform: rotate(0deg); }
       }
 
       /* --- SELECTION AND DOMAIN ANIMATIONS --- */
@@ -160,12 +150,12 @@
       }
       @keyframes step4Anim {
         0%, 52% { opacity: 0; }
-        53%, 68% { opacity: 1; }
-        69%, 100% { opacity: 0; }
+        53%, 64% { opacity: 1; }
+        65%, 100% { opacity: 0; }
       }
       @keyframes step5Anim {
-        0%, 68% { opacity: 0; }
-        69%, 95% { opacity: 1; }
+        0%, 64% { opacity: 0; }
+        65%, 95% { opacity: 1; }
         96%, 100% { opacity: 0; }
       }
 
@@ -178,12 +168,10 @@
 
       .scene-content { animation: sceneLoopAnim 11s infinite; }
       .tab-yt-icon { animation: ytTabIconAnim 11s infinite; }
-      .tab-spinner { animation: tabSpinnerAnim 11s infinite; }
-      .tab-tv-icon { animation: tvTabIconAnim 11s infinite; }
+      .tab-tv-icon { animation: tvTabIconAnim 11s infinite; opacity: 0; }
       .tab-yt-title { animation: tabYtTitleAnim 11s infinite; }
-      .tab-loading-title { animation: tabLoadingTitleAnim 11s infinite; }
-      .tab-retro-title { animation: tabRetroTitleAnim 11s infinite; }
-      .chrome-progress { animation: chromeLoadingBarAnim 11s infinite; }
+      .tab-retro-title { animation: tabRetroTitleAnim 11s infinite; opacity: 0; }
+      .chrome-progress { animation: chromeLoadingBarAnim 11s infinite; opacity: 0; }
       .reload-icon-group { animation: reloadIconRotateAnim 11s infinite; transform-origin: 114px 63px; }
 
       .selection-rect { animation: selectAnim 11s infinite; }
@@ -228,15 +216,8 @@
       <polygon points="24,17.2 24,22.8 28.5,20" fill="#ffffff"/>
     </g>
 
-    <!-- 2. TAB FAVICON: Chrome Loading Spinner (Rotating blue arc) -->
-    <g class="tab-spinner" transform="translate(26, 20)">
-      <circle cx="0" cy="0" r="6.5" fill="none" stroke="#1a73e8" stroke-width="1.8" stroke-dasharray="27 12" stroke-linecap="round">
-        <animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="0.75s" repeatCount="indefinite"/>
-      </circle>
-    </g>
-
-    <!-- 3. TAB FAVICON: Retro TV Icon (from tv.ico / brand-mark) -->
-    <g class="tab-tv-icon" transform="translate(18, 12)">
+    <!-- 2. TAB FAVICON: Retro TV Icon (from tv.ico / brand-mark) -->
+    <g class="tab-tv-icon" transform="translate(18, 12)" opacity="0">
       <!-- Antenna -->
       <path d="M4.5 1L8 4L11.5 1" fill="none" stroke="#626454" stroke-width="1.2" stroke-linecap="round"/>
       <!-- TV Cabinet -->
@@ -255,11 +236,8 @@
       <!-- Title 1: YouTube -->
       <text class="tab-yt-title" x="40" y="24" fill="#202124" font-weight="500">YouTube</text>
 
-      <!-- Title 2: tvretro.github.io (Connecting state) -->
-      <text class="tab-loading-title" x="40" y="24" fill="#5f6368" font-style="italic">tvretro.github.io...</text>
-
-      <!-- Title 3: Watch the YouTube video on Retro TV -->
-      <text class="tab-retro-title" x="40" y="24" fill="#202124" font-weight="600">Watch the YouTube video on &quot;Retro TV&quot;</text>
+      <!-- Title 2: Watch the YouTube video on Retro TV -->
+      <text class="tab-retro-title" x="40" y="24" fill="#202124" font-weight="600" opacity="0">Watch the YouTube video on &quot;Retro TV&quot;</text>
     </g>
 
     <!-- Tab Close and New Tab Buttons -->
@@ -288,7 +266,7 @@
 
     <!-- Chrome Address Bar Loading Progress Line (slides across when enter is pressed) -->
     <g clip-path="url(#addressBarClip)">
-      <rect class="chrome-progress" x="204" y="88.5" width="0" height="2.5" fill="#1a73e8"/>
+      <rect class="chrome-progress" x="204" y="88.5" width="0" height="2.5" fill="#1a73e8" opacity="0"/>
     </g>
     <clipPath id="addressBarClip">
       <rect x="204" y="47" width="438" height="44" rx="22"/>
