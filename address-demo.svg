@@ -37,14 +37,7 @@
         67%, 100% { opacity: 0; width: 0px; }
       }
 
-      /* --- RELOAD ICON ROTATION ON ENTER --- */
-      @keyframes reloadIconRotateAnim {
-        0%, 52% { transform: rotate(0deg); }
-        53%, 65% { transform: rotate(360deg); }
-        66%, 100% { transform: rotate(0deg); }
-      }
-
-      /* --- SELECTION AND DOMAIN ANIMATIONS --- */
+              /* --- SELECTION AND DOMAIN ANIMATIONS --- */
       @keyframes selectAnim {
         0%, 10% { opacity: 0; }
         11%, 19% { opacity: 1; }
@@ -172,8 +165,7 @@
       .tab-yt-title { animation: tabYtTitleAnim 11s infinite; }
       .tab-retro-title { animation: tabRetroTitleAnim 11s infinite; opacity: 0; }
       .chrome-progress { animation: chromeLoadingBarAnim 11s infinite; opacity: 0; }
-      .reload-icon-group { animation: reloadIconRotateAnim 11s infinite; transform-origin: 114px 63px; }
-
+      
       .selection-rect { animation: selectAnim 11s infinite; }
       .yt-domain { animation: ytTextAnim 11s infinite; }
       .retro-domain { animation: retroTextAnim 11s infinite; }
@@ -252,10 +244,7 @@
       <path d="M31 61l-8 8 8 8M23 69h17" opacity=".55"/>
       <path d="M67 61l8 8-8 8M75 69H58" opacity=".55"/>
     </g>
-    <!-- Reload Button -->
-    <g class="reload-icon-group" transform="translate(106.7 55.7) scale(1.33)" fill="#5f6368">
-      <path d="M10 16c-1.668 0-3.082-.582-4.25-1.75C4.582 13.082 4 11.668 4 10c0-1.668.582-3.082 1.75-4.25C6.918 4.582 8.332 4 10 4a5.68 5.68 0 0 1 2.512.563c.77.375 1.433.875 1.988 1.5V4H16v5h-5V7.5h2.73a4.443 4.443 0 0 0-1.585-1.457A4.332 4.332 0 0 0 10 5.5c-1.25 0-2.313.438-3.188 1.313S5.5 8.75 5.5 10c0 1.25.438 2.313 1.313 3.188C7.688 14.062 8.75 14.5 10 14.5c1.168 0 2.168-.387 3-1.156a4.425 4.425 0 0 0 1.438-2.844h1.542c-.125 1.555-.757 2.86-1.898 3.918C12.945 15.473 11.582 16 10 16Z"/>
-    </g>
+    
     <g transform="translate(158 59) scale(.04)" fill="none" stroke="#5f6368" stroke-width="44" stroke-linecap="round" stroke-linejoin="round">
       <path d="M48 208L232 47Q256 26 280 47L464 208"/>
       <path d="M80 190V430Q80 464 114 464H398Q432 464 432 430V190"/>
