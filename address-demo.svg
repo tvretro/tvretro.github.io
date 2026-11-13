@@ -266,7 +266,7 @@
     </g>
 
     <!-- Navigation Bar Area -->
-    <rect y="40" width="662" height="66" fill="#fff"/>
+    <rect x="1" y="40" width="660" height="66" fill="#fff"/>
     <g fill="none" stroke="#5f6368" stroke-width="2.15" stroke-linecap="round" stroke-linejoin="round">
       <path d="M31 61l-8 8 8 8M23 69h17" opacity=".55"/>
       <path d="M67 61l8 8-8 8M75 69H58" opacity=".55"/>
@@ -327,5 +327,6 @@
       <text class="step-4" x="24" y="194" fill="#1a73e8" opacity="0">Connecting to Retro TV...</text>
       <text class="step-5" x="24" y="194" fill="#2e7d32" opacity="0">Loaded! The video opens inside Retro TV.</text>
     </g>
+    <rect id="outerBorderFrame" x="0.5" y="0.5" width="661" height="214" rx="10" fill="none" stroke="#aeb5bf" stroke-width="1"/>
   </g>
 </svg>
